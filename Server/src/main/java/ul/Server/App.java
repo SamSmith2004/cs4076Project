@@ -15,8 +15,8 @@ public class App {
     public static void main(String[] args) {
         try (ServerSocket servSock = new ServerSocket(PORT)) {
             System.out.println("Server listening on port " + PORT);
-
-            while (true) {
+            boolean run = true;
+            while (run) {
                 Socket link = null;
                 try {
                     link = servSock.accept();
@@ -29,7 +29,14 @@ public class App {
                     String message;
                     while ((message = in.readLine()) != null) {
                         System.out.println("Received: " + message);
-                        out.println("Server: " + message);
+                        if (message.equals("CLOSE")) {
+                            out.println("TERMINATE");
+                            link.close();
+                            run = false;
+                            break;
+                        } else {
+                            out.println("Server: " + message);
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
