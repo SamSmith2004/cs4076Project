@@ -20,7 +20,7 @@ public class App {
                 Socket link = null;
                 try {
                     link = servSock.accept();
-                    // System.out.println("New connection from " + link.getRemoteAddress());
+                    System.out.println("New connection from " + link.getInetAddress().getHostAddress());
 
                     BufferedReader in =
                             new BufferedReader(new InputStreamReader(link.getInputStream()));
@@ -28,7 +28,7 @@ public class App {
 
                     String message;
                     while ((message = in.readLine()) != null) {
-                        // System.out.println("Received: " + message);
+                        System.out.println("Received: " + message);
                         out.println("Server: " + message);
                     }
                 } catch (IOException e) {
