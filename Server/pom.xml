@@ -3,17 +3,19 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>ul.Server</groupId>
-  <artifactId>Server</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <parent>
+    <groupId>ul</groupId>
+    <artifactId>cs4076Project-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
 
-  <name>Server</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <artifactId>cs4076Project-server</artifactId>
+  <name>cs4076Project-server</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.source>23</maven.compiler.source>
+    <maven.compiler.target>23</maven.compiler.target>
   </properties>
 
   <dependencyManagement>
