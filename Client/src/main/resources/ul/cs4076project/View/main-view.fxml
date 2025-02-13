@@ -1,19 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="ul.cs4076project.Controller.MainController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+    fx:controller="ul.cs4076project.Controller.MainController">
 
-    <Label fx:id="stopText"/>
-    <Button text="STOP" onAction="#onStopButtonClick"/>
-</VBox>
+    <!-- Header (Top) -->
+    <top>
+        <StackPane prefWidth="200.0" prefHeight="100.0"> <!-- Adjust height as needed -->
+            <ImageView fx:id="imageView" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@images/ul_logo.png" backgroundLoading="true" />
+                </image>
+            </ImageView>
+            <Label>Lecture Timetable</Label>
+        </StackPane>
+    </top>
+
+    <!-- Main Content (Center) -->
+    <center>
+        <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+
+            <!-- Course Selection -->
+            <Pane>
+                <Label>Select Course Timetable</Label>
+            </Pane>
+
+            <!-- Buttons and Labels -->
+            <HBox spacing="20.0" alignment="CENTER">
+                <VBox alignment="CENTER" spacing="20.0">
+                    <Label fx:id="welcomeText" />
+                    <Button text="Hello!" onAction="#onHelloButtonClick" />
+                </VBox>
+                <VBox alignment="CENTER" spacing="20.0">
+                    <Label fx:id="stopText" />
+                    <Button text="STOP" onAction="#onStopButtonClick" />
+                </VBox>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>
