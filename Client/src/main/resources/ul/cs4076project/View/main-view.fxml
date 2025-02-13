@@ -6,22 +6,33 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.Region?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
     fx:controller="ul.cs4076project.Controller.MainController">
 
     <!-- Header (Top) -->
     <top>
-        <StackPane prefWidth="200.0" prefHeight="100.0"> <!-- Adjust height as needed -->
-            <ImageView fx:id="imageView" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+        <StackPane prefHeight="100.0" style="-fx-background-color: lightgray;">
+            <!-- Logo on the left -->
+            <ImageView fx:id="imageView" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"
+                        StackPane.alignment="TOP_LEFT">
                 <image>
                     <Image url="@images/ul_logo.png" backgroundLoading="true" />
                 </image>
             </ImageView>
-            <Label>Lecture Timetable</Label>
+
+            <!-- Centered Text -->
+            <Label text="Lecture Timetable" style="-fx-font-size: 36px; -fx-font-weight: bold;"
+                   StackPane.alignment="CENTER">
+                <!-- Bind the left margin to the logo's width -->
+                <StackPane.margin>
+                    <Insets left="200.0" /> <!-- Adjust this value to match the logo's width -->
+                </StackPane.margin>
+            </Label>
         </StackPane>
     </top>
 
