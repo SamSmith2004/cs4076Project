@@ -1,5 +1,8 @@
 package ul.Server;
 
+import ul.Server.Handlers.Get;
+import ul.Server.Handlers.Post;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,13 +13,7 @@ import java.net.SocketException;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.json.JsonWriterFactory;
-import javax.json.JsonException;
 import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-import javax.json.JsonWriter;
 
 public class Server {
     private static final int PORT = 8080;
@@ -37,7 +34,7 @@ public class Server {
                          PrintWriter out = new PrintWriter(link.getOutputStream(), true)) {
 
                         String request;
-                        while ((request = requestReader(in)) != null) {
+                        while ((request = in.readLine()) != null) {
                             System.out.println("Received: " + request);
 
                             if (request.equals("STOP")) {
@@ -49,7 +46,26 @@ public class Server {
                                 break;
                             }
 
-                            String response = responseBuilder(request);
+                            StringReader stringReader = new StringReader(request);
+                            JsonReader jsonReader = Json.createReader(stringReader);
+                            JsonObject requestData = jsonReader.readObject();
+
+                            String response = null;
+                            JsonObject method = requestData.getJsonObject("method");
+                            switch (method.getString("type")) {
+                                case "GET":
+                                    Get get = new Get(requestData);
+                                    response = get.responseBuilder();
+                                    break;
+                                case "POST":
+                                    Post post = new Post(requestData);
+                                    response = post.responseBuilder();
+                                    break;
+                                default:
+                                    System.out.println("Unknown method");
+                                    break;
+                            }
+
                             System.out.println("Sending: " + response);
                             out.println(response);
                             out.flush();
@@ -76,73 +92,5 @@ public class Server {
         } catch (IOException e) {
             System.err.println("IO Error: " + e.getMessage());
         }
-    }
-
-    private static String requestReader(BufferedReader in) throws IOException {
-        return in.readLine();
-    }
-
-    private static String responseBuilder(String request) {
-        try {
-            // Deserialize req
-            StringReader stringReader = new StringReader(request);
-            JsonReader jsonReader = Json.createReader(stringReader);
-            JsonObject requestData = jsonReader.readObject();
-
-            // Extract headers and data
-            JsonObject headers = requestData.getJsonObject("headers");
-            JsonObject data = requestData.getJsonObject("data");
-
-            for (String key : headers.keySet()) {
-                switch (key) {
-                    case "error":
-                        throw new Exception("Error header present");
-                    case "test":
-                        System.out.println("Test header present");
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            String message = data.toString();
-
-            // Build response
-            JsonObject responseData =
-                    Json.createObjectBuilder().add("status", "success").add("message", message).build();
-
-            return jsonToString(responseData);
-
-        } catch (JsonException e) {
-            System.err.println("JsonException occurred: " + e.getMessage());
-            return errorBuilder(e);
-        } catch (Exception e) {
-            System.err.println("Exception occurred: " + e.getMessage());
-            return errorBuilder(e);
-        }
-    }
-
-    private static String jsonToString(JsonObject jsonObject) {
-        // Serialization config
-        Map<String, Object> responseConfig = new HashMap<>();
-        // Enable pretty printing (Currently broken)
-        // responseConfig.put(JsonGenerator.PRETTY_PRINTING, true);
-        JsonWriterFactory writerFactory = Json.createWriterFactory(responseConfig);
-
-        StringWriter stringWriter = new StringWriter();
-        try (JsonWriter jsonWriter = writerFactory.createWriter(stringWriter)) {
-            jsonWriter.writeObject(jsonObject);
-        }
-        return stringWriter.toString();
-    }
-
-
-    private static String errorBuilder(Exception e) {
-        JsonObject errorResponse =
-                Json.createObjectBuilder()
-                        .add("status", "error")
-                        .add("message", "Server error: " + e.getMessage())
-                        .build();
-        return jsonToString(errorResponse);
     }
 }
