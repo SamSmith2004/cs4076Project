@@ -46,6 +46,7 @@ public class App {
                     out.println(response);
 
                     if (response.equals("TERMINATE")) {
+                        System.out.println("Server shutting down");
                         run = false;
                     }
 
@@ -91,7 +92,19 @@ public class App {
             JsonObject headers = requestData.getJsonObject("headers");
             JsonObject data = requestData.getJsonObject("data");
 
-            String message = "Server processed data: " + data.toString();
+            for (String key : headers.keySet()) {
+                switch (key) {
+                    case "error":
+                        throw new Exception("Error header present");
+                    case "test":
+                        System.out.println("Test header present");
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            String message = data.toString();
 
             // Build response
             JsonObject responseData =
