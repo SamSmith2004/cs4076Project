@@ -41,15 +41,18 @@ public class Server {
                     String request = requestReader(in);
                     System.out.println("Received: " + request);
 
+                    if (request.equals("STOP")) {
+                        System.out.println("Server shutting down");
+                        run = false;
+                        out.println("TERMINATE");
+                        out.flush();
+                        break;
+                    }
+
                     String response = responseBuilder(request);
                     System.out.println("Sending: " + response);
                     out.println(response);
                     out.flush();
-
-                    if (response.equals("TERMINATE")) {
-                        System.out.println("Server shutting down");
-                        run = false;
-                    }
 
                 } catch (IOException e) {
                     System.err.println("IO Error: " + e.getMessage());
@@ -75,9 +78,6 @@ public class Server {
     }
 
     private static String responseBuilder(String request) {
-        if (request.equals("STOP")) {
-            return "TERMINATE";
-        }
         try {
             // Deserialize req
             StringReader stringReader = new StringReader(request);
