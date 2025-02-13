@@ -22,7 +22,7 @@ import java.util.Map;
 // echo '{"headers": {}, "data": {"item": "1"}}' | nc localhost 8080
 // echo "STOP" | nc localhost 8080
 
-public class App {
+public class Server {
     private static final int PORT = 8080;
 
     public static void main(String[] args) {
