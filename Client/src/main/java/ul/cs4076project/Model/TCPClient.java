@@ -12,9 +12,9 @@ import javax.json.JsonReader;
 
 public class TCPClient {
     private static final int PORT = 8080;
-    private Socket link;
-    private BufferedReader in;
-    private PrintWriter out;
+    private final Socket link;
+    private final BufferedReader in;
+    private final PrintWriter out;
 
     public TCPClient() throws IOException {
         try {
@@ -23,32 +23,46 @@ public class TCPClient {
             out = new PrintWriter(link.getOutputStream(), true);
         } catch (IOException e) {
             System.err.println("Error creating socket: " + e.getMessage());
+            throw e;
         }
     }
 
-    public JsonObject post(String message) throws IOException {
-        try {
-            // Create JSON request
-            JsonObject jsonRequest =
-                    Json.createObjectBuilder()
-                            .add("headers", Json.createObjectBuilder().build())
-                            .add("data", Json.createObjectBuilder().add("item", message).build())
-                            .build();
+    public JsonObject get(String message) throws IOException {
+        return sendRequest("GET", message);
+    }
 
-            // Send JSON request
+    public JsonObject post(String message) throws IOException {
+        return sendRequest("POST", message);
+    }
+
+    private JsonObject sendRequest(String methodType, String message) throws IOException {
+        try {
+            // Create JSON req
+            JsonObject jsonRequest = Json.createObjectBuilder()
+                    .add("method", Json.createObjectBuilder()
+                            .add("type", methodType)
+                            .build())
+                    .add("headers", Json.createObjectBuilder()
+                            .add("test", "true")
+                            .build())
+                    .add("content", Json.createObjectBuilder()
+                            .add("message", message)
+                            .build())
+                    .build();
+
             out.println(jsonRequest.toString());
 
-            // Read JSON response
+            // Read response
             String response = in.readLine();
             System.out.println("Received: " + response);
             JsonReader jsonReader = Json.createReader(new StringReader(response));
 
             return jsonReader.readObject();
         } catch (IOException e) {
-            System.err.println("IO Error during POST: " + e.getMessage());
+            System.err.println("IO Error during " + methodType + ": " + e.getMessage());
             throw e;
         } catch (Exception e) {
-            System.err.println("Error during POST: " + e.getMessage());
+            System.err.println("Error during " + methodType + ": " + e.getMessage());
             throw e;
         }
     }
@@ -56,10 +70,9 @@ public class TCPClient {
     public void close() {
         try {
             out.println("STOP");
-
-            // Read JSON response
             String response = in.readLine();
             System.out.println("Received: " + response);
+
             if (response.equals("TERMINATE")) {
                 in.close();
                 out.close();
@@ -67,36 +80,8 @@ public class TCPClient {
             } else {
                 System.err.println("Error closing connection: " + response);
             }
-
         } catch (IOException e) {
-            System.err.println("IO Error during POST: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("Error during POST: " + e.getMessage());
-            throw e;
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            TCPClient client = new TCPClient();
-            BufferedReader userEntry = new BufferedReader(new InputStreamReader(System.in));
-            String message;
-
-            System.out.println("Enter message to be sent to server (or 'exit' to quit):");
-            while ((message = userEntry.readLine()) != null) {
-                if (message.equalsIgnoreCase("exit")) {
-                    break;
-                }
-
-                JsonObject response = client.post(message);
-                System.out.println("\nSERVER RESPONSE> " + response.toString());
-
-                System.out.println("Enter message to be sent to server (or 'exit' to quit):");
-            }
-
-            client.close();
-        } catch (IOException e) {
-            System.err.println("IO Exception: " + e.getMessage());
+            System.err.println("IO Error during close: " + e.getMessage());
         }
     }
 }
