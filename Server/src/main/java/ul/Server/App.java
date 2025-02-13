@@ -12,7 +12,6 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonWriter;
 import javax.json.JsonWriterFactory;
-import javax.json.stream.JsonGenerator;
 import javax.json.JsonException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -43,7 +42,9 @@ public class App {
                     System.out.println("Received: " + request);
 
                     String response = responseBuilder(request);
+                    System.out.println("Sending: " + response);
                     out.println(response);
+                    out.flush();
 
                     if (response.equals("TERMINATE")) {
                         System.out.println("Server shutting down");
@@ -70,12 +71,7 @@ public class App {
     }
 
     private static String requestReader(BufferedReader in) throws IOException {
-        StringBuilder message = new StringBuilder();
-        String buffer;
-        while ((buffer = in.readLine()) != null) {
-            message.append(buffer);
-        }
-        return message.toString();
+        return in.readLine();
     }
 
     private static String responseBuilder(String request) {
@@ -123,8 +119,8 @@ public class App {
     private static String jsonToString(JsonObject jsonObject) {
         // Serialization config
         Map<String, Object> responseConfig = new HashMap<>();
-        // Enable pretty printing
-        responseConfig.put(JsonGenerator.PRETTY_PRINTING, true);
+        // Enable pretty printing (Currently broken)
+        // responseConfig.put(JsonGenerator.PRETTY_PRINTING, true);
         JsonWriterFactory writerFactory = Json.createWriterFactory(responseConfig);
 
         StringWriter stringWriter = new StringWriter();

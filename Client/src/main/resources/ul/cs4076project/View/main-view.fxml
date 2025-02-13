@@ -13,4 +13,7 @@
 
     <Label fx:id="welcomeText"/>
     <Button text="Hello!" onAction="#onHelloButtonClick"/>
+
+    <Label fx:id="stopText"/>
+    <Button text="STOP" onAction="#onStopButtonClick"/>
 </VBox>
