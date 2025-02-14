@@ -28,8 +28,6 @@
             <!-- Centered Text -->
             <Label text="Lecture Timetable" style="-fx-font-size: 36px; -fx-font-weight: bold;"
                 StackPane.alignment="CENTER">
-
-                
             </Label>
         </StackPane>
     </top>
@@ -109,11 +107,11 @@
                 <Insets bottom="40" />
             </padding>
 
-            <Label fx:id="stopText" />
-            <Button onAction="#onStopClick">
+            <Label fx:id="serverStatus" />
+            <Button onAction="#onServerFunctionButtonClick">
                 <graphic>
                     <StackPane>
-                        <Label text="STOP Server"
+                        <Label fx:id="serverStatusButton"
                             style="-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 6px;"
                             StackPane.alignment="CENTER" />
                     </StackPane>

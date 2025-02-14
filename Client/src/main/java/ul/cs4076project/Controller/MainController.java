@@ -1,21 +1,28 @@
 package ul.cs4076project.Controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import ul.cs4076project.Model.TCPClient;
 
 import javax.json.JsonObject;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MainController {
+public class MainController implements Initializable {
     private TCPClient client;
-    
-    @FXML private Label stopText;
-    
+    private boolean isConnectedToServer = false;
+
+    @FXML
+    private Label serverStatus;
+    @FXML
+    private Label serverStatusButton;
+
     public MainController() throws IOException {
         try {
             client = new TCPClient();
+            isConnectedToServer = true;
         } catch (IOException e) {
             System.err.println("Error creating TCPClient: " + e.getMessage());
         }
@@ -35,6 +42,18 @@ public class MainController {
     // }
     // }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        if (isConnectedToServer) {
+            serverStatus.setText("Connected to Server!");
+            serverStatusButton.setText("STOP Server");
+        } else {
+            serverStatus.setText("Disconnected from Server...");
+            serverStatusButton.setText("Attempt to Connect to Server");
+
+        }
+    }
+
     @FXML
     protected void onLM05125ButtonClick() {
 
@@ -51,13 +70,30 @@ public class MainController {
     }
 
     @FXML
-    protected void onStopClick() {
-        try {
-            client.close();
-            stopText.setText("Server Stopped!");
-        } catch (Exception e) {
-            System.err.println("Error stopping server: " + e.getMessage());
-            stopText.setText("Error Stopping Server!");
+    protected void onServerFunctionButtonClick() {
+        if (isConnectedToServer) {
+            serverStatusButton.setText("STOP Server");
+            isConnectedToServer = false;
+
+            try {
+                client.close();
+                serverStatus.setText("Server Stopped!");
+            } catch (Exception e) {
+                System.err.println("Error stopping server: " + e.getMessage());
+                serverStatus.setText("Error Stopping Server!");
+            }
+            serverStatusButton.setText("Attempt to Connect to Server");
+        } else {
+            try {
+                client = new TCPClient();
+
+                serverStatusButton.setText("STOP Server");
+                serverStatus.setText("Connected to Server!");
+                isConnectedToServer = true;
+            } catch (IOException e) {
+                System.err.println("Error creating TCPClient: " + e.getMessage());
+                serverStatus.setText("ERROR Unable to Establish Connection with the Server");
+            }
         }
     }
 }
