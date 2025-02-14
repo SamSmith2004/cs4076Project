@@ -10,9 +10,6 @@ import java.io.IOException;
 public class MainController {
     private TCPClient client;
 
-    @FXML private Label welcomeText;
-    @FXML private Label stopText;
-
     public MainController() throws IOException {
         try {
             client = new TCPClient();
@@ -21,36 +18,32 @@ public class MainController {
         }
     }
 
+    // EXAMPLE FUNCTION TO SEND TO SERVER
+
+    // @FXML
+    // protected void onLM05125ButtonClick() {
+    // try {
+
+    // JsonObject response = client.post("Hello from JavaFX!");
+    // welcomeText.setText("Server response: " + response.toString());
+    // } catch (IOException e) {
+    // System.err.println("Error sending message: " + e.getMessage());
+    // welcomeText.setText("Error sending message to server!");
+    // }
+    // }
+
     @FXML
     protected void onLM05125ButtonClick() {
-        try {
-            JsonObject response = client.post("Hello from JavaFX!");
-            welcomeText.setText("Server response: " + response.toString());
-        } catch (IOException e) {
-            System.err.println("Error sending message: " + e.getMessage());
-            welcomeText.setText("Error sending message to server!");
-        }
+
     }
 
     @FXML
     protected void onLM11025ButtonClick() {
-        try {
-            client.close();
-            stopText.setText("Server stopped!");
-        } catch (Exception e) {
-            System.err.println("Error stopping server: " + e.getMessage());
-            stopText.setText("Error stopping server!");
-        }
+
     }
 
     @FXML
     protected void onLK04925ButtonClick() {
-        try {
-            client.close();
-            stopText.setText("Server stopped!");
-        } catch (Exception e) {
-            System.err.println("Error stopping server: " + e.getMessage());
-            stopText.setText("Error stopping server!");
-        }
+
     }
 }
