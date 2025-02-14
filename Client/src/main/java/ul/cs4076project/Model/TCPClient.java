@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.Socket;
+import java.util.Map;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 
 public class TCPClient {
@@ -27,24 +29,26 @@ public class TCPClient {
         }
     }
 
-    public JsonObject get(String message) throws IOException {
-        return sendRequest("GET", message);
+    public JsonObject get(String message, Map<String, String> headers) throws IOException {
+        return sendRequest("GET", message, headers);
     }
 
-    public JsonObject post(String message) throws IOException {
-        return sendRequest("POST", message);
+    public JsonObject post(String message, Map<String, String> headers) throws IOException {
+        return sendRequest("POST", message, headers);
     }
 
-    private JsonObject sendRequest(String methodType, String message) throws IOException {
+    private JsonObject sendRequest(String methodType, String message, Map<String, String> headers) throws IOException {
         try {
-            // Create JSON req
+            // Get headers
+            JsonObjectBuilder headersBuilder = Json.createObjectBuilder();
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                headersBuilder.add(entry.getKey(), entry.getValue());
+            }
+
+            // Build JSON request
             JsonObject jsonRequest = Json.createObjectBuilder()
-                    .add("method", Json.createObjectBuilder()
-                            .add("type", methodType)
-                            .build())
-                    .add("headers", Json.createObjectBuilder()
-                            .add("test", "true")
-                            .build())
+                    .add("method", methodType)
+                    .add("headers", headersBuilder)
                     .add("content", Json.createObjectBuilder()
                             .add("message", message)
                             .build())

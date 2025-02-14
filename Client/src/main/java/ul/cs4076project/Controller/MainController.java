@@ -9,6 +9,8 @@ import javax.json.JsonObject;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainController implements Initializable {
     private TCPClient client;
@@ -18,6 +20,7 @@ public class MainController implements Initializable {
     private Label serverStatus;
     @FXML
     private Label serverStatusButton;
+    @FXML private Label debugLabel;
 
     public MainController() throws IOException {
         try {
@@ -56,7 +59,17 @@ public class MainController implements Initializable {
 
     @FXML
     protected void onLM05125ButtonClick() {
+        try {
+            Map<String, String> headers = new HashMap<>();
+            headers.put("getTimetable", "true");
 
+            JsonObject response = client.get("LM05125", headers);
+            //System.out.println("Server response: " + response.toString());
+            debugLabel.setText(response.toString());
+        } catch (IOException e) {
+            System.err.println("Error sending message: " + e.getMessage());
+            debugLabel.setText("Error sending message to server!");
+        }
     }
 
     @FXML

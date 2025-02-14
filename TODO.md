@@ -34,8 +34,8 @@
   - [ ] Success message
 - [ ] Remove a Lecture
     - [ ] Success Messages (include room number)
-- [ ] Display Schedule
-  - [ ] Send data structure to client
+- [X] Display Schedule
+  - [X] Send data structure to client
 - [ ] Other -> Custom User input
   - [ ] IncorrectActionException
 

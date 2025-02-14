@@ -98,11 +98,17 @@
                     </Button>
                 </VBox>
             </HBox>
+            <Label fx:id="debugLabel" alignment="CENTER"/>
         </VBox>
     </center>
 
     <bottom>
-        <VBox spacing="20.0" alignment="CENTER">
+        <VBox spacing="20.0"
+              alignment="CENTER"
+              style="-fx-text-fill: black;
+               -fx-font-size: 16px;
+                -fx-font-weight: bold;
+                 -fx-padding: 6px;">
             <padding>
                 <Insets bottom="40" />
             </padding>

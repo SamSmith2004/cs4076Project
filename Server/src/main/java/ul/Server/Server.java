@@ -2,6 +2,7 @@ package ul.Server;
 
 import ul.Server.Handlers.Get;
 import ul.Server.Handlers.Post;
+import ul.Server.Utils.SessionData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,9 +21,11 @@ public class Server {
 
     public static void main(String[] args) {
         boolean serverRunning = true;
+        SessionData sessionData = new SessionData();
 
         try (ServerSocket servSock = new ServerSocket(PORT)) {
             System.out.println("Server listening on port " + PORT);
+            sessionData.fillMockData();
 
             while (serverRunning) {
                 Socket link = null;
@@ -51,15 +54,14 @@ public class Server {
                             JsonObject requestData = jsonReader.readObject();
 
                             String response = null;
-                            JsonObject method = requestData.getJsonObject("method");
-                            switch (method.getString("type")) {
+                            switch (requestData.getString("method")) {
                                 case "GET":
                                     Get get = new Get(requestData);
-                                    response = get.responseBuilder();
+                                    response = get.responseBuilder(sessionData);
                                     break;
                                 case "POST":
                                     Post post = new Post(requestData);
-                                    response = post.responseBuilder();
+                                    response = post.responseBuilder(sessionData);
                                     break;
                                 default:
                                     System.out.println("Unknown method");

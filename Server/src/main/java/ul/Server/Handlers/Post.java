@@ -1,5 +1,7 @@
 package ul.Server.Handlers;
 
+import ul.Server.Utils.SessionData;
+
 import javax.json.Json;
 import javax.json.JsonException;
 import javax.json.JsonObject;
@@ -7,23 +9,24 @@ import java.io.IOException;
 import java.util.Set;
 
 public class Post extends RequestHandler {
-    Set<String> headers;
+    JsonObject headers;
+    Set<String> headerKeys;
     JsonObject content;
 
     public Post(JsonObject requestData) {
-        this.headers = requestData.getJsonObject("headers").keySet();
+        this.headerKeys = requestData.getJsonObject("headers").keySet();
         this.content = requestData.getJsonObject("content");
     }
 
     @Override
-    public String responseBuilder() throws IOException {
+    public String responseBuilder(SessionData sessionData) throws IOException {
         try {
-            for (String key : headers) {
+            for (String key : headerKeys) {
                 switch (key) {
                     case "error":
                         throw new Exception("Error header present");
                     case "test":
-                        System.out.println("Test header present");
+                        System.out.println(headers.getString("test"));
                         break;
                     default:
                         break;
