@@ -29,9 +29,7 @@
             <Label text="Lecture Timetable" style="-fx-font-size: 36px; -fx-font-weight: bold;"
                 StackPane.alignment="CENTER">
 
-                <StackPane.margin>
-                    <Insets left="200.0" />
-                </StackPane.margin>
+                
             </Label>
         </StackPane>
     </top>
