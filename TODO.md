@@ -6,7 +6,7 @@
     - [x] Buttons for Course Selection
     - [x] Stop Button
     - [ ] Controller Logic
-    - [ ] Styling
+    - [x] Styling
 ### Actions
 - [ ] Add Lecture
     - [ ] Button:
