@@ -106,17 +106,21 @@
     </center>
 
     <bottom>
-        <HBox spacing="20.0" alignment="CENTER">
-            <Button onAction="#onStop">
+        <VBox spacing="20.0" alignment="CENTER">
+            <padding>
+                <Insets bottom="40" />
+            </padding>
+
+            <Label fx:id="stopText" />
+            <Button onAction="#onStopClick">
                 <graphic>
                     <StackPane>
-
-                        <Label text="STOP Server &amp; Exit Application"
+                        <Label text="STOP Server"
                             style="-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 6px;"
                             StackPane.alignment="CENTER" />
                     </StackPane>
                 </graphic>
             </Button>
-        </HBox>
+        </VBox>
     </bottom>
 </BorderPane>

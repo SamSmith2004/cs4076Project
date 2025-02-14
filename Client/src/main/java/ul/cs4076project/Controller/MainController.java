@@ -2,6 +2,7 @@ package ul.cs4076project.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import ul.cs4076project.Model.TCPClient;
 
 import javax.json.JsonObject;
@@ -9,7 +10,9 @@ import java.io.IOException;
 
 public class MainController {
     private TCPClient client;
-
+    
+    @FXML private Label stopText;
+    
     public MainController() throws IOException {
         try {
             client = new TCPClient();
@@ -48,7 +51,13 @@ public class MainController {
     }
 
     @FXML
-    protected void onStop() {
-
+    protected void onStopClick() {
+        try {
+            client.close();
+            stopText.setText("Server Stopped!");
+        } catch (Exception e) {
+            System.err.println("Error stopping server: " + e.getMessage());
+            stopText.setText("Error Stopping Server!");
+        }
     }
 }
