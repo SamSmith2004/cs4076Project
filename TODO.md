@@ -1,5 +1,12 @@
 # TODO
 ## Client
+### GUI
+- [ ] Main Menu Screen
+    - [x] Header
+    - [x] Buttons for Course Selection
+    - [x] Stop Button
+    - [ ] Controller Logic
+    - [ ] Styling
 ### Actions
 - [ ] Add Lecture
     - [ ] Button:
@@ -34,5 +41,3 @@
 
 ## Submission Requirements
 - studentId1_studentId2.zip
-- Client File -> studentId1_studentId2_Client.java
-- Server File -> studentId1_studentId2_Server.java

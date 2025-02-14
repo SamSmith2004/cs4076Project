@@ -46,4 +46,9 @@ public class MainController {
     protected void onLK04925ButtonClick() {
 
     }
+
+    @FXML
+    protected void onStop() {
+
+    }
 }
