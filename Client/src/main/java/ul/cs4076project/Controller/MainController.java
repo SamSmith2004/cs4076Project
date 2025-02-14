@@ -7,11 +7,14 @@ import ul.cs4076project.Model.TCPClient;
 
 import javax.json.JsonObject;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainController {
     private TCPClient client;
     
     @FXML private Label stopText;
+    @FXML private Label debugLabel;
     
     public MainController() throws IOException {
         try {
@@ -37,7 +40,17 @@ public class MainController {
 
     @FXML
     protected void onLM05125ButtonClick() {
+        try {
+            Map<String, String> headers = new HashMap<>();
+            headers.put("getTimetable", "true");
 
+            JsonObject response = client.get("LM05125", headers);
+            //System.out.println("Server response: " + response.toString());
+            debugLabel.setText(response.toString());
+        } catch (IOException e) {
+            System.err.println("Error sending message: " + e.getMessage());
+            debugLabel.setText("Error sending message to server!");
+        }
     }
 
     @FXML
