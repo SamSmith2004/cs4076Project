@@ -1,5 +1,7 @@
 package ul.Server.Handlers;
 
+import ul.Server.Utils.SessionData;
+
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonWriter;
@@ -10,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class RequestHandler {
-    protected abstract String responseBuilder() throws IOException;
+    protected abstract String responseBuilder(SessionData sessionData) throws IOException;
 
     public static String jsonToString(JsonObject jsonObject) {
         Map<String, Object> responseConfig = new HashMap<>();
