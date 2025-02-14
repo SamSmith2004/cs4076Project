@@ -19,7 +19,7 @@
         <StackPane prefHeight="100.0" style="-fx-background-color: lightgray;">
             <!-- Logo on the left -->
             <ImageView fx:id="imageView" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"
-                        StackPane.alignment="TOP_LEFT">
+                StackPane.alignment="TOP_LEFT" smooth="true">
                 <image>
                     <Image url="@images/ul_logo.png" backgroundLoading="true" />
                 </image>
@@ -27,10 +27,10 @@
 
             <!-- Centered Text -->
             <Label text="Lecture Timetable" style="-fx-font-size: 36px; -fx-font-weight: bold;"
-                   StackPane.alignment="CENTER">
-                <!-- Bind the left margin to the logo's width -->
+                StackPane.alignment="CENTER">
+
                 <StackPane.margin>
-                    <Insets left="200.0" /> <!-- Adjust this value to match the logo's width -->
+                    <Insets left="200.0" />
                 </StackPane.margin>
             </Label>
         </StackPane>
@@ -44,19 +44,62 @@
             </padding>
 
             <!-- Course Selection -->
-            <Pane>
-                <Label>Select Course Timetable</Label>
-            </Pane>
+            <HBox alignment="CENTER">
+                <Label text="Select Course Timetable"
+                    style="-fx-font-size: 26px; -fx-font-weight: bold;" />
+            </HBox>
 
             <!-- Buttons and Labels -->
             <HBox spacing="20.0" alignment="CENTER">
                 <VBox alignment="CENTER" spacing="20.0">
-                    <Label fx:id="welcomeText" />
-                    <Button text="Hello!" onAction="#onHelloButtonClick" />
+                    <Button onAction="#onLM05125ButtonClick">
+                        <graphic>
+                            <StackPane>
+                                <ImageView fitWidth="350.0" preserveRatio="true" smooth="true">
+                                    <image>
+                                        <Image url="@images/timetable_icon.jpg" />
+                                    </image>
+                                </ImageView>
+                                <Label text="LM051-2025"
+                                    style="-fx-text-fill: black; -fx-font-size: 26px; -fx-font-weight: bold; -fx-padding: 6px; -fx-background-color: lightgrey; -fx-background-radius: 10px;"
+                                    StackPane.alignment="CENTER" />
+                            </StackPane>
+                        </graphic>
+                    </Button>
                 </VBox>
+
                 <VBox alignment="CENTER" spacing="20.0">
-                    <Label fx:id="stopText" />
-                    <Button text="STOP" onAction="#onStopButtonClick" />
+                    <Button onAction="#onLM11025ButtonClick">
+                        <graphic>
+                            <StackPane>
+                                <ImageView fitWidth="350.0" preserveRatio="true" smooth="true">
+                                    <image>
+                                        <Image url="@images/timetable_icon.jpg" />
+                                    </image>
+                                </ImageView>
+                                <Label text="LM110-2025"
+                                    style="-fx-text-fill: black; -fx-font-size: 26px; -fx-font-weight: bold; -fx-padding: 6px; -fx-background-color: lightgrey; -fx-background-radius: 10px;"
+                                    StackPane.alignment="CENTER" />
+                            </StackPane>
+                        </graphic>
+                    </Button>
+                </VBox>
+
+                <VBox alignment="CENTER" spacing="20.0">
+                    <Button onAction="#onLK04925ButtonClick">
+                        <graphic>
+                            <StackPane>
+                                <ImageView fitWidth="350.0" preserveRatio="true" smooth="true">
+                                    <image>
+                                        <Image url="@images/timetable_icon.jpg" />
+                                    </image>
+                                </ImageView>
+                                <Label text="LK049-2025"
+                                    style="-fx-text-fill: black; -fx-font-size: 26px; -fx-font-weight: bold; -fx-padding: 6px; -fx-background-color: lightgrey; -fx-background-radius: 10px;"
+                                    StackPane.alignment="CENTER" />
+                            </StackPane>
+                        </graphic>
+                    </Button>
                 </VBox>
             </HBox>
         </VBox>

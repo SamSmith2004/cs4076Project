@@ -22,7 +22,7 @@ public class MainController {
     }
 
     @FXML
-    protected void onHelloButtonClick() {
+    protected void onLM05125ButtonClick() {
         try {
             JsonObject response = client.post("Hello from JavaFX!");
             welcomeText.setText("Server response: " + response.toString());
@@ -33,7 +33,18 @@ public class MainController {
     }
 
     @FXML
-    protected void onStopButtonClick() {
+    protected void onLM11025ButtonClick() {
+        try {
+            client.close();
+            stopText.setText("Server stopped!");
+        } catch (Exception e) {
+            System.err.println("Error stopping server: " + e.getMessage());
+            stopText.setText("Error stopping server!");
+        }
+    }
+
+    @FXML
+    protected void onLK04925ButtonClick() {
         try {
             client.close();
             stopText.setText("Server stopped!");
