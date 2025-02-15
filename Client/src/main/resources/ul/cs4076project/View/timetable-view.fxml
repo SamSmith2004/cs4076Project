@@ -11,16 +11,17 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
+
 <BorderPane xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ul.cs4076project.Controller.TimetableController">
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="ul.cs4076project.Controller.TimetableController">
     <!-- Header (Top) -->
     <top>
         <StackPane prefHeight="100.0" style="-fx-background-color: lightgray;">
             <!-- Logo on the left -->
             <ImageView fitWidth="200.0" pickOnBounds="true" preserveRatio="true"
-                       StackPane.alignment="TOP_LEFT">
-                <Image url="@images/ul_logo.png" backgroundLoading="true"/>
+                StackPane.alignment="TOP_LEFT">
+                <Image url="@images/ul_logo.png" backgroundLoading="true" />
             </ImageView>
 
             <!-- Centered Text -->
@@ -31,15 +32,15 @@
     </top>
 
     <center>
-        <VBox spacing="10">
+        <VBox spacing="15" style="-fx-padding: 15 0 0 0;">
             <!-- Control buttons -->
             <HBox spacing="10" alignment="CENTER">
                 <Button onAction="#onAddLectureClick">
                     <graphic>
                         <StackPane>
                             <Label text="ADD Lecture"
-                                   style="-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 6px;"
-                                   StackPane.alignment="CENTER" />
+                                style="-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 6px;"
+                                StackPane.alignment="CENTER" />
                         </StackPane>
                     </graphic>
                 </Button>
@@ -48,8 +49,8 @@
                     <graphic>
                         <StackPane>
                             <Label text="REMOVE Lecture"
-                                   style="-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 6px;"
-                                   StackPane.alignment="CENTER" />
+                                style="-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 6px;"
+                                StackPane.alignment="CENTER" />
                         </StackPane>
                     </graphic>
                 </Button>
@@ -58,60 +59,60 @@
                     <graphic>
                         <StackPane>
                             <Label text="Back To Menu"
-                                   style="-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 6px;"
-                                   StackPane.alignment="CENTER" />
+                                style="-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 6px;"
+                                StackPane.alignment="CENTER" />
                         </StackPane>
                     </graphic>
                 </Button>
             </HBox>
 
             <!-- Timetable Grid -->
-            <GridPane fx:id="timetableGrid" alignment="CENTER" gridLinesVisible="true" style="-fx-background-color: white; -fx-padding: 10;">
+            <GridPane fx:id="timetableGrid" alignment="CENTER" gridLinesVisible="true">
                 <!-- Column constraints -->
                 <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100" />
                 </columnConstraints>
 
                 <!-- Row constraints -->
                 <rowConstraints>
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50"/>
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50"/>
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50"/>
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50"/>
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50"/>
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50"/>
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50"/>
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50"/>
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50"/>
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50"/>
+                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
                 </rowConstraints>
 
                 <!-- Days row (grid header) -->
                 <Label text="Monday" GridPane.columnIndex="0" GridPane.rowIndex="0"
-                       style="-fx-font-weight: bold; -fx-padding: 10;"
-                       alignment="CENTER"/>
+                    style="-fx-font-weight: bold; -fx-padding: 10;"
+                    alignment="CENTER" />
                 <Label text="Tuesday" GridPane.columnIndex="1" GridPane.rowIndex="0"
-                       style="-fx-font-weight: bold; -fx-padding: 10;"
-                       alignment="CENTER"/>
+                    style="-fx-font-weight: bold; -fx-padding: 10;"
+                    alignment="CENTER" />
                 <Label text="Wednesday" GridPane.columnIndex="2" GridPane.rowIndex="0"
-                       style="-fx-font-weight: bold; -fx-padding: 10;"
-                       alignment="CENTER"/>
+                    style="-fx-font-weight: bold; -fx-padding: 10;"
+                    alignment="CENTER" />
                 <Label text="Thursday" GridPane.columnIndex="3" GridPane.rowIndex="0"
-                       style="-fx-font-weight: bold; -fx-padding: 10;"
-                       alignment="CENTER"/>
+                    style="-fx-font-weight: bold; -fx-padding: 10;"
+                    alignment="CENTER" />
                 <Label text="Friday" GridPane.columnIndex="4" GridPane.rowIndex="0"
-                       style="-fx-font-weight: bold; -fx-padding: 10;"
-                       alignment="CENTER"/>
+                    style="-fx-font-weight: bold; -fx-padding: 10;"
+                    alignment="CENTER" />
             </GridPane>
         </VBox>
     </center>
 
     <!-- Footer (Bottom) -->
     <bottom>
-        <Label fx:id="debugLabel" alignment="CENTER"/>
+        <Label fx:id="debugLabel" alignment="CENTER" />
     </bottom>
 </BorderPane>
