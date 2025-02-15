@@ -21,21 +21,26 @@ public class MainController implements Initializable {
     private Label serverStatus;
     @FXML
     private Label serverStatusButton;
-    @FXML private Label debugLabel;
+    @FXML
+    private Label debugLabel;
 
-    public MainController() {}
+    public MainController() {
+    }
 
     // EXAMPLE FUNCTION TO SEND TO SERVER
 
     // @FXML
     // protected void onLM05125ButtonClick() {
     // try {
+    // Map<String, String> headers = new HashMap<>();
+    // headers.put("getTimetable", "true");
 
-    // JsonObject response = client.post("Hello from JavaFX!");
-    // welcomeText.setText("Server response: " + response.toString());
+    // JsonObject response = client.get("LM05125", headers);
+    // //System.out.println("Server response: " + response.toString());
+    // debugLabel.setText(response.toString());
     // } catch (IOException e) {
     // System.err.println("Error sending message: " + e.getMessage());
-    // welcomeText.setText("Error sending message to server!");
+    // debugLabel.setText("Error sending message to server!");
     // }
     // }
 
@@ -71,22 +76,12 @@ public class MainController implements Initializable {
 
     @FXML
     protected void onLM05125ButtonClick() {
-        try {
-            Map<String, String> headers = new HashMap<>();
-            headers.put("getTimetable", "true");
-
-            JsonObject response = client.get("LM05125", headers);
-            //System.out.println("Server response: " + response.toString());
-            debugLabel.setText(response.toString());
-        } catch (IOException e) {
-            System.err.println("Error sending message: " + e.getMessage());
-            debugLabel.setText("Error sending message to server!");
-        }
+        App.loadTimetableView();
     }
 
     @FXML
-    protected void onLM11025ButtonClick(){
-        App.loadTimetableView();
+    protected void onLM11025ButtonClick() {
+
     }
 
     @FXML
