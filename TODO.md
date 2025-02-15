@@ -20,9 +20,9 @@
         - [ ] Lecture Time
         - [ ] Confirm prompt -> Contains Lecture details
     - [ ] Handle server response
-- [ ] Display Schedule
-    - [ ] Parse Server response
-    - [ ] Format parsed response to timetable
+- [X] Display Schedule
+    - [X] Parse Server response
+    - [X] Format parsed response to timetable
 - [ ] Other 
     - [ ] Custom User input
     - [ ] Handle Server Response
@@ -40,7 +40,7 @@
   - [ ] IncorrectActionException
 
 ## Bugs
-- [ ] Bug with Sockets when Switching Between Views - App crashes after having switched view and attempting to close the server
+- [X] Bug with Sockets when Switching Between Views - App crashes after having switched view and attempting to close the server
 
 ## Submission Requirements
 - studentId1_studentId2.zip
