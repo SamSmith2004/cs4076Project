@@ -14,7 +14,7 @@
       - [X] Time 
       - [x] Room num
       - [x] module name
-    - [ ] Change Input Fields to Correct Types (text field, Day Selection, Time Selection)
+      - [ ] Change Input Fields to Correct Types (text field, Day Selection, Time Selection)
     - [ ] Handle server response
 - [ ] Remove a Lecture
     - [ ] Button:
