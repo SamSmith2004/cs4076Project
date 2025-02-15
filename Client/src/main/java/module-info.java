@@ -9,5 +9,6 @@ module ul.cs4076project {
     opens ul.cs4076project to javafx.fxml;
     exports ul.cs4076project;
     exports ul.cs4076project.Controller;
+    exports ul.cs4076project.Model;
     opens ul.cs4076project.Controller to javafx.fxml;
 }

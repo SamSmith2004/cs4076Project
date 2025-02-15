@@ -23,14 +23,7 @@ public class MainController implements Initializable {
     private Label serverStatusButton;
     @FXML private Label debugLabel;
 
-    public MainController() throws IOException {
-        try {
-            client = new TCPClient();
-            isConnectedToServer = true;
-        } catch (IOException e) {
-            System.err.println("Error creating TCPClient: " + e.getMessage());
-        }
-    }
+    public MainController() {}
 
     // EXAMPLE FUNCTION TO SEND TO SERVER
 
@@ -46,6 +39,12 @@ public class MainController implements Initializable {
     // }
     // }
 
+    public void initializeWithClient(TCPClient client) {
+        this.client = client;
+        this.isConnectedToServer = (client != null);
+        updateServerStatus();
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (isConnectedToServer) {
@@ -55,6 +54,18 @@ public class MainController implements Initializable {
             serverStatus.setText("Disconnected from Server...");
             serverStatusButton.setText("Attempt to Connect to Server");
 
+        }
+    }
+
+    private void updateServerStatus() {
+        if (serverStatus != null && serverStatusButton != null) {
+            if (isConnectedToServer) {
+                serverStatus.setText("Connected to Server!");
+                serverStatusButton.setText("STOP Server");
+            } else {
+                serverStatus.setText("Disconnected from Server...");
+                serverStatusButton.setText("Attempt to Connect to Server");
+            }
         }
     }
 
@@ -74,7 +85,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    protected void onLM11025ButtonClick() throws IOException {
+    protected void onLM11025ButtonClick(){
         App.loadTimetableView();
     }
 
