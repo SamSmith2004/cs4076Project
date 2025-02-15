@@ -68,11 +68,12 @@ public class MainController implements Initializable {
 
     @FXML
     protected void onLM05125ButtonClick() {
+        App.loadTimetableView();
     }
 
     @FXML
     protected void onLM11025ButtonClick(){
-        App.loadTimetableView();
+        
     }
 
     @FXML
