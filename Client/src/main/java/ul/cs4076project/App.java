@@ -3,8 +3,12 @@ package ul.cs4076project;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import ul.cs4076project.Controller.AddALecturePopupDialogueController;
 import ul.cs4076project.Controller.MainController;
+import ul.cs4076project.Controller.RemoveALecturePopupDialogueController;
 import ul.cs4076project.Controller.TimetableController;
 import ul.cs4076project.Model.TCPClient;
 
@@ -12,6 +16,8 @@ import java.io.IOException;
 
 public class App extends Application {
     private static Stage primaryStage;
+    private static Stage addALecturePopupStage;
+    private static Stage removeALecturePopupStage;
     private static Scene mainScene;
     private static Scene timetableScene;
     private static TCPClient client;
@@ -50,6 +56,48 @@ public class App extends Application {
         primaryStage.setTitle("Lecture Timetable");
         primaryStage.setScene(timetableScene);
         primaryStage.show();
+    }
+
+    public static void openAddALecturePopupDialogue() {
+        try {
+            FXMLLoader addALecturePopupLoader = new FXMLLoader(App.class.getResource("View/popup-dialogues/add-lecture-popup-dialogue.fxml"));
+            Scene scene = new Scene(addALecturePopupLoader.load(), 350, 500);
+            addALecturePopupStage = new Stage();
+            addALecturePopupStage.setTitle("ADD Lecture");
+            addALecturePopupStage.initStyle(StageStyle.UTILITY);
+            addALecturePopupStage.initModality(Modality.WINDOW_MODAL);
+            addALecturePopupStage.initOwner(primaryStage);
+            addALecturePopupStage.setScene(scene);
+
+            // Get the controller and set the dialog stage
+            AddALecturePopupDialogueController controller = addALecturePopupLoader.getController();
+            controller.setDialogStage(addALecturePopupStage);
+
+            addALecturePopupStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void openRemoveALecturePopupDialogue() {
+        try {
+            FXMLLoader removeALecturePopupLoader = new FXMLLoader(App.class.getResource("View/popup-dialogues/remove-lecture-popup-dialogue.fxml"));
+            Scene scene = new Scene(removeALecturePopupLoader.load(), 350, 500);
+            removeALecturePopupStage = new Stage();
+            removeALecturePopupStage.setTitle("REMOVE Lecture");
+            removeALecturePopupStage.initStyle(StageStyle.UTILITY);
+            removeALecturePopupStage.initModality(Modality.WINDOW_MODAL);
+            removeALecturePopupStage.initOwner(primaryStage);
+            removeALecturePopupStage.setScene(scene);
+
+            // Get the controller and set the dialog stage
+            RemoveALecturePopupDialogueController controller = removeALecturePopupLoader.getController();
+            controller.setDialogStage(removeALecturePopupStage);
+
+            removeALecturePopupStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

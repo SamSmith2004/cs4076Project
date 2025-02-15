@@ -45,20 +45,12 @@ public class TimetableController implements Initializable {
 
     @FXML
     protected void onAddLectureClick() {
-        try {
-            Map<String, String> headers = new HashMap<>();
-            headers.put("getTimetable", "true");
-
-            JsonObject response = client.get("LM05125", headers);
-            debugLabel.setText(response.toString());
-        } catch (IOException e) {
-            System.err.println("Error sending message: " + e.getMessage());
-            debugLabel.setText("Error sending message to server!");
-        }
+        App.openAddALecturePopupDialogue();
     }
 
     @FXML
     protected void onRemoveLectureClick() {
+        App.openRemoveALecturePopupDialogue();
     }
 
     @FXML
