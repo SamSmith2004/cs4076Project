@@ -73,9 +73,6 @@ public class TimetableController implements Initializable {
             System.err.println("Error sending message: " + e.getMessage());
             debugLabel.setText("Error sending message to server!");
         }
-    @FXML
-    protected void onAddLectureClick() {
-        App.openAddALecturePopupDialogue();
     }
 
     private void updateTimetableGrid(Lecture[][] lectures) {
@@ -115,6 +112,7 @@ public class TimetableController implements Initializable {
 
     @FXML
     protected void onAddLectureClick() {
+        App.openAddALecturePopupDialogue();
     }
 
     @FXML
