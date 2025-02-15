@@ -79,16 +79,16 @@
 
                 <!-- Row constraints -->
                 <rowConstraints>
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="50" prefHeight="50" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="20" prefHeight="20" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
+                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
                 </rowConstraints>
 
                 <!-- Days row (grid header) -->
