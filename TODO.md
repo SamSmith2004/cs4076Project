@@ -9,11 +9,12 @@
     - [x] Styling
 ### Actions
 - [ ] Add Lecture
-    - [ ] Button:
-      - [ ] Date
-      - [ ] Time 
-      - [ ] Room num
-      - [ ] module name
+    - [ ] Input Fields:
+      - [x] Day
+      - [X] Time 
+      - [x] Room num
+      - [x] module name
+    - [ ] Change Input Fields to Correct Types (text field, Day Selection, Time Selection)
     - [ ] Handle server response
 - [ ] Remove a Lecture
     - [ ] Button:
