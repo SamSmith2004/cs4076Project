@@ -98,6 +98,7 @@ public class MainController implements Initializable {
         } else {
             try {
                 client = new TCPClient();
+                App.updateClientReference(client);
 
                 serverStatusButton.setText("STOP Server");
                 serverStatus.setText("Connected to Server!");

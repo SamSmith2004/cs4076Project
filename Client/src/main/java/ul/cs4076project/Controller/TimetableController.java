@@ -52,12 +52,14 @@ public class TimetableController implements Initializable {
         }
     }
 
-    private void loadTimetableData() {
+    public void loadTimetableData() {
         if (client == null) {
             debugLabel.setText("Error: Client not initialized!");
+            createEmptyCells();
             return;
         }
 
+        // Client is init
         try {
             Map<String, String> headers = new HashMap<>();
             headers.put("Content-Type", "timetable");

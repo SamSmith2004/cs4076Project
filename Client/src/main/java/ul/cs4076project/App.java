@@ -20,6 +20,8 @@ public class App extends Application {
     private static Stage removeALecturePopupStage;
     private static Scene mainScene;
     private static Scene timetableScene;
+    private static MainController mainController;
+    private static TimetableController timetableController;
     private static TCPClient client;
 
     @Override
@@ -37,8 +39,8 @@ public class App extends Application {
         timetableScene = new Scene(timetableLoader.load(), 1280, 720);
 
         // Get the controllers after loading and initialize the TCPClient
-        MainController mainController = mainLoader.getController();
-        TimetableController timetableController = timetableLoader.getController();
+        mainController = mainLoader.getController();
+        timetableController = timetableLoader.getController();
         mainController.initializeWithClient(client);
         timetableController.initializeWithClient(client);
 
@@ -55,7 +57,15 @@ public class App extends Application {
     public static void loadTimetableView() {
         primaryStage.setTitle("Lecture Timetable");
         primaryStage.setScene(timetableScene);
+
+        timetableController.loadTimetableData();
+
         primaryStage.show();
+    }
+
+    public static void updateClientReference(TCPClient newClient) {
+        timetableController.initializeWithClient(newClient);
+        client = newClient;
     }
 
     public static void openAddALecturePopupDialogue() {
@@ -75,7 +85,7 @@ public class App extends Application {
 
             addALecturePopupStage.showAndWait();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error loading AddALecturePopupDialogue: " + e.getMessage());
         }
     }
 
@@ -96,7 +106,7 @@ public class App extends Application {
 
             removeALecturePopupStage.showAndWait();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error loading RemoveALecturePopupDialogue: " + e.getMessage());
         }
     }
 
