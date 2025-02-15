@@ -37,7 +37,7 @@ public class Post extends RequestHandler {
 
             // Build response
             JsonObject responseData =
-                    Json.createObjectBuilder().add("status", "success").add("content", message).build();
+                    Json.createObjectBuilder().add("status", "success").add("Content-Type", "message").add("content", message).build();
 
             return jsonToString(responseData);
 

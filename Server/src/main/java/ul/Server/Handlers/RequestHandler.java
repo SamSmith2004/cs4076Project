@@ -32,6 +32,7 @@ public abstract class RequestHandler {
                 Json.createObjectBuilder()
                         .add("status", "error")
                         .add("message", "Server error: " + e.getMessage())
+                        .add("Content-Type", "Error")
                         .build();
         return jsonToString(errorResponse);
     }

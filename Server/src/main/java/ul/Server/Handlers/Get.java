@@ -20,19 +20,13 @@ public class Get extends RequestHandler {
     public String responseBuilder(SessionData sessionData) throws IOException {
         JsonObject responseData = null;
         try {
-            for (String key : headerKeys) {
-                // "Enhanced" switch statement to make IDE warnings stop
-                responseData = switch (key) {
-                    case "error" -> throw new Exception("Error header present");
-                    case "getTimetable" -> {
-                        yield buildTimetableResponse(sessionData);
-                    }
-                    default -> {
-                        System.out.println("GET requests require a URL header");
-                        yield buildInvalidUrlResponse();
-                    }
-                };
-            }
+            String contentType = headers.getString("Content-Type");
+
+            responseData = switch (contentType) {
+                case "timetable" -> buildTimetableResponse(sessionData);
+                case "lecture" -> buildLectureResponse(sessionData);
+                default -> buildInvalidResponse();
+            };
 
             return jsonToString(responseData);
 
@@ -45,10 +39,11 @@ public class Get extends RequestHandler {
         }
     }
 
-    private JsonObject buildInvalidUrlResponse() {
+    private JsonObject buildInvalidResponse() {
         return Json.createObjectBuilder()
                 .add("status", "error")
-                .add("message", "Invalid URL")
+                .add("content", "Invalid Content-Type")
+                .add("Content-Type", "Error")
                 .build();
     }
 
@@ -65,6 +60,11 @@ public class Get extends RequestHandler {
             arrayBuilder.add(lectureBuilder);
         }
 
-        return Json.createObjectBuilder().add("status", "success").add("content", arrayBuilder).build();
+        return Json.createObjectBuilder().add("status", "success").add("Content-Type", "timetable").add("content", arrayBuilder).build();
+    }
+
+    private JsonObject buildLectureResponse(SessionData sessionData) {
+        // TODO
+        return null;
     }
 }
