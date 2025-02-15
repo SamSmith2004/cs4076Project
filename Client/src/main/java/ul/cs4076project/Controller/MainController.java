@@ -3,6 +3,7 @@ package ul.cs4076project.Controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import ul.cs4076project.App;
 import ul.cs4076project.Model.TCPClient;
 
 import javax.json.JsonObject;
@@ -73,8 +74,8 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    protected void onLM11025ButtonClick() {
-
+    protected void onLM11025ButtonClick() throws IOException {
+        App.loadTimetableView();
     }
 
     @FXML
