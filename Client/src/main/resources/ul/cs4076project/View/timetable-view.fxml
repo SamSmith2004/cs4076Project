@@ -25,7 +25,7 @@
             </ImageView>
 
             <!-- Centered Text -->
-            <Label text="Lecture Timetable" style="-fx-font-size: 36px; -fx-font-weight: bold;"
+            <Label text="LM051-2025 SEM 1 Timetable" style="-fx-font-size: 36px; -fx-font-weight: bold;"
                 StackPane.alignment="CENTER">
             </Label>
         </StackPane>
