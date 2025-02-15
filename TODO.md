@@ -41,6 +41,7 @@
 
 ## Bugs
 - [X] Bug with Sockets when Switching Between Views - App crashes after having switched view and attempting to close the server
+- [ ] Bug with loading Timetable data when starting app before server - No logic to refetch timetable once connection to server has been reestablished
 
 ## Submission Requirements
 - studentId1_studentId2.zip
