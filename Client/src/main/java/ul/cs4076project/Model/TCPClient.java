@@ -29,15 +29,15 @@ public class TCPClient {
         }
     }
 
-    public JsonObject get(String message, Map<String, String> headers) throws IOException {
+    public Object get(String message, Map<String, String> headers) throws IOException {
         return sendRequest("GET", message, headers);
     }
 
-    public JsonObject post(String message, Map<String, String> headers) throws IOException {
+    public Object post(String message, Map<String, String> headers) throws IOException {
         return sendRequest("POST", message, headers);
     }
 
-    private JsonObject sendRequest(String methodType, String message, Map<String, String> headers) throws IOException {
+    private Object sendRequest(String methodType, String message, Map<String, String> headers) throws IOException {
         try {
             // Get headers
             JsonObjectBuilder headersBuilder = Json.createObjectBuilder();
@@ -61,7 +61,8 @@ public class TCPClient {
             System.out.println("Received: " + response);
             JsonReader jsonReader = Json.createReader(new StringReader(response));
 
-            return jsonReader.readObject();
+            ResponseHandler parsedResponse = new ResponseHandler(jsonReader.readObject());
+            return parsedResponse.extractResponse();
         } catch (IOException e) {
             System.err.println("IO Error during " + methodType + ": " + e.getMessage());
             throw e;
