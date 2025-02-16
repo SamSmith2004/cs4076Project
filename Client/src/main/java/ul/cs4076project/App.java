@@ -22,6 +22,7 @@ public class App extends Application {
     private static Scene timetableScene;
     private static MainController mainController;
     private static TimetableController timetableController;
+    private static AddALecturePopupDialogueController addALecturePopupDialogueController;
     private static TCPClient client;
 
     @Override
@@ -80,8 +81,9 @@ public class App extends Application {
             addALecturePopupStage.setScene(scene);
 
             // Get the controller and set the dialog stage
-            AddALecturePopupDialogueController controller = addALecturePopupLoader.getController();
-            controller.setDialogStage(addALecturePopupStage);
+            addALecturePopupDialogueController = addALecturePopupLoader.getController();
+            addALecturePopupDialogueController.initializeWithClient(client);
+            addALecturePopupDialogueController.setDialogStage(addALecturePopupStage);
 
             addALecturePopupStage.showAndWait();
         } catch (IOException e) {

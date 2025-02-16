@@ -60,6 +60,9 @@
                     style="-fx-font-size: 14;" prefWidth="100" />
             </VBox>
 
+            <!-- Notice Label -->
+            <Label fx:id="noticeLabel" text="" style="-fx-font-size: 14; -fx-text-fill: red;" />
+
             <!-- OK Button -->
             <Button fx:id="okButton" text="ADD Lecture" onAction="#handleOKButton" style="-fx-font-size: 14;"
                 prefWidth="100" />

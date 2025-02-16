@@ -31,6 +31,9 @@ public class ResponseHandler {
             case "Message":
                 result = response.getString("message");
                 break;
+            case "test":
+                result = response.getString("content");
+                break;
             default:
                 System.out.println("Invalid Content-Type");
                 break;

@@ -1,5 +1,6 @@
 package ul.cs4076project.Controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -12,13 +13,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import ul.cs4076project.Model.TCPClient;
 
 public class AddALecturePopupDialogueController implements Initializable {
     private Map<String, String> lm05125_sem1_modules;
     private Stage addALecturePopupStage;
     private List<String> originalToTimes;
+    private TCPClient client;
+    private boolean isConnectedToServer = false;
 
     @FXML
     private ComboBox<String> comboBoxFromTimeField;
@@ -34,6 +39,9 @@ public class AddALecturePopupDialogueController implements Initializable {
 
     @FXML
     private TextField roomNumberField;
+
+    @FXML
+    private Label noticeLabel;
 
     @FXML
     private Button okButton;
@@ -78,13 +86,41 @@ public class AddALecturePopupDialogueController implements Initializable {
         });
     }
 
+    public void initializeWithClient(TCPClient client) {
+        this.client = client;
+        this.isConnectedToServer = (client != null);
+    }
+
     public void setDialogStage(Stage addALecturePopupStage) {
         this.addALecturePopupStage = addALecturePopupStage;
     }
 
     @FXML
     private void handleOKButton() {
-        // Handle submission of data to server
+        if (!isConnectedToServer) {
+            System.err.println("Client is not connected to server");
+            noticeLabel.setText("Not connected to server");
+            return;
+        }
+
+        // Check if all fields are filled
+        if (comboBoxModuleField.getSelectionModel().isEmpty() ||
+            comboBoxFromTimeField.getSelectionModel().isEmpty() ||
+            comboBoxToTimeField.getSelectionModel().isEmpty() ||
+            comboBoxDayField.getSelectionModel().isEmpty() ||
+            roomNumberField.getText().isEmpty()) {
+            noticeLabel.setText("All fields must be filled");
+            return;
+        }
+
+        try {
+            HashMap<String, String> headers = new HashMap<String, String>();
+            headers.put("Content-Type", "test");
+            Object response = client.post("test", headers);
+            System.out.println("Server add response: " + response.toString());
+        } catch (IOException e) {
+            System.err.println("Error sending message: " + e.getMessage());
+        }
 
         addALecturePopupStage.close();
     }
