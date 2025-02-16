@@ -1,42 +1,90 @@
 package ul.cs4076project.Controller;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.net.URL;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class AddALecturePopupDialogueController {
+public class AddALecturePopupDialogueController implements Initializable {
+    private Map<String, String> lm05125_sem1_modules;
     private Stage addALecturePopupStage;
+    private List<String> originalToTimes;
 
-    // FXML fields for the input controls
     @FXML
-    private TextField timeField;
+    private ComboBox<String> comboBoxFromTimeField;
+
+    @FXML
+    private ComboBox<String> comboBoxToTimeField;
+
+    @FXML
+    private ComboBox<String> comboBoxDayField;
+
+    @FXML
+    private ComboBox<String> comboBoxModuleField;
 
     @FXML
     private TextField roomNumberField;
 
     @FXML
-    private TextField moduleNameField;
-
-    @FXML
     private Button okButton;
 
-    // Set the dialog stage
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Add module_id and module title to HashMap
+        lm05125_sem1_modules = new HashMap<>();
+        lm05125_sem1_modules.put("CS4006", "CS4006 - Intelligent Systems");
+        lm05125_sem1_modules.put("CS4076", "CS4076 - Event Driven Programming");
+        lm05125_sem1_modules.put("CS4115", "CS4115 - Data Structures and Algorithms");
+        lm05125_sem1_modules.put("CS4185", "CS4815 - Computer Graphics");
+        lm05125_sem1_modules.put("MA4413", "MA4413 - Statistics for Computing");
+
+        comboBoxDayField.getItems().addAll("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
+        comboBoxFromTimeField.getItems().addAll("0900", "1000", "1100", "1200", "1300", "1400", "1500", "1600", "1700");
+
+        originalToTimes = new ArrayList<>();
+        originalToTimes.addAll(List.of("1000", "1100", "1200", "1300", "1400", "1500", "1600", "1700", "1800"));
+        comboBoxToTimeField.getItems().addAll(originalToTimes);
+
+        for (Map.Entry<String, String> module : lm05125_sem1_modules.entrySet()) {
+            comboBoxModuleField.getItems().add(module.getValue());
+        }
+
+        // Add a listener to the "From Time" ComboBox
+        comboBoxFromTimeField.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                comboBoxToTimeField.getItems().setAll(originalToTimes);
+
+                List<String> validToTimes = originalToTimes.stream()
+                        .filter(time -> time.compareTo(newValue) > 0)
+                        .collect(Collectors.toList());
+
+                comboBoxToTimeField.getItems().setAll(validToTimes);
+
+                if (comboBoxToTimeField.getSelectionModel().getSelectedItem() == null ||
+                    comboBoxToTimeField.getSelectionModel().getSelectedItem().compareTo(newValue) <= 0) {
+                    comboBoxToTimeField.getSelectionModel().clearSelection();
+                }
+            }
+        });
+    }
+
     public void setDialogStage(Stage addALecturePopupStage) {
         this.addALecturePopupStage = addALecturePopupStage;
     }
 
-    // Handle the OK button click
     @FXML
     private void handleOKButton() {
-        String time = timeField.getText();
-        String roomNumber = roomNumberField.getText();
-        String moduleName = moduleNameField.getText();
-
-        if (time.isEmpty() || roomNumber.isEmpty() || moduleName.isEmpty()) {
-            System.out.println("Please fill in all fields.");
-            return; // Do not close the dialog if fields are empty
-        }
+        // Handle submission of data to server
 
         addALecturePopupStage.close();
     }

@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Pos?>
+<?import javafx.scene.control.ComboBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17"
     xmlns:fx="http://javafx.com/fxml/1"
@@ -23,15 +24,33 @@
             <!-- Time Field -->
             <VBox spacing="5">
                 <Label text="Time:" style="-fx-font-size: 14;" />
-                <TextField fx:id="timeField" promptText="Enter time" style="-fx-font-size: 14;"
-                    prefWidth="100" />
+                <HBox spacing="10">
+                    <VBox spacing="5">
+                        <ComboBox fx:id="comboBoxFromTimeField" prefWidth="100"
+                            style="-fx-font-size: 14;" />
+                    </VBox>
+
+                    <VBox spacing="5">
+                        <Label text="to" style="-fx-font-size: 14;" />
+                    </VBox>
+
+                    <VBox spacing="5">
+                        <ComboBox fx:id="comboBoxToTimeField" prefWidth="100"
+                            style="-fx-font-size: 14;" />
+                    </VBox>
+                </HBox>
             </VBox>
 
             <!-- Day Field -->
             <VBox spacing="5">
                 <Label text="Day:" style="-fx-font-size: 14;" />
-                <TextField fx:id="timeField" promptText="Enter day" style="-fx-font-size: 14;"
-                    prefWidth="100" />
+                <ComboBox fx:id="comboBoxDayField" prefWidth="100" style="-fx-font-size: 14;" />
+            </VBox>
+
+            <!-- Module Name Field -->
+            <VBox spacing="5">
+                <Label text="Module Name:" style="-fx-font-size: 14;" />
+                <ComboBox fx:id="comboBoxModuleField" prefWidth="100" style="-fx-font-size: 14;" />
             </VBox>
 
             <!-- Room Number Field -->
@@ -41,15 +60,8 @@
                     style="-fx-font-size: 14;" prefWidth="100" />
             </VBox>
 
-            <!-- Module Name Field -->
-            <VBox spacing="5">
-                <Label text="Module Name:" style="-fx-font-size: 14;" />
-                <TextField fx:id="moduleNameField" promptText="Enter module name"
-                    style="-fx-font-size: 14;" prefWidth="100" />
-            </VBox>
-
             <!-- OK Button -->
-            <Button fx:id="okButton" text="OK" onAction="#handleOKButton" style="-fx-font-size: 14;"
+            <Button fx:id="okButton" text="ADD Lecture" onAction="#handleOKButton" style="-fx-font-size: 14;"
                 prefWidth="100" />
         </VBox>
     </center>

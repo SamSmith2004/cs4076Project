@@ -71,7 +71,7 @@ public class App extends Application {
     public static void openAddALecturePopupDialogue() {
         try {
             FXMLLoader addALecturePopupLoader = new FXMLLoader(App.class.getResource("View/popup-dialogues/add-lecture-popup-dialogue.fxml"));
-            Scene scene = new Scene(addALecturePopupLoader.load(), 350, 380);
+            Scene scene = new Scene(addALecturePopupLoader.load(), 350, 450);
             addALecturePopupStage = new Stage();
             addALecturePopupStage.setTitle("ADD Lecture");
             addALecturePopupStage.initStyle(StageStyle.UTILITY);
