@@ -23,7 +23,7 @@ public class SessionData {
         timeTable.remove(index);
     }
 
-    public void editLecture(int index, Lecture lecture) {
+    public void replaceLecture(int index, Lecture lecture) {
         timeTable.set(index, lecture);
     }
 
@@ -38,10 +38,10 @@ public class SessionData {
 
 
     public void fillMockData() {
-        timeTable.add(new Lecture("CS101", "Dr. Smith", "Room 101", "9:00", "Monday"));
-        timeTable.add(new Lecture("CS102", "Dr. Smith", "Room 102", "10:00", "Tuesday"));
-        timeTable.add(new Lecture("CS103", "Dr. Smith", "Room 103", "11:00", "Wednesday"));
-        timeTable.add(new Lecture("CS104", "Dr. Smith", "Room 104", "12:00", "Thursday"));
-        timeTable.add(new Lecture("CS105", "Dr. Smith", "Room 105", "13:00", "Friday"));
+        timeTable.add(new Lecture("CS101", "Dr. Smith", "Room 101", "9:00", "10:00", "Monday"));
+        timeTable.add(new Lecture("CS102", "Dr. Smith", "Room 102", "10:00","11:00", "Tuesday"));
+        timeTable.add(new Lecture("CS103", "Dr. Smith", "Room 103", "11:00","12:00", "Wednesday"));
+        timeTable.add(new Lecture("CS104", "Dr. Smith", "Room 104", "12:00","13:00", "Thursday"));
+        timeTable.add(new Lecture("CS105", "Dr. Smith", "Room 105", "13:00", "14:00","Friday"));
     }
 }

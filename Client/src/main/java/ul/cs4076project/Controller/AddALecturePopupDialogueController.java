@@ -115,13 +115,15 @@ public class AddALecturePopupDialogueController implements Initializable {
             return;
         }
 
-        String formattedTime = String.valueOf(Integer.parseInt(comboBoxFromTimeField.getValue().substring(0, 2))) + ":00";
+        String fromTime = String.valueOf(Integer.parseInt(comboBoxFromTimeField.getValue().substring(0, 2))) + ":00";
+        String toTime = String.valueOf(Integer.parseInt(comboBoxToTimeField.getValue().substring(0, 2))) + ":00";
 
         Lecture lecture = new Lecture(
                 comboBoxModuleField.getValue().split(" - ")[0],
                 "TODO", // lecturer placeholder
                 roomNumberField.getText(),
-                formattedTime,
+                fromTime,
+                toTime,
                 comboBoxDayField.getValue()
         );
 

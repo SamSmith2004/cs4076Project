@@ -18,7 +18,7 @@ public class Get extends RequestHandler {
 
     @Override
     public String responseBuilder(SessionData sessionData) throws IOException {
-        JsonObject responseData = null;
+        JsonObject responseData;
         try {
             String contentType = headers.getString("Content-Type");
 
@@ -55,7 +55,8 @@ public class Get extends RequestHandler {
                     .add("module", lecture.getModule())
                     .add("lecturer", lecture.getLecturer())
                     .add("room", lecture.getRoom())
-                    .add("time", lecture.getTime())
+                    .add("fromTime", lecture.getFromTime())
+                    .add("toTime", lecture.getToTime())
                     .add("day", lecture.getDay());
             arrayBuilder.add(lectureBuilder);
         }

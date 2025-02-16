@@ -54,7 +54,8 @@ public class ResponseHandler {
                     lectureJson.getString("module"),
                     lectureJson.getString("lecturer"),
                     lectureJson.getString("room"),
-                    lectureJson.getString("time"),
+                    lectureJson.getString("fromTime"),
+                    lectureJson.getString("toTime"),
                     lectureJson.getString("day")
             );
             lectures.add(lecture);
@@ -70,7 +71,7 @@ public class ResponseHandler {
                 case "Friday" -> 4;
                 default -> -1;
             };
-            int time = switch (lecture.getTime()) {
+            int time = switch (lecture.getFromTime()) {
                 case "9:00" -> 0;
                 case "10:00" -> 1;
                 case "11:00" -> 2;

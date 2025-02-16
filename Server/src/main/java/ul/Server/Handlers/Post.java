@@ -61,28 +61,31 @@ public class Post extends RequestHandler {
         String module = content.getString("module");
         String lecturer = content.getString("lecturer");
         String room = content.getString("room");
-        String time = content.getString("time");
+        String fromTime = content.getString("fromTime");
+        String toTime = content.getString("toTime");
         String day = content.getString("day");
 
         // Normalize time to prevent comparison failures
-        String normalizedTime = time.replaceFirst("^0", "");
+        String normalizedFromTime = fromTime.replaceFirst("^0", "");
+        String normalizedToTime = toTime.replaceFirst("^0", "");
 
-        // Check if timeslot is already taken
+        Lecture newLecture = new Lecture(module, lecturer, room, normalizedFromTime, normalizedToTime, day);
+
+        // Check if timeslot overlaps with existing lectures
         ArrayList<Lecture> lectures = sessionData.getTimeTable();
-        for (Lecture lecture : lectures) {
-            String existingTime = lecture.getTime().replaceFirst("^0", "");
-            if (existingTime.equals(normalizedTime) && lecture.getDay().equals(day)) {
+        for (Lecture existingLecture : lectures) {
+            if (newLecture.overlaps(existingLecture)) {
                 return Json.createObjectBuilder()
                         .add("status", "error")
                         .add("content", "Timeslot already taken")
+                        .add("message", String.format("Time %s-%s on %s overlaps with %s",
+                                fromTime, toTime, day, existingLecture.getModule()))
                         .add("Content-Type", "addLecture")
                         .build();
             }
         }
 
-        Lecture lecture = new Lecture(module, lecturer, room, time, day);
-        sessionData.addLecture(lecture);
-
+        sessionData.addLecture(newLecture);
         return Json.createObjectBuilder()
                 .add("status", "success")
                 .add("content", "Lecture added")

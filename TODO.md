@@ -36,7 +36,7 @@
 ### Actions
 - [X] Add Lecture
   - [X] Basic check for timeslot clashes
-  - [ ] From + To timeslot check
+  - [X] From + To timeslot check
   - [X] Success message
 - [ ] Remove a Lecture
     - [ ] Success Messages (include room number)
@@ -47,7 +47,7 @@
 
 ## Bugs
 - [X] Bug with Sockets when Switching Between Views - App crashes after having switched view and attempting to close the server
-- [X] Bug with loading Timetable data when starting app before server - No logic to refetch timetable once connection to server has been reestablished
+- [X] Bug with loading Timetable data when starting app before server - No logic to re-fetch timetable once connection to server has been reestablished
 
 ## Submission Requirements
 - studentId1_studentId2.zip
