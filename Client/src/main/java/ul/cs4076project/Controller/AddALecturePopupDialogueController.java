@@ -16,6 +16,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import ul.cs4076project.Model.Lecture;
 import ul.cs4076project.Model.TCPClient;
 
 public class AddALecturePopupDialogueController implements Initializable {
@@ -113,13 +114,25 @@ public class AddALecturePopupDialogueController implements Initializable {
             return;
         }
 
+        Lecture lecture = new Lecture(
+                comboBoxModuleField.getValue(),
+                "TODO", // lecturer placeholder
+                roomNumberField.getText(),
+                comboBoxFromTimeField.getValue(),
+                comboBoxDayField.getValue()
+        );
+
         try {
             HashMap<String, String> headers = new HashMap<String, String>();
-            headers.put("Content-Type", "test");
-            Object response = client.post("test", headers);
+            headers.put("Content-Type", "addLecture");
+            Object response = client.post(lecture.toJson().toString(), headers);
             System.out.println("Server add response: " + response.toString());
+            noticeLabel.setText("Lecture added successfully");
+
+            // TODO: Update the timetable view
         } catch (IOException e) {
             System.err.println("Error sending message: " + e.getMessage());
+            noticeLabel.setText("Error adding lecture");
         }
 
         addALecturePopupStage.close();

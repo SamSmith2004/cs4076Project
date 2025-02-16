@@ -39,6 +39,17 @@ public class TCPClient {
 
     private Object sendRequest(String methodType, String message, Map<String, String> headers) throws IOException {
         try {
+            // Parse the message if it's a JSON string (ensure it's a JSON object)
+            JsonObject messageContent;
+            if (message.startsWith("{") && message.endsWith("}")) {
+                JsonReader jsonReader = Json.createReader(new StringReader(message));
+                messageContent = jsonReader.readObject();
+            } else {
+                messageContent = Json.createObjectBuilder()
+                        .add("message", message)
+                        .build();
+            }
+
             // Get headers
             JsonObjectBuilder headersBuilder = Json.createObjectBuilder();
             for (Map.Entry<String, String> entry : headers.entrySet()) {
@@ -49,9 +60,7 @@ public class TCPClient {
             JsonObject jsonRequest = Json.createObjectBuilder()
                     .add("method", methodType)
                     .add("headers", headersBuilder)
-                    .add("content", Json.createObjectBuilder()
-                            .add("message", message)
-                            .build())
+                    .add("content", messageContent)
                     .build();
 
             out.println(jsonRequest.toString());

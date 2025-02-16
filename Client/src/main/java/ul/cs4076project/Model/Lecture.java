@@ -1,5 +1,8 @@
 package ul.cs4076project.Model;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+
 public class Lecture {
     private String module;
     private String lecturer;
@@ -20,6 +23,16 @@ public class Lecture {
     public String getRoom() { return room; }
     public String getTime() { return time; }
     public String getDay() { return day; }
+
+    public JsonObject toJson() {
+        return Json.createObjectBuilder()
+                .add("module", module)
+                .add("lecturer", lecturer)
+                .add("room", room)
+                .add("time", time)
+                .add("day", day)
+                .build();
+    }
 
     public String toString() {
         return "Module: " + module + ", Lecturer: " + lecturer + ", Room: " + room + ", Time: " + time + ", Day: " + day;

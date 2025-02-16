@@ -14,6 +14,7 @@
       - [X] Time 
       - [x] Room num
       - [x] module name
+      - [ ] lecturer name
       - [x] Change Input Fields to Correct Types (text field, Day Selection, Time Selection)
     - [ ] Styling
     - [ ] Handle server response
@@ -23,9 +24,10 @@
         - [ ] Confirm prompt -> Contains Lecture details
     - [ ] Styling
     - [ ] Handle server response
-- [X] Display Schedule
+- [ ] Display Schedule
     - [X] Parse Server response
     - [X] Format parsed response to timetable
+    - [ ] Deal with lectures longer than 1 hour
 - [ ] Other 
     - [ ] Custom User input
     - [ ] Handle Server Response
@@ -34,7 +36,7 @@
 ### Actions
 - [ ] Add Lecture
   - [ ] Check for timeslot clashes
-  - [ ] Success message
+  - [X] Success message
 - [ ] Remove a Lecture
     - [ ] Success Messages (include room number)
 - [X] Display Schedule
