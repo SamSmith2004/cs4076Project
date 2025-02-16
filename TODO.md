@@ -9,17 +9,19 @@
     - [x] Styling
 ### Actions
 - [ ] Add Lecture
-    - [ ] Input Fields:
+    - [x] Input Fields:
       - [x] Day
       - [X] Time 
       - [x] Room num
       - [x] module name
-      - [ ] Change Input Fields to Correct Types (text field, Day Selection, Time Selection)
+      - [x] Change Input Fields to Correct Types (text field, Day Selection, Time Selection)
+    - [ ] Styling
     - [ ] Handle server response
 - [ ] Remove a Lecture
     - [ ] Button:
         - [ ] Lecture Time
         - [ ] Confirm prompt -> Contains Lecture details
+    - [ ] Styling
     - [ ] Handle server response
 - [X] Display Schedule
     - [X] Parse Server response
