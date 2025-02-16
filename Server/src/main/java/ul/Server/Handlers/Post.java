@@ -7,7 +7,7 @@ import javax.json.Json;
 import javax.json.JsonException;
 import javax.json.JsonObject;
 import java.io.IOException;
-import java.util.Set;
+import java.util.ArrayList;
 
 public class Post extends RequestHandler {
     JsonObject headers;
@@ -20,7 +20,7 @@ public class Post extends RequestHandler {
 
     @Override
     public String responseBuilder(SessionData sessionData) throws IOException {
-        JsonObject responseData = null;
+        JsonObject responseData;
         try {
             String contentType = headers.getString("Content-Type");
 
@@ -63,6 +63,22 @@ public class Post extends RequestHandler {
         String room = content.getString("room");
         String time = content.getString("time");
         String day = content.getString("day");
+
+        // Normalize time to prevent comparison failures
+        String normalizedTime = time.replaceFirst("^0", "");
+
+        // Check if timeslot is already taken
+        ArrayList<Lecture> lectures = sessionData.getTimeTable();
+        for (Lecture lecture : lectures) {
+            String existingTime = lecture.getTime().replaceFirst("^0", "");
+            if (existingTime.equals(normalizedTime) && lecture.getDay().equals(day)) {
+                return Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("content", "Timeslot already taken")
+                        .add("Content-Type", "addLecture")
+                        .build();
+            }
+        }
 
         Lecture lecture = new Lecture(module, lecturer, room, time, day);
         sessionData.addLecture(lecture);

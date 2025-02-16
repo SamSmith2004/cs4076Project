@@ -16,6 +16,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import ul.cs4076project.App;
 import ul.cs4076project.Model.Lecture;
 import ul.cs4076project.Model.TCPClient;
 
@@ -114,27 +115,39 @@ public class AddALecturePopupDialogueController implements Initializable {
             return;
         }
 
+        String formattedTime = String.valueOf(Integer.parseInt(comboBoxFromTimeField.getValue().substring(0, 2))) + ":00";
+
         Lecture lecture = new Lecture(
-                comboBoxModuleField.getValue(),
+                comboBoxModuleField.getValue().split(" - ")[0],
                 "TODO", // lecturer placeholder
                 roomNumberField.getText(),
-                comboBoxFromTimeField.getValue(),
+                formattedTime,
                 comboBoxDayField.getValue()
         );
 
         try {
-            HashMap<String, String> headers = new HashMap<String, String>();
+            HashMap<String, String> headers = new HashMap<>();
             headers.put("Content-Type", "addLecture");
             Object response = client.post(lecture.toJson().toString(), headers);
             System.out.println("Server add response: " + response.toString());
             noticeLabel.setText("Lecture added successfully");
 
-            // TODO: Update the timetable view
+            switch (response.toString()) {
+                case "Lecture added":
+                    noticeLabel.setText("Lecture added successfully");
+                    addALecturePopupStage.close();
+                    App.loadTimetableView();
+                    break;
+                case "Timeslot already taken":
+                    noticeLabel.setText("Timeslot already taken");
+                    break;
+                default:
+                    noticeLabel.setText("Failed to add lecture: " + response);
+                    break;
+            }
         } catch (IOException e) {
             System.err.println("Error sending message: " + e.getMessage());
             noticeLabel.setText("Error adding lecture");
         }
-
-        addALecturePopupStage.close();
     }
 }

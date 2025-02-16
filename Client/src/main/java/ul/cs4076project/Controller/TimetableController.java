@@ -106,6 +106,10 @@ public class TimetableController implements Initializable {
         debugLabel.setText("");
     }
 
+    private boolean checkIsTimeSlotEmpty(int col, int row) {
+        return timetable[col][row] == null;
+    }
+
     private Label createStyledLabel(String text, String style) {
         Label label = new Label(text);
         label.setStyle(style);

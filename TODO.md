@@ -17,7 +17,7 @@
       - [ ] lecturer name
       - [x] Change Input Fields to Correct Types (text field, Day Selection, Time Selection)
     - [ ] Styling
-    - [ ] Handle server response
+    - [X] Handle server response
 - [ ] Remove a Lecture
     - [ ] Button:
         - [ ] Lecture Time
@@ -34,8 +34,9 @@
 
 ## Server
 ### Actions
-- [ ] Add Lecture
-  - [ ] Check for timeslot clashes
+- [X] Add Lecture
+  - [X] Basic check for timeslot clashes
+  - [ ] From + To timeslot check
   - [X] Success message
 - [ ] Remove a Lecture
     - [ ] Success Messages (include room number)

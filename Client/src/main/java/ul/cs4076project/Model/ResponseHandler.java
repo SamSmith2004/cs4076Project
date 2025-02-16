@@ -17,7 +17,7 @@ public class ResponseHandler {
         String status = response.getString("status");
 
         if (status.equals("error")) {
-            return response.getString("message");
+            return response.getString("content");
         }
 
         Object result = null;
@@ -31,7 +31,7 @@ public class ResponseHandler {
             default:
                 System.out.println("Invalid Content-Type");
                 break;
-        };
+        }
 
         return result;
     }
@@ -86,18 +86,6 @@ public class ResponseHandler {
                 timetable[day][time] = lecture;
             }
         }
-
-        // Debug
-//        for (int i = 0; i < 5; i++) {
-//            for (int j = 0; j < 9; j++) {
-//                if (timetable[i][j] != null) {
-//                    System.out.print(timetable[i][j].toString() + " ");
-//                } else {
-//                    System.out.print("null ");
-//                }
-//            }
-//            System.out.println();
-//        }
 
         return timetable;
     }
