@@ -49,6 +49,7 @@
 - [X] Bug with Sockets when Switching Between Views - App crashes after having switched view and attempting to close the server
 - [X] Bug with loading Timetable data when starting app before server - No logic to re-fetch timetable once connection to server has been reestablished
 - [x] Bug with displaying "Added Lectures" on timetable after connection to server has been restarted - Client keeps previous "Added Lecture and does not remove it - potential flushing issue
+- [ ] Bug with loading of scenes - when going between scenes and the application happens to be a differerent size than what was initialised (so not 1280x720), it will resize itself to 1280x720 from whatever the previous window size was. So if you are in fullscreen and switch to timetable view, it will resize the window to what was initialised as 1280x720
 
 ## Submission Requirements
 - studentId1_studentId2.zip
