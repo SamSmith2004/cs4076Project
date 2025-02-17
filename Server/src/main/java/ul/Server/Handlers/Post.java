@@ -78,8 +78,6 @@ public class Post extends RequestHandler {
                 return Json.createObjectBuilder()
                         .add("status", "error")
                         .add("content", "Timeslot already taken")
-                        .add("message", String.format("Time %s-%s on %s overlaps with %s",
-                                fromTime, toTime, day, existingLecture.getModule()))
                         .add("Content-Type", "addLecture")
                         .build();
             }
