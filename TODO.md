@@ -45,10 +45,10 @@
 - [ ] Other -> Custom User input
   - [ ] IncorrectActionException
 
-## Bugs
+## Bugs - Add as They Occur
 - [X] Bug with Sockets when Switching Between Views - App crashes after having switched view and attempting to close the server
 - [X] Bug with loading Timetable data when starting app before server - No logic to re-fetch timetable once connection to server has been reestablished
-- [ ] Bug with displaying "Added Lectures" on timetable after connection to server has been restarted - Client keeps previous "Added Lecture and does not remove it - potential flushing issue
+- [x] Bug with displaying "Added Lectures" on timetable after connection to server has been restarted - Client keeps previous "Added Lecture and does not remove it - potential flushing issue
 
 ## Submission Requirements
 - studentId1_studentId2.zip

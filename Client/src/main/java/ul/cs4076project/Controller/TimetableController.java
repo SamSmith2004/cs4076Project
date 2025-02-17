@@ -78,6 +78,8 @@ public class TimetableController implements Initializable {
     }
 
     private void updateTimetableGrid(Lecture[][] lectures) {
+        createEmptyCells();
+        
         for (int row = 1; row < 10; row++) {
             for (int col = 0; col < 5; col++) {
                 Lecture lecture = lectures[col][row - 1];
