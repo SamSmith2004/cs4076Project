@@ -85,6 +85,8 @@ public class App extends Application {
             addALecturePopupDialogueController.initializeWithClient(client);
             addALecturePopupDialogueController.setDialogStage(addALecturePopupStage);
 
+            addALecturePopupStage.setResizable(false);
+
             addALecturePopupStage.showAndWait();
         } catch (IOException e) {
             System.err.println("Error loading AddALecturePopupDialogue: " + e.getMessage());
@@ -105,6 +107,8 @@ public class App extends Application {
             // Get the controller and set the dialog stage
             RemoveALecturePopupDialogueController controller = removeALecturePopupLoader.getController();
             controller.setDialogStage(removeALecturePopupStage);
+
+            removeALecturePopupStage.setResizable(false);
 
             removeALecturePopupStage.showAndWait();
         } catch (IOException e) {

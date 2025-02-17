@@ -16,7 +16,7 @@
       - [x] module name
       - [ ] lecturer name
       - [x] Change Input Fields to Correct Types (text field, Day Selection, Time Selection)
-    - [ ] Styling
+    - [x] Styling
     - [X] Handle server response
 - [ ] Remove a Lecture
     - [ ] Button:
