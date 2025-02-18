@@ -50,7 +50,23 @@
             <!-- Notice Label -->
             <Label fx:id="noticeLabel" style="-fx-font-size: 14; -fx-text-fill: red;" />
 
+            <!-- Lecture Detail Lectures -->
+            <VBox spacing="5" alignment="CENTER" BorderPane.alignment="CENTER">
+                <VBox alignment="CENTER">
+                    <padding>
+                        <Insets bottom="10"/>
+                    </padding>
 
+                    <Label style="-fx-font-size: 16;"
+                        text="Confirm Details" />
+                </VBox>
+
+                <Label fx:id="moduleName" style="-fx-font-size: 14;"
+                    text="moduleName" />
+                <Label fx:id="lecturerName" style="-fx-font-size: 14;" text="lecturerName" />
+                <Label fx:id="roomNumber" style="-fx-font-size: 14;" text="roomNumber" />
+                <Label fx:id="timeOfLecture" style="-fx-font-size: 14;" text="timeOfLecture" />
+            </VBox>
         </VBox>
     </center>
 

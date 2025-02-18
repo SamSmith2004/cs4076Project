@@ -96,7 +96,7 @@ public class App extends Application {
     public static void openRemoveALecturePopupDialogue() {
         try {
             FXMLLoader removeALecturePopupLoader = new FXMLLoader(App.class.getResource("View/popup-dialogues/remove-lecture-popup-dialogue.fxml"));
-            Scene scene = new Scene(removeALecturePopupLoader.load(), 350, 500);
+            Scene scene = new Scene(removeALecturePopupLoader.load(), 350, 420);
             removeALecturePopupStage = new Stage();
             removeALecturePopupStage.setTitle("REMOVE Lecture");
             removeALecturePopupStage.initStyle(StageStyle.UTILITY);
