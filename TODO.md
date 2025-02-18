@@ -22,7 +22,12 @@
     - [ ] Button:
         - [x] Lecture Time
         - [ ] Confirm prompt -> Contains Lecture details
+    - [ ] Logic
+        - [ ] Event Handlers For All Input Fields (If They Are Populated)
+        - [ ] Conditional Logic to Render Lecture Details and "REMOVE Lecture" Button Once Fields are Filled In
     - [ ] Styling
+        - [ ] Auto Resizable Window Once All Fields Have Been Filled Out and Lecture Details are Displayed
+        - [ ] Style Lecture Details on Popup Window
     - [ ] Handle server response
 - [ ] Display Schedule
     - [X] Parse Server response
