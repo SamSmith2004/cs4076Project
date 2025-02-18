@@ -34,9 +34,9 @@
     - [X] Format parsed response to timetable
     - [ ] Styling
     - [ ] Deal with lectures longer than 1 hour [Optional]
-- [ ] Other 
-    - [ ] Custom User input
-    - [ ] Handle Server Response
+- [X] Other 
+    - [X] Custom User input
+    - [X] Handle Server Response
 
 ## Server
 ### Actions

@@ -16,6 +16,10 @@ public class ResponseHandler {
         String contentType = response.getString("Content-Type");
         String status = response.getString("status");
 
+        if (status.equals("InvalidActionException")) {
+            return "Invalid Action Exception";
+        }
+
         if (status.equals("error")) {
             return response.getString("content");
         }

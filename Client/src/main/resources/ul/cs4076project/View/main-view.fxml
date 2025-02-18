@@ -89,7 +89,7 @@
                     </Button>
                 </VBox>
             </HBox>
-            <Label fx:id="debugLabel" alignment="CENTER"/>
+            <Label fx:id="noticeLabel" alignment="CENTER" style="-fx-text-fill: red"/>
         </VBox>
     </center>
 

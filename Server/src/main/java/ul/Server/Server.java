@@ -52,37 +52,51 @@ public class Server {
                                 break;
                             }
 
-                            StringReader stringReader = new StringReader(request);
-                            JsonReader jsonReader = Json.createReader(stringReader);
-                            JsonObject requestData = jsonReader.readObject();
+                            try {
+                                StringReader stringReader = new StringReader(request);
+                                JsonReader jsonReader = Json.createReader(stringReader);
+                                JsonObject requestData = jsonReader.readObject();
 
-                            String response = switch (requestData.getString("method")) {
-                                case "GET" -> {
-                                    Get get = new Get(requestData);
-                                    yield get.responseBuilder(sessionData);
-                                }
-                                case "POST" -> {
-                                    Post post = new Post(requestData);
-                                    yield post.responseBuilder(sessionData);
-                                }
-                                default -> throw new IncorrectActionException();
-                            };
+                                String response;
+                                switch (requestData.getString("method")) {
+                                    case "GET" -> {
+                                        Get get = new Get(requestData);
+                                        response = get.responseBuilder(sessionData);
+                                    }
+                                    case "POST" -> {
+                                        Post post = new Post(requestData);
+                                        response =  post.responseBuilder(sessionData);
+                                    }
+                                    default -> throw new IncorrectActionException();
+                                };
 
-                            System.out.println("Sending: " + response);
-                            out.println(response);
-                            out.flush();
+                                System.out.println("Sending: " + response);
+                                out.println(response);
+                                out.flush();
+                            } catch (IncorrectActionException e) {
+                                JsonObject response = Json.createObjectBuilder()
+                                        .add("status", "InvalidActionException")
+                                        .add("content", "Invalid method")
+                                        .add("Content-Type", "Exception")
+                                        .build();
+
+                                System.out.println("Sending: " + response);
+                                out.println(response);
+                                out.flush();
+                            } catch (IOException e) {
+                                JsonObject response = Json.createObjectBuilder()
+                                        .add("status", "error")
+                                        .add("content", e.getMessage())
+                                        .add("Content-Type", "Exception")
+                                        .build();
+
+                                System.out.println("Sending: " + response);
+                                out.println(response);
+                                out.flush();
+                            }
                         }
                         System.out.println("Client disconnected: " + link.getInetAddress().getHostAddress());
 
-                    } catch (IncorrectActionException e) {
-                        JsonObject response = Json.createObjectBuilder()
-                                .add("status", "error")
-                                .add("content", "Invalid method")
-                                .add("Content-Type", "Error")
-                                .build();
-
-                        out.println(response);
-                        out.flush();
                     } catch (IOException e) {
                         System.err.println("IO Error in client handling: " + e.getMessage());
                     }
