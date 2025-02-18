@@ -38,8 +38,8 @@
   - [X] Basic check for timeslot clashes
   - [X] From + To timeslot check
   - [X] Success message
-- [ ] Remove a Lecture
-    - [ ] Success Messages (include room number)
+- [X] Remove a Lecture
+    - [X] Return removed lecture data
 - [X] Display Schedule
   - [X] Send data structure to client
 - [ ] Other -> Custom User input

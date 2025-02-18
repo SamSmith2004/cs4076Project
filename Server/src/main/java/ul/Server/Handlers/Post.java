@@ -26,6 +26,7 @@ public class Post extends RequestHandler {
 
             responseData = switch (contentType) {
                 case "addLecture" -> buildAddLectureResponse(sessionData);
+                case "removeLecture" -> buildRemoveLectureResponse(sessionData);
                 case "test" -> buildTestResponse();
                 default -> buildInvalidResponse();
             };
@@ -88,6 +89,35 @@ public class Post extends RequestHandler {
                 .add("status", "success")
                 .add("content", "Lecture added")
                 .add("Content-Type", "addLecture")
+                .build();
+    }
+
+    private JsonObject buildRemoveLectureResponse(SessionData sessionData) {
+        String fromTime = content.getString("fromTime");
+        String toTime = content.getString("toTime");
+        String day = content.getString("day");
+
+        // Normalize time to prevent comparison failures
+        String normalizedFromTime = fromTime.replaceFirst("^0", "");
+        String normalizedToTime = toTime.replaceFirst("^0", "");
+
+        try {
+            JsonObject removedLecture = sessionData.removeLecture(day, normalizedFromTime, normalizedToTime);
+            return Json.createObjectBuilder()
+                    .add("status", "success")
+                    .add("content", removedLecture)
+                    .add("Content-Type", "removeLecture")
+                    .build();
+        } catch (Exception e) {
+            return serialError(e);
+        }
+    }
+
+    private JsonObject serialError (Exception e) {
+        return Json.createObjectBuilder()
+                .add("status", "error")
+                .add("content", e.getMessage())
+                .add("Content-Type", "error")
                 .build();
     }
 }
