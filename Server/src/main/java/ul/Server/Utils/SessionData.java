@@ -1,5 +1,7 @@
 package ul.Server.Utils;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import java.util.ArrayList;
 
 public class SessionData {
@@ -19,8 +21,31 @@ public class SessionData {
         timeTable.clear();
     }
 
-    public void removeLecture(int index) {
-        timeTable.remove(index);
+    public JsonObject removeLecture(String day, String fromTime, String toTime) {
+        JsonObject response = null;
+        for (Lecture lec : timeTable) {
+            if (lec.getDay().equals(day) && normalisedTime(lec.getFromTime()).equals(fromTime) && normalisedTime(lec.getToTime()).equals(toTime)) {
+                response = serializeLecture(lec);
+                timeTable.remove(lec);
+                break;
+            }
+        }
+        return response;
+    }
+
+    private String normalisedTime(String time) {
+        return time.replaceFirst("^0", "");
+    }
+
+    private JsonObject serializeLecture(Lecture lecture) {
+        return Json.createObjectBuilder()
+                .add("module", lecture.getModule())
+                .add("lecturer", lecture.getLecturer())
+                .add("room", lecture.getRoom())
+                .add("fromTime", lecture.getFromTime())
+                .add("toTime", lecture.getToTime())
+                .add("day", lecture.getDay())
+                .build();
     }
 
     public void replaceLecture(int index, Lecture lecture) {
