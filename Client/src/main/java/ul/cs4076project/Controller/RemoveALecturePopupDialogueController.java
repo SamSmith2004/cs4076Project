@@ -85,7 +85,7 @@ public class RemoveALecturePopupDialogueController implements Initializable {
                     timeOfLecture.setText("Time: " + lecture.getTime());
                     dayOfLecture.setText("Day: " + lecture.getDay());
 
-                    resizeStage(350, 500);
+                    resizeStage(500);
                 }
             }
         });
@@ -174,9 +174,8 @@ public class RemoveALecturePopupDialogueController implements Initializable {
     }
 
 
-    private void resizeStage(int w, int h) {
+    private void resizeStage(int h) {
         Stage stage = (Stage) moduleName.getScene().getWindow();
-        stage.setWidth(w);
         stage.setHeight(h);
     }
 }
