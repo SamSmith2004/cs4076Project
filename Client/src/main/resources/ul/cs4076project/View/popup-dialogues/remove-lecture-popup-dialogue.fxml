@@ -2,25 +2,61 @@
 
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+
 <BorderPane xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ul.cs4076project.Controller.RemoveALecturePopupDialogueController">
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="ul.cs4076project.Controller.RemoveALecturePopupDialogueController">
 
     <center>
         <VBox alignment="TOP_CENTER" spacing="20" BorderPane.alignment="CENTER">
 
             <!-- Add padding around the VBox -->
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets top="20" right="20" bottom="20" left="20" />
             </padding>
 
             <!-- Day Field -->
+            <VBox spacing="5">
+                <Label text="Day:" style="-fx-font-size: 14;" />
+                <ComboBox fx:id="comboBoxDayField" prefWidth="310" style="-fx-font-size: 14;" />
+            </VBox>
 
             <!-- Time Field -->
+            <VBox spacing="5">
+                <Label text="Time:" style="-fx-font-size: 14;" />
+                <HBox spacing="10">
+                    <VBox spacing="5">
+                        <ComboBox fx:id="comboBoxFromTimeField" prefWidth="138"
+                            style="-fx-font-size: 14;" />
+                    </VBox>
+
+                    <VBox spacing="5">
+                        <Label text="to" style="-fx-font-size: 14;" />
+                    </VBox>
+
+                    <VBox spacing="5">
+                        <ComboBox fx:id="comboBoxToTimeField" prefWidth="138"
+                            style="-fx-font-size: 14;" />
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Notice Label -->
+            <Label fx:id="noticeLabel" style="-fx-font-size: 14; -fx-text-fill: red;" />
+
 
         </VBox>
     </center>
 
+    <bottom>
+        <Button fx:id="okButton" text="REMOVE Lecture" onAction="#handleOKButton"
+            style="-fx-font-size: 14;"
+            prefWidth="130" />
+    </bottom>
 </BorderPane>

@@ -8,7 +8,7 @@
     - [ ] Controller Logic
     - [x] Styling
 ### Actions
-- [ ] Add Lecture
+- [x] Add Lecture
     - [x] Input Fields:
       - [x] Day
       - [X] Time 
@@ -20,7 +20,7 @@
     - [X] Handle server response
 - [ ] Remove a Lecture
     - [ ] Button:
-        - [ ] Lecture Time
+        - [x] Lecture Time
         - [ ] Confirm prompt -> Contains Lecture details
     - [ ] Styling
     - [ ] Handle server response

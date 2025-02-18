@@ -23,7 +23,6 @@ public class App extends Application {
     private static MainController mainController;
     private static TimetableController timetableController;
     private static AddALecturePopupDialogueController addALecturePopupDialogueController;
-    private static RemoveALecturePopupDialogueController removeALecturePopupDialogueController;
     private static TCPClient client;
 
     @Override
@@ -106,9 +105,8 @@ public class App extends Application {
             removeALecturePopupStage.setScene(scene);
 
             // Get the controller and set the dialog stage
-            removeALecturePopupDialogueController = removeALecturePopupLoader.getController();
-            removeALecturePopupDialogueController.initializeWithClient(client);
-            removeALecturePopupDialogueController.setDialogStage(removeALecturePopupStage);
+            RemoveALecturePopupDialogueController controller = removeALecturePopupLoader.getController();
+            controller.setDialogStage(removeALecturePopupStage);
 
             removeALecturePopupStage.setResizable(false);
 
