@@ -97,7 +97,7 @@ public class App extends Application {
     public static void openRemoveALecturePopupDialogue() {
         try {
             FXMLLoader removeALecturePopupLoader = new FXMLLoader(App.class.getResource("View/popup-dialogues/remove-lecture-popup-dialogue.fxml"));
-            Scene scene = new Scene(removeALecturePopupLoader.load(), 350, 420);
+            Scene scene = new Scene(removeALecturePopupLoader.load(), 350, 300);
             removeALecturePopupStage = new Stage();
             removeALecturePopupStage.setTitle("REMOVE Lecture");
             removeALecturePopupStage.initStyle(StageStyle.UTILITY);
@@ -116,6 +116,10 @@ public class App extends Application {
         } catch (IOException e) {
             System.err.println("Error loading RemoveALecturePopupDialogue: " + e.getMessage());
         }
+    }
+
+    public static TimetableController getTimetableController() {
+        return timetableController;
     }
 
     public static void main(String[] args) {

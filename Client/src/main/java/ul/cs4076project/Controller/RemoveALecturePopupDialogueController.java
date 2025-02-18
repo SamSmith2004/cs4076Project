@@ -25,20 +25,18 @@ public class RemoveALecturePopupDialogueController implements Initializable {
     private TCPClient client;
     private List<String> originalToTimes;
 
-    @FXML
-    private Button okButton;
+    @FXML private Button okButton;
+    @FXML private ComboBox<String> comboBoxFromTimeField;
+    @FXML private ComboBox<String> comboBoxToTimeField;
+    @FXML private ComboBox<String> comboBoxDayField;
 
-    @FXML
-    private ComboBox<String> comboBoxFromTimeField;
-
-    @FXML
-    private ComboBox<String> comboBoxToTimeField;
-
-    @FXML
-    private ComboBox<String> comboBoxDayField;
-
-    @FXML
-    private Label noticeLabel;
+    @FXML private Label confirmLabel;
+    @FXML private Label noticeLabel;
+    @FXML private Label moduleName;
+    @FXML private Label lecturerName;
+    @FXML private Label roomNumber;
+    @FXML private Label timeOfLecture;
+    @FXML private Label dayOfLecture;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,9 +48,8 @@ public class RemoveALecturePopupDialogueController implements Initializable {
         comboBoxToTimeField.getItems().addAll(originalToTimes);
 
         // Add a listener to the "From Time" ComboBox
-        comboBoxFromTimeField.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
-
-        {
+        comboBoxFromTimeField.getSelectionModel().selectedItemProperty().addListener((
+                observable, oldValue, newValue) -> {
             if (newValue != null) {
                 comboBoxToTimeField.getItems().setAll(originalToTimes);
 
@@ -68,6 +65,54 @@ public class RemoveALecturePopupDialogueController implements Initializable {
                 }
             }
         });
+
+        comboBoxToTimeField.getSelectionModel().selectedItemProperty().addListener((
+                observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                if (!comboBoxToTimeField.getSelectionModel().isEmpty() && !comboBoxFromTimeField.getSelectionModel().isEmpty() && !comboBoxDayField.getSelectionModel().isEmpty() ) {
+                    okButton.setVisible(true);
+
+                    Lecture lecture = getLecture();
+                    if (lecture == null) {
+                        noticeLabel.setText("No lecture at that time found");
+                        return;
+                    }
+
+                    confirmLabel.setText("Confirm removal:");
+                    moduleName.setText("Module: " + lecture.getModule());
+                    lecturerName.setText("Lecturer: " + lecture.getLecturer());
+                    roomNumber.setText("Room: " + lecture.getRoom());
+                    timeOfLecture.setText("Time: " + lecture.getTime());
+                    dayOfLecture.setText("Day: " + lecture.getDay());
+
+                    resizeStage(350, 500);
+                }
+            }
+        });
+    }
+
+    private Lecture getLecture() {
+        int row = switch (comboBoxDayField.getValue()) {
+            case "Monday" -> 0;
+            case "Tuesday" -> 1;
+            case "Wednesday" -> 2;
+            case "Thursday" -> 3;
+            case "Friday" -> 4;
+            default -> -1;
+        };
+        int col = switch (comboBoxFromTimeField.getValue().replaceFirst("^0", "")) {
+            case "900" -> 0;
+            case "1000" -> 1;
+            case "1100" -> 2;
+            case "1200" -> 3;
+            case "1300" -> 4;
+            case "1400" -> 5;
+            case "1500" -> 6;
+            case "1600" -> 7;
+            case "1700" -> 8;
+            default -> -1;
+        };
+        return App.getTimetableController().getLectures()[row][col];
     }
 
     public void setDialogStage(Stage dialogStage) {
@@ -126,5 +171,12 @@ public class RemoveALecturePopupDialogueController implements Initializable {
             System.err.println("JsonException occurred: " + e.getMessage());
             noticeLabel.setText("Error occurred while removing lecture");
         }
+    }
+
+
+    private void resizeStage(int w, int h) {
+        Stage stage = (Stage) moduleName.getScene().getWindow();
+        stage.setWidth(w);
+        stage.setHeight(h);
     }
 }

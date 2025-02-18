@@ -57,15 +57,14 @@
                         <Insets bottom="10"/>
                     </padding>
 
-                    <Label style="-fx-font-size: 16;"
-                        text="Confirm Details" />
+                    <Label fx:id="confirmLabel" style="-fx-font-size: 16;"/>
                 </VBox>
 
-                <Label fx:id="moduleName" style="-fx-font-size: 14;"
-                    text="moduleName" />
-                <Label fx:id="lecturerName" style="-fx-font-size: 14;" text="lecturerName" />
-                <Label fx:id="roomNumber" style="-fx-font-size: 14;" text="roomNumber" />
-                <Label fx:id="timeOfLecture" style="-fx-font-size: 14;" text="timeOfLecture" />
+                <Label fx:id="moduleName" style="-fx-font-size: 14;"/>
+                <Label fx:id="lecturerName" style="-fx-font-size: 14;"/>
+                <Label fx:id="roomNumber" style="-fx-font-size: 14;"/>
+                <Label fx:id="timeOfLecture" style="-fx-font-size: 14;"/>
+                <Label fx:id="dayOfLecture" style="-fx-font-size: 14;"/>
             </VBox>
         </VBox>
     </center>
@@ -77,9 +76,10 @@
                 <Insets top="20" right="20" bottom="20" left="20" />
             </padding>
 
-            <Button fx:id="okButton" text="REMOVE Lecture" onAction="#handleOKButton"
+            <Button fx:id="okButton" text="Confirm" onAction="#handleOKButton"
                 style="-fx-font-size: 14;"
-                prefWidth="130" />
+                prefWidth="130" visible="false"
+            />
         </VBox>
     </bottom>
 </BorderPane>

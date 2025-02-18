@@ -18,21 +18,22 @@
       - [x] Change Input Fields to Correct Types (text field, Day Selection, Time Selection)
     - [x] Styling
     - [X] Handle server response
-- [ ] Remove a Lecture
-    - [ ] Button:
+- [X] Remove a Lecture
+    - [X] Button:
         - [x] Lecture Time
-        - [ ] Confirm prompt -> Contains Lecture details
-    - [ ] Logic
-        - [ ] Event Handlers For All Input Fields (If They Are Populated)
-        - [ ] Conditional Logic to Render Lecture Details and "REMOVE Lecture" Button Once Fields are Filled In
-    - [ ] Styling
-        - [ ] Auto Resizable Window Once All Fields Have Been Filled Out and Lecture Details are Displayed
-        - [ ] Style Lecture Details on Popup Window
+        - [X] Confirm prompt -> Contains Lecture details
+    - [X] Logic
+        - [X] Event Handlers For All Input Fields (If They Are Populated)
+        - [X] Conditional Logic to Render Lecture Details and "REMOVE Lecture" Button Once Fields are Filled In
+    - [X] Styling
+        - [X] Auto Resizable Window Once All Fields Have Been Filled Out and Lecture Details are Displayed
+        - [X] Style Lecture Details on Popup Window
     - [X] Handle server response
 - [ ] Display Schedule
     - [X] Parse Server response
     - [X] Format parsed response to timetable
-    - [ ] Deal with lectures longer than 1 hour
+    - [ ] Styling
+    - [ ] Deal with lectures longer than 1 hour [Optional]
 - [ ] Other 
     - [ ] Custom User input
     - [ ] Handle Server Response

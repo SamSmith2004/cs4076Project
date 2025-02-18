@@ -19,6 +19,7 @@ import ul.cs4076project.Model.TCPClient;
 public class TimetableController implements Initializable {
     private TCPClient client;
     private String[][] timetable;
+    private Lecture[][] lectures;
 
     @FXML private Label debugLabel;
     @FXML private GridPane timetableGrid;
@@ -64,9 +65,10 @@ public class TimetableController implements Initializable {
             Map<String, String> headers = new HashMap<>();
             headers.put("Content-Type", "timetable");
 
-            Object response = client.get("LM05125", headers);
-            if (response instanceof Lecture[][] lectures) {
+            Object response = (Lecture[][])client.get("LM05125", headers);
+            if (response != null) {
                 timetable = new String[5][9];
+                lectures = (Lecture[][])response;
                 updateTimetableGrid(lectures);
             } else {
                 debugLabel.setText("Error: Invalid response type");
@@ -108,10 +110,6 @@ public class TimetableController implements Initializable {
         debugLabel.setText("");
     }
 
-    private boolean checkIsTimeSlotEmpty(int col, int row) {
-        return timetable[col][row] == null;
-    }
-
     private Label createStyledLabel(String text, String style) {
         Label label = new Label(text);
         label.setStyle(style);
@@ -131,5 +129,9 @@ public class TimetableController implements Initializable {
     @FXML
     protected void onBackToMenuClick() {
         App.loadMainView();
+    }
+
+    public Lecture[][] getLectures() {
+        return lectures;
     }
 }
