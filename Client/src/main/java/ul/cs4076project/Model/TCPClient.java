@@ -44,6 +44,10 @@ public class TCPClient {
         return sendRequest("POST", message, headers);
     }
 
+    public Object create(String message, Map<String, String> headers) throws IOException {
+        return sendRequest("CREATE", message, headers);
+    }
+
     private Object sendRequest(String methodType, String message, Map<String, String> headers) throws IOException {
         try {
             // Parse the message if it's a JSON string (ensure it's a JSON object)
@@ -81,10 +85,6 @@ public class TCPClient {
             return parsedResponse.extractResponse();
         } catch (IOException e) {
             System.err.println("IO Error during " + methodType + ": " + e.getMessage());
-            isConnected = false;
-            throw e;
-        } catch (Exception e) {
-            System.err.println("Error during " + methodType + ": " + e.getMessage());
             isConnected = false;
             throw e;
         }

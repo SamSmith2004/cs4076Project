@@ -8,6 +8,7 @@ import ul.cs4076project.Model.TCPClient;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -19,6 +20,7 @@ public class MainController implements Initializable {
     @FXML
     private Label serverStatusButton;
     @FXML private Label debugLabel;
+    @FXML private Label noticeLabel;
 
     public MainController() {}
 
@@ -50,7 +52,6 @@ public class MainController implements Initializable {
         } else {
             serverStatus.setText("Disconnected from Server...");
             serverStatusButton.setText("Attempt to Connect to Server");
-
         }
     }
 
@@ -72,13 +73,43 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    protected void onLM11025ButtonClick(){
-        
+    protected void onLM11025ButtonClick() {
+        if (!client.isConnected() || client == null) {
+            noticeLabel.setText("Not connected to server!");
+            return;
+        }
+
+        try {
+            String response = (String)client.create("LM11025", new HashMap<String, String>());
+            if (response != null && response.equals("Invalid Action Exception")) {
+                noticeLabel.setText("Invalid Action");
+            } else {
+                noticeLabel.setText("Unknown error");
+            }
+        } catch (IOException e) {
+            System.err.println("Error sending message: " + e.getMessage());
+            noticeLabel.setText("Error sending message to server!");
+        }
     }
 
     @FXML
     protected void onLK04925ButtonClick() {
+        if (!client.isConnected() || client == null) {
+            noticeLabel.setText("Not connected to server!");
+            return;
+        }
 
+        try {
+            String response = (String)client.create("LM11025", new HashMap<String, String>());
+            if (response != null && response.equals("Invalid Action Exception")) {
+                noticeLabel.setText("Invalid Action");
+            } else {
+                noticeLabel.setText("Unknown error");
+            }
+        } catch (IOException e) {
+            System.err.println("Error sending message: " + e.getMessage());
+            noticeLabel.setText("Error sending message to server!");
+        }
     }
 
     @FXML

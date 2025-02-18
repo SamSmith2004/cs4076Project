@@ -1,11 +1,11 @@
 # TODO
 ## Client
 ### GUI
-- [ ] Main Menu Screen
+- [X] Main Menu Screen
     - [x] Header
     - [x] Buttons for Course Selection
     - [x] Stop Button
-    - [ ] Controller Logic
+    - [X] Controller Logic
     - [x] Styling
 ### Actions
 - [x] Add Lecture
@@ -29,14 +29,12 @@
         - [X] Auto Resizable Window Once All Fields Have Been Filled Out and Lecture Details are Displayed
         - [X] Style Lecture Details on Popup Window
     - [X] Handle server response
-- [ ] Display Schedule
+- [X] Display Schedule
     - [X] Parse Server response
     - [X] Format parsed response to timetable
-    - [ ] Styling
-    - [ ] Deal with lectures longer than 1 hour [Optional]
-- [ ] Other 
-    - [ ] Custom User input
-    - [ ] Handle Server Response
+- [X] Other 
+    - [X] Custom User input
+    - [X] Handle Server Response
 
 ## Server
 ### Actions
@@ -56,7 +54,20 @@
 - [X] Bug with loading Timetable data when starting app before server - No logic to re-fetch timetable once connection to server has been reestablished
 - [x] Bug with displaying "Added Lectures" on timetable after connection to server has been restarted - Client keeps previous "Added Lecture and does not remove it - potential flushing issue
 - [ ] Bug with loading of scenes - when going between scenes and the application happens to be a differerent size than what was initialised (so not 1280x720), it will resize itself to 1280x720 from whatever the previous window size was. So if you are in fullscreen and switch to timetable view, it will resize the window to what was initialised as 1280x720
+- [ ] RemoveLectureDialogue Edge cases
+  - [ ] Order of selection bug 
 - [X] Connection error message bug on remove stage
+
+## Polishing
+- [ ] Replace general exceptions with correct explicit exceptions
+- [ ] Update notice labels to reflect user-friendly messages
+- [ ] Fix Types for API
+- [ ] Styling
+  - [ ] Timetable
+  - [ ] Main Menu
+  - [ ] Add Lecture
+  - [ ] Remove Lecture
+- [ ] Remove redundancies
 
 ## Submission Requirements
 - studentId1_studentId2.zip
