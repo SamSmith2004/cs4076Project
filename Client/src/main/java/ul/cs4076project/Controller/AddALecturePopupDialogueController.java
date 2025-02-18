@@ -100,7 +100,7 @@ public class AddALecturePopupDialogueController implements Initializable {
 
     @FXML
     private void handleOKButton() {
-        if (client == null) {
+        if (!client.isConnected() || client == null) {
             noticeLabel.setText("Not connected to server");
             System.out.println("Client is not connected to server");
             return;
