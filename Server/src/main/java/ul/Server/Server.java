@@ -2,6 +2,7 @@ package ul.Server;
 
 import ul.Server.Handlers.Get;
 import ul.Server.Handlers.Post;
+import ul.Server.Utils.IncorrectActionException;
 import ul.Server.Utils.SessionData;
 
 import java.io.BufferedReader;
@@ -16,6 +17,8 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import java.io.StringReader;
 
+import static java.lang.System.out;
+
 public class Server {
     private static final int PORT = 8080;
 
@@ -24,14 +27,14 @@ public class Server {
         SessionData sessionData = new SessionData();
 
         try (ServerSocket servSock = new ServerSocket(PORT)) {
-            System.out.println("Server listening on port " + PORT);
+            out.println("Server listening on port " + PORT);
             sessionData.fillMockData();
 
             while (serverRunning) {
                 Socket link = null;
                 try {
                     link = servSock.accept();
-                    System.out.println("Client connected: " + link.getInetAddress().getHostAddress());
+                    out.println("Client connected: " + link.getInetAddress().getHostAddress());
 
                     try (BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));
                          PrintWriter out = new PrintWriter(link.getOutputStream(), true)) {
@@ -53,20 +56,17 @@ public class Server {
                             JsonReader jsonReader = Json.createReader(stringReader);
                             JsonObject requestData = jsonReader.readObject();
 
-                            String response = null;
-                            switch (requestData.getString("method")) {
-                                case "GET":
+                            String response = switch (requestData.getString("method")) {
+                                case "GET" -> {
                                     Get get = new Get(requestData);
-                                    response = get.responseBuilder(sessionData);
-                                    break;
-                                case "POST":
+                                    yield get.responseBuilder(sessionData);
+                                }
+                                case "POST" -> {
                                     Post post = new Post(requestData);
-                                    response = post.responseBuilder(sessionData);
-                                    break;
-                                default:
-                                    System.out.println("Unknown method");
-                                    break;
-                            }
+                                    yield post.responseBuilder(sessionData);
+                                }
+                                default -> throw new IncorrectActionException();
+                            };
 
                             System.out.println("Sending: " + response);
                             out.println(response);
@@ -74,6 +74,15 @@ public class Server {
                         }
                         System.out.println("Client disconnected: " + link.getInetAddress().getHostAddress());
 
+                    } catch (IncorrectActionException e) {
+                        JsonObject response = Json.createObjectBuilder()
+                                .add("status", "error")
+                                .add("content", "Invalid method")
+                                .add("Content-Type", "Error")
+                                .build();
+
+                        out.println(response);
+                        out.flush();
                     } catch (IOException e) {
                         System.err.println("IO Error in client handling: " + e.getMessage());
                     }
@@ -89,7 +98,7 @@ public class Server {
                     }
                 }
             }
-            System.out.println("Server shutting down.");
+            out.println("Server shutting down.");
 
         } catch (IOException e) {
             System.err.println("IO Error: " + e.getMessage());

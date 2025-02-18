@@ -47,8 +47,8 @@
     - [X] Return removed lecture data
 - [X] Display Schedule
   - [X] Send data structure to client
-- [ ] Other -> Custom User input
-  - [ ] IncorrectActionException
+- [X] Other -> Custom User input
+  - [X] IncorrectActionException
 
 ## Bugs - Add as They Occur
 - [X] Bug with Sockets when Switching Between Views - App crashes after having switched view and attempting to close the server
