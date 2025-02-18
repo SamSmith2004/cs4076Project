@@ -55,8 +55,15 @@
     </center>
 
     <bottom>
-        <Button fx:id="okButton" text="REMOVE Lecture" onAction="#handleOKButton"
-            style="-fx-font-size: 14;"
-            prefWidth="130" />
+        <VBox alignment="BOTTOM_CENTER" spacing="20" BorderPane.alignment="CENTER">
+            <!-- Add padding around the VBox -->
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20" />
+            </padding>
+
+            <Button fx:id="okButton" text="REMOVE Lecture" onAction="#handleOKButton"
+                style="-fx-font-size: 14;"
+                prefWidth="130" />
+        </VBox>
     </bottom>
 </BorderPane>
