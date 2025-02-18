@@ -17,16 +17,23 @@ public class TCPClient {
     private final Socket link;
     private final BufferedReader in;
     private final PrintWriter out;
+    private boolean isConnected = false;
 
     public TCPClient() throws IOException {
         try {
             link = new Socket("localhost", PORT);
             in = new BufferedReader(new InputStreamReader(link.getInputStream()));
             out = new PrintWriter(link.getOutputStream(), true);
+            isConnected = true;
         } catch (IOException e) {
             System.err.println("Error creating socket: " + e.getMessage());
+            isConnected = false;
             throw e;
         }
+    }
+
+    public boolean isConnected() {
+        return isConnected;
     }
 
     public Object get(String message, Map<String, String> headers) throws IOException {
@@ -74,9 +81,11 @@ public class TCPClient {
             return parsedResponse.extractResponse();
         } catch (IOException e) {
             System.err.println("IO Error during " + methodType + ": " + e.getMessage());
+            isConnected = false;
             throw e;
         } catch (Exception e) {
             System.err.println("Error during " + methodType + ": " + e.getMessage());
+            isConnected = false;
             throw e;
         }
     }
