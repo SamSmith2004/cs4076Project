@@ -60,8 +60,15 @@
                     style="-fx-font-size: 14;" prefWidth="310" />
             </VBox>
 
+            <!-- Lecturer Field -->
+            <VBox spacing="5">
+                <Label text="Lecturer:" style="-fx-font-size: 14;" />
+                <TextField fx:id="lecturerField" promptText="Enter Lecturer name"
+                           style="-fx-font-size: 14;" prefWidth="310" />
+            </VBox>
+
             <!-- Notice Label -->
-            <Label fx:id="noticeLabel" text="" style="-fx-font-size: 14; -fx-text-fill: red;" />
+            <Label fx:id="noticeLabel" style="-fx-font-size: 14; -fx-text-fill: red;" />
 
             <!-- OK Button -->
             <Button fx:id="okButton" text="ADD Lecture" onAction="#handleOKButton" style="-fx-font-size: 14;"

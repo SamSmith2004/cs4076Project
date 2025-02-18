@@ -14,7 +14,7 @@
       - [X] Time 
       - [x] Room num
       - [x] module name
-      - [ ] lecturer name
+      - [X] lecturer name
       - [x] Change Input Fields to Correct Types (text field, Day Selection, Time Selection)
     - [x] Styling
     - [X] Handle server response

@@ -25,7 +25,6 @@ public class AddALecturePopupDialogueController implements Initializable {
     private Stage addALecturePopupStage;
     private List<String> originalToTimes;
     private TCPClient client;
-    private boolean isConnectedToServer = false;
 
     @FXML
     private ComboBox<String> comboBoxFromTimeField;
@@ -41,6 +40,9 @@ public class AddALecturePopupDialogueController implements Initializable {
 
     @FXML
     private TextField roomNumberField;
+
+    @FXML
+    private TextField lecturerField;
 
     @FXML
     private Label noticeLabel;
@@ -90,7 +92,6 @@ public class AddALecturePopupDialogueController implements Initializable {
 
     public void initializeWithClient(TCPClient client) {
         this.client = client;
-        this.isConnectedToServer = (client != null);
     }
 
     public void setDialogStage(Stage addALecturePopupStage) {
@@ -99,9 +100,9 @@ public class AddALecturePopupDialogueController implements Initializable {
 
     @FXML
     private void handleOKButton() {
-        if (!isConnectedToServer) {
-            System.err.println("Client is not connected to server");
+        if (client == null) {
             noticeLabel.setText("Not connected to server");
+            System.out.println("Client is not connected to server");
             return;
         }
 
@@ -110,17 +111,17 @@ public class AddALecturePopupDialogueController implements Initializable {
             comboBoxFromTimeField.getSelectionModel().isEmpty() ||
             comboBoxToTimeField.getSelectionModel().isEmpty() ||
             comboBoxDayField.getSelectionModel().isEmpty() ||
-            roomNumberField.getText().isEmpty()) {
+            roomNumberField.getText().isEmpty() || lecturerField.getText().isEmpty()) {
             noticeLabel.setText("All fields must be filled");
             return;
         }
 
-        String fromTime = String.valueOf(Integer.parseInt(comboBoxFromTimeField.getValue().substring(0, 2))) + ":00";
-        String toTime = String.valueOf(Integer.parseInt(comboBoxToTimeField.getValue().substring(0, 2))) + ":00";
+        String fromTime = comboBoxFromTimeField.getValue().substring(0, 2) + ":00";
+        String toTime = comboBoxToTimeField.getValue().substring(0, 2) + ":00";
 
         Lecture lecture = new Lecture(
                 comboBoxModuleField.getValue().split(" - ")[0],
-                "TODO", // lecturer placeholder
+                lecturerField.getText(),
                 roomNumberField.getText(),
                 fromTime,
                 toTime,
