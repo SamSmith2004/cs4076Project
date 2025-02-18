@@ -7,10 +7,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
-
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.ScrollPane?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17"
     xmlns:fx="http://javafx.com/fxml/1"
@@ -25,14 +25,15 @@
             </ImageView>
 
             <!-- Centered Text -->
-            <Label text="LM051-2025 SEM 1 Timetable" style="-fx-font-size: 36px; -fx-font-weight: bold;"
+            <Label text="LM051-2025 SEM 1 Timetable"
+                style="-fx-font-size: 36px; -fx-font-weight: bold;"
                 StackPane.alignment="CENTER">
             </Label>
         </StackPane>
     </top>
 
     <center>
-        <VBox spacing="15" style="-fx-padding: 15 0 0 0;">
+        <VBox spacing="15" style="-fx-padding: 15 150 0 150;">
             <!-- Control buttons -->
             <HBox spacing="10" alignment="CENTER">
                 <Button onAction="#onAddLectureClick">
@@ -67,47 +68,49 @@
             </HBox>
 
             <!-- Timetable Grid -->
-            <GridPane fx:id="timetableGrid" alignment="CENTER" gridLinesVisible="true">
-                <!-- Column constraints -->
-                <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100" />
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100" />
-                </columnConstraints>
+            <ScrollPane fitToWidth="true" fitToHeight="true">
+                <GridPane fx:id="timetableGrid" alignment="CENTER" gridLinesVisible="true">
+                    <!-- Column constraints -->
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="90" prefWidth="90" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="90" prefWidth="90" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="90" prefWidth="90" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="90" prefWidth="90" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="90" prefWidth="90" />
+                    </columnConstraints>
 
-                <!-- Row constraints -->
-                <rowConstraints>
-                    <RowConstraints vgrow="SOMETIMES" minHeight="20" prefHeight="20" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
-                    <RowConstraints vgrow="SOMETIMES" minHeight="57" prefHeight="57" />
-                </rowConstraints>
+                    <!-- Row constraints -->
+                    <rowConstraints>
+                        <RowConstraints vgrow="SOMETIMES" minHeight="20" prefHeight="20" />
+                        <RowConstraints vgrow="SOMETIMES" minHeight="110" prefHeight="110" />
+                        <RowConstraints vgrow="SOMETIMES" minHeight="110" prefHeight="110" />
+                        <RowConstraints vgrow="SOMETIMES" minHeight="110" prefHeight="110" />
+                        <RowConstraints vgrow="SOMETIMES" minHeight="110" prefHeight="110" />
+                        <RowConstraints vgrow="SOMETIMES" minHeight="110" prefHeight="110" />
+                        <RowConstraints vgrow="SOMETIMES" minHeight="110" prefHeight="110" />
+                        <RowConstraints vgrow="SOMETIMES" minHeight="110" prefHeight="110" />
+                        <RowConstraints vgrow="SOMETIMES" minHeight="110" prefHeight="110" />
+                        <RowConstraints vgrow="SOMETIMES" minHeight="110" prefHeight="110" />
+                    </rowConstraints>
 
-                <!-- Days row (grid header) -->
-                <Label text="Monday" GridPane.columnIndex="0" GridPane.rowIndex="0"
-                    style="-fx-font-weight: bold; -fx-padding: 10;"
-                    alignment="CENTER" />
-                <Label text="Tuesday" GridPane.columnIndex="1" GridPane.rowIndex="0"
-                    style="-fx-font-weight: bold; -fx-padding: 10;"
-                    alignment="CENTER" />
-                <Label text="Wednesday" GridPane.columnIndex="2" GridPane.rowIndex="0"
-                    style="-fx-font-weight: bold; -fx-padding: 10;"
-                    alignment="CENTER" />
-                <Label text="Thursday" GridPane.columnIndex="3" GridPane.rowIndex="0"
-                    style="-fx-font-weight: bold; -fx-padding: 10;"
-                    alignment="CENTER" />
-                <Label text="Friday" GridPane.columnIndex="4" GridPane.rowIndex="0"
-                    style="-fx-font-weight: bold; -fx-padding: 10;"
-                    alignment="CENTER" />
-            </GridPane>
+                    <!-- Days row (grid header) -->
+                    <StackPane GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="Monday" style="-fx-font-weight: bold; -fx-padding: 12;" />
+                    </StackPane>
+                    <StackPane GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="Tuesday" style="-fx-font-weight: bold; -fx-padding: 12;" />
+                    </StackPane>
+                    <StackPane GridPane.columnIndex="2" GridPane.rowIndex="0">
+                        <Label text="Wednesday" style="-fx-font-weight: bold; -fx-padding: 12;" />
+                    </StackPane>
+                    <StackPane GridPane.columnIndex="3" GridPane.rowIndex="0">
+                        <Label text="Thursday" style="-fx-font-weight: bold; -fx-padding: 12;" />
+                    </StackPane>
+                    <StackPane GridPane.columnIndex="4" GridPane.rowIndex="0">
+                        <Label text="Friday" style="-fx-font-weight: bold; -fx-padding: 12;" />
+                    </StackPane>
+                </GridPane>
+            </ScrollPane>
         </VBox>
     </center>
 
