@@ -18,6 +18,8 @@ import ul.cs4076project.App;
 import ul.cs4076project.Model.Lecture;
 import ul.cs4076project.Model.TCPClient;
 
+import javax.json.JsonException;
+
 public class RemoveALecturePopupDialogueController implements Initializable {
     private Stage removeALecturePopupStage;
     private TCPClient client;
@@ -95,5 +97,34 @@ public class RemoveALecturePopupDialogueController implements Initializable {
         String fromTime = comboBoxFromTimeField.getValue().substring(0, 2) + ":00";
         String toTime = comboBoxToTimeField.getValue().substring(0, 2) + ":00";
 
+        try {
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("Content-Type", "removeLecture");
+
+            Lecture lecture = new Lecture(
+                    "test",
+                    "test",
+                    "test",
+                    fromTime,
+                    toTime,
+                    comboBoxDayField.getValue()
+            );
+
+            String response = (String)client.post(lecture.toJson().toString(), headers);
+            noticeLabel.setText("Lecture removed");
+
+            if (response.equals("Lecture removed")) {
+                App.loadTimetableView();
+                removeALecturePopupStage.close();
+            } else {
+                noticeLabel.setText("Error occurred while removing lecture");
+            }
+        } catch (IOException e) {
+            System.err.println("IOException occurred: " + e.getMessage());
+            noticeLabel.setText("Error occurred while removing lecture");
+        } catch (JsonException e) {
+            System.err.println("JsonException occurred: " + e.getMessage());
+            noticeLabel.setText("Error occurred while removing lecture");
+        }
     }
 }

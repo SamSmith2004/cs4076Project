@@ -25,7 +25,7 @@ public class ResponseHandler {
             case "timetable" :
                 result = buildTimetableResponse();
                 break;
-            case "addLecture", "test", "Message":
+            case "addLecture", "test", "Message", "removeLecture":
                 result = response.getString("content");
                 break;
             default:

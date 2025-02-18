@@ -21,16 +21,14 @@ public class SessionData {
         timeTable.clear();
     }
 
-    public JsonObject removeLecture(String day, String fromTime, String toTime) {
-        JsonObject response = null;
+    public boolean removeLecture(String day, String fromTime, String toTime) {
         for (Lecture lec : timeTable) {
             if (lec.getDay().equals(day) && normalisedTime(lec.getFromTime()).equals(fromTime) && normalisedTime(lec.getToTime()).equals(toTime)) {
-                response = serializeLecture(lec);
                 timeTable.remove(lec);
-                break;
+                return true;
             }
         }
-        return response;
+        return false;
     }
 
     private String normalisedTime(String time) {

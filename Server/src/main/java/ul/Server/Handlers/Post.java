@@ -101,16 +101,23 @@ public class Post extends RequestHandler {
         String normalizedFromTime = fromTime.replaceFirst("^0", "");
         String normalizedToTime = toTime.replaceFirst("^0", "");
 
-        try {
-            JsonObject removedLecture = sessionData.removeLecture(day, normalizedFromTime, normalizedToTime);
-            return Json.createObjectBuilder()
-                    .add("status", "success")
-                    .add("content", removedLecture)
-                    .add("Content-Type", "removeLecture")
-                    .build();
-        } catch (Exception e) {
-            return serialError(e);
-        }
+         if (sessionData.removeLecture(day, normalizedFromTime, normalizedToTime)) {
+             try {
+                 return Json.createObjectBuilder()
+                         .add("status", "success")
+                         .add("content", "Lecture removed")
+                         .add("Content-Type", "removeLecture")
+                         .build();
+             } catch (Exception e) {
+                 return serialError(e);
+             }
+         } else {
+                return Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("content", "Lecture not found")
+                        .add("Content-Type", "removeLecture")
+                        .build();
+         }
     }
 
     private JsonObject serialError (Exception e) {
