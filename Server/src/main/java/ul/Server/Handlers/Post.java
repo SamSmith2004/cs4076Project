@@ -94,14 +94,12 @@ public class Post extends RequestHandler {
 
     private JsonObject buildRemoveLectureResponse(SessionData sessionData) {
         String fromTime = content.getString("fromTime");
-        String toTime = content.getString("toTime");
         String day = content.getString("day");
 
         // Normalize time to prevent comparison failures
         String normalizedFromTime = fromTime.replaceFirst("^0", "");
-        String normalizedToTime = toTime.replaceFirst("^0", "");
 
-         if (sessionData.removeLecture(day, normalizedFromTime, normalizedToTime)) {
+         if (sessionData.removeLecture(day, normalizedFromTime)) {
              try {
                  return Json.createObjectBuilder()
                          .add("status", "success")
