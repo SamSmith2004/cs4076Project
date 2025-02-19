@@ -21,9 +21,9 @@ public class SessionData {
         timeTable.clear();
     }
 
-    public boolean removeLecture(String day, String fromTime, String toTime) {
+    public boolean removeLecture(String day, String fromTime) {
         for (Lecture lec : timeTable) {
-            if (lec.getDay().equals(day) && normalisedTime(lec.getFromTime()).equals(fromTime) && normalisedTime(lec.getToTime()).equals(toTime)) {
+            if (lec.getDay().equals(day) && normalisedTime(lec.getFromTime()).equals(fromTime)) {
                 timeTable.remove(lec);
                 return true;
             }

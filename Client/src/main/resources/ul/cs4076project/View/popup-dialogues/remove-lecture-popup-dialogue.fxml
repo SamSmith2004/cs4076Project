@@ -21,31 +21,19 @@
                 <Insets top="20" right="20" bottom="20" left="20" />
             </padding>
 
+            <Label text="Enter the details of slot you wish to free" />
+
             <!-- Day Field -->
-            <VBox spacing="5">
+            <HBox spacing="13" alignment="CENTER">
                 <Label text="Day:" style="-fx-font-size: 14;" />
-                <ComboBox fx:id="comboBoxDayField" prefWidth="310" style="-fx-font-size: 14;" />
-            </VBox>
+                <ComboBox fx:id="comboBoxDayField" prefWidth="150" style="-fx-font-size: 14;" />
+            </HBox>
 
             <!-- Time Field -->
-            <VBox spacing="5">
+            <HBox spacing="5" alignment="CENTER">
                 <Label text="Time:" style="-fx-font-size: 14;" />
-                <HBox spacing="10">
-                    <VBox spacing="5">
-                        <ComboBox fx:id="comboBoxFromTimeField" prefWidth="138"
-                            style="-fx-font-size: 14;" />
-                    </VBox>
-
-                    <VBox spacing="5">
-                        <Label text="to" style="-fx-font-size: 14;" />
-                    </VBox>
-
-                    <VBox spacing="5">
-                        <ComboBox fx:id="comboBoxToTimeField" prefWidth="138"
-                            style="-fx-font-size: 14;" />
-                    </VBox>
-                </HBox>
-            </VBox>
+                <ComboBox fx:id="comboBoxFromTimeField" prefWidth="150" style="-fx-font-size: 14;" />
+            </HBox>
 
             <!-- Notice Label -->
             <Label fx:id="noticeLabel" style="-fx-font-size: 14; -fx-text-fill: red;" />

@@ -27,7 +27,6 @@ public class RemoveALecturePopupDialogueController implements Initializable {
 
     @FXML private Button okButton;
     @FXML private ComboBox<String> comboBoxFromTimeField;
-    @FXML private ComboBox<String> comboBoxToTimeField;
     @FXML private ComboBox<String> comboBoxDayField;
 
     @FXML private Label confirmLabel;
@@ -43,51 +42,15 @@ public class RemoveALecturePopupDialogueController implements Initializable {
         comboBoxDayField.getItems().addAll("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
         comboBoxFromTimeField.getItems().addAll("0900", "1000", "1100", "1200", "1300", "1400", "1500", "1600", "1700");
 
-        originalToTimes = new ArrayList<>();
-        originalToTimes.addAll(List.of("1000", "1100", "1200", "1300", "1400", "1500", "1600", "1700", "1800"));
-        comboBoxToTimeField.getItems().addAll(originalToTimes);
-
         // Add a listener to the "From Time" ComboBox
         comboBoxFromTimeField.getSelectionModel().selectedItemProperty().addListener((
                 observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                comboBoxToTimeField.getItems().setAll(originalToTimes);
-
-                List<String> validToTimes = originalToTimes.stream()
-                        .filter(time -> time.compareTo(newValue) > 0)
-                        .collect(Collectors.toList());
-
-                comboBoxToTimeField.getItems().setAll(validToTimes);
-
-                if (comboBoxToTimeField.getSelectionModel().getSelectedItem() == null ||
-                        comboBoxToTimeField.getSelectionModel().getSelectedItem().compareTo(newValue) <= 0) {
-                    comboBoxToTimeField.getSelectionModel().clearSelection();
-                }
-            }
+            removeEvent(newValue);
         });
 
-        comboBoxToTimeField.getSelectionModel().selectedItemProperty().addListener((
+        comboBoxDayField.getSelectionModel().selectedItemProperty().addListener((
                 observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                if (!comboBoxToTimeField.getSelectionModel().isEmpty() && !comboBoxFromTimeField.getSelectionModel().isEmpty() && !comboBoxDayField.getSelectionModel().isEmpty() ) {
-                    okButton.setVisible(true);
-
-                    Lecture lecture = getLecture();
-                    if (lecture == null) {
-                        noticeLabel.setText("No lecture at that time found");
-                        return;
-                    }
-
-                    confirmLabel.setText("Confirm removal:");
-                    moduleName.setText("Module: " + lecture.getModule());
-                    lecturerName.setText("Lecturer: " + lecture.getLecturer());
-                    roomNumber.setText("Room: " + lecture.getRoom());
-                    timeOfLecture.setText("Time: " + lecture.getTime());
-                    dayOfLecture.setText("Day: " + lecture.getDay());
-
-                    resizeStage(500);
-                }
-            }
+            removeEvent(newValue);
         });
     }
 
@@ -133,14 +96,12 @@ public class RemoveALecturePopupDialogueController implements Initializable {
 
         // Check if all fields are filled
         if (comboBoxFromTimeField.getSelectionModel().isEmpty() ||
-                comboBoxToTimeField.getSelectionModel().isEmpty() ||
                 comboBoxDayField.getSelectionModel().isEmpty()) {
             noticeLabel.setText("All fields must be filled");
             return;
         }
 
         String fromTime = comboBoxFromTimeField.getValue().substring(0, 2) + ":00";
-        String toTime = comboBoxToTimeField.getValue().substring(0, 2) + ":00";
 
         try {
             HashMap<String, String> headers = new HashMap<>();
@@ -151,7 +112,7 @@ public class RemoveALecturePopupDialogueController implements Initializable {
                     "test",
                     "test",
                     fromTime,
-                    toTime,
+                    "",
                     comboBoxDayField.getValue()
             );
 
@@ -173,6 +134,29 @@ public class RemoveALecturePopupDialogueController implements Initializable {
         }
     }
 
+    private void removeEvent(String newValue) {
+        if (newValue != null) {
+            if (!comboBoxFromTimeField.getSelectionModel().isEmpty() && !comboBoxDayField.getSelectionModel().isEmpty() ) {
+                okButton.setVisible(true);
+
+                Lecture lecture = getLecture();
+                if (lecture == null) {
+                    noticeLabel.setText("No lecture at that time found");
+                    return;
+                }
+
+                confirmLabel.setText("Confirm removal:");
+                moduleName.setText("Module: " + lecture.getModule());
+                lecturerName.setText("Lecturer: " + lecture.getLecturer());
+                roomNumber.setText("Room: " + lecture.getRoom());
+                timeOfLecture.setText("Time: " + lecture.getTime());
+                dayOfLecture.setText("Day: " + lecture.getDay());
+                noticeLabel.setText("");
+
+                resizeStage(500);
+            }
+        }
+    }
 
     private void resizeStage(int h) {
         Stage stage = (Stage) moduleName.getScene().getWindow();
