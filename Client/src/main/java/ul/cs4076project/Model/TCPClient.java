@@ -36,53 +36,46 @@ public class TCPClient {
         return isConnected;
     }
 
-    public Object get(String message, Map<String, String> headers) throws IOException {
+    public ResponseType get(String message, Map<String, String> headers) throws IOException {
         return sendRequest("GET", message, headers);
     }
 
-    public Object post(String message, Map<String, String> headers) throws IOException {
+    public ResponseType post(String message, Map<String, String> headers) throws IOException {
         return sendRequest("POST", message, headers);
     }
 
-    public Object create(String message, Map<String, String> headers) throws IOException {
+    public ResponseType create(String message, Map<String, String> headers) throws IOException {
         return sendRequest("CREATE", message, headers);
     }
 
-    private Object sendRequest(String methodType, String message, Map<String, String> headers) throws IOException {
+    private ResponseType sendRequest(String methodType, String message, Map<String, String> headers) throws IOException {
         try {
-            // Parse the message if it's a JSON string (ensure it's a JSON object)
-            JsonObject messageContent;
-            if (message.startsWith("{") && message.endsWith("}")) {
-                JsonReader jsonReader = Json.createReader(new StringReader(message));
-                messageContent = jsonReader.readObject();
-            } else {
-                messageContent = Json.createObjectBuilder()
-                        .add("message", message)
-                        .build();
-            }
-
-            // Get headers
+            // Headers
             JsonObjectBuilder headersBuilder = Json.createObjectBuilder();
-            for (Map.Entry<String, String> entry : headers.entrySet()) {
-                headersBuilder.add(entry.getKey(), entry.getValue());
+            headers.forEach(headersBuilder::add);
+
+            // Build + Send JSON req
+            JsonObjectBuilder contentBuilder = Json.createObjectBuilder();
+            if (message.startsWith("{")) {
+                JsonReader jsonReader = Json.createReader(new StringReader(message));
+                contentBuilder = Json.createObjectBuilder(jsonReader.readObject());
+            } else {
+                contentBuilder.add("message", message);
             }
 
-            // Build JSON request
             JsonObject jsonRequest = Json.createObjectBuilder()
                     .add("method", methodType)
                     .add("headers", headersBuilder)
-                    .add("content", messageContent)
+                    .add("content", contentBuilder)
                     .build();
-
             out.println(jsonRequest.toString());
 
             // Read response
             String response = in.readLine();
             System.out.println("Received: " + response);
-            JsonReader jsonReader = Json.createReader(new StringReader(response));
 
-            ResponseHandler parsedResponse = new ResponseHandler(jsonReader.readObject());
-            return parsedResponse.extractResponse();
+            JsonReader jsonReader = Json.createReader(new StringReader(response));
+            return new ResponseHandler(jsonReader.readObject()).extractResponse();
         } catch (IOException e) {
             System.err.println("IO Error during " + methodType + ": " + e.getMessage());
             isConnected = false;

@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import ul.cs4076project.App;
+import ul.cs4076project.Model.ResponseType;
 import ul.cs4076project.Model.TCPClient;
 
 import java.io.IOException;
@@ -19,24 +20,9 @@ public class MainController implements Initializable {
     private Label serverStatus;
     @FXML
     private Label serverStatusButton;
-    @FXML private Label debugLabel;
     @FXML private Label noticeLabel;
 
     public MainController() {}
-
-    // EXAMPLE FUNCTION TO SEND TO SERVER
-
-    // @FXML
-    // protected void onLM05125ButtonClick() {
-    // try {
-
-    // JsonObject response = client.post("Hello from JavaFX!");
-    // welcomeText.setText("Server response: " + response.toString());
-    // } catch (IOException e) {
-    // System.err.println("Error sending message: " + e.getMessage());
-    // welcomeText.setText("Error sending message to server!");
-    // }
-    // }
 
     public void initializeWithClient(TCPClient client) {
         this.client = client;
@@ -80,8 +66,8 @@ public class MainController implements Initializable {
         }
 
         try {
-            String response = (String)client.create("LM11025", new HashMap<String, String>());
-            if (response != null && response.equals("Invalid Action Exception")) {
+            ResponseType response = client.create("LM11025", new HashMap<>());
+            if (response instanceof ResponseType.StringResponse(String value) && value.equals("Invalid Action Exception")) {
                 noticeLabel.setText("Invalid Action");
             } else {
                 noticeLabel.setText("Unknown error");
@@ -100,9 +86,15 @@ public class MainController implements Initializable {
         }
 
         try {
-            String response = (String)client.create("LM11025", new HashMap<String, String>());
-            if (response != null && response.equals("Invalid Action Exception")) {
-                noticeLabel.setText("Invalid Action");
+            ResponseType response = client.create("LM11025", new HashMap<>());
+            if (response instanceof ResponseType.StringResponse(
+                    String value
+            )) {
+                if (value.equals("Invalid Action Exception")) {
+                    noticeLabel.setText("Invalid Action");
+                } else {
+                    noticeLabel.setText("Unknown error");
+                }
             } else {
                 noticeLabel.setText("Unknown error");
             }

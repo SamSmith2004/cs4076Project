@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import ul.cs4076project.App;
 import ul.cs4076project.Model.Lecture;
+import ul.cs4076project.Model.ResponseType;
 import ul.cs4076project.Model.TCPClient;
 
 public class TimetableController implements Initializable {
@@ -63,19 +64,19 @@ public class TimetableController implements Initializable {
             return;
         }
 
-        // Client is init
         try {
             Map<String, String> headers = new HashMap<>();
             headers.put("Content-Type", "timetable");
 
-            Object response = (Lecture[][]) client.get("LM05125", headers);
-            if (response != null) {
+            ResponseType response = client.get("timetable", headers);
+            if (response instanceof ResponseType.TimetableResponse(Lecture[][] value)) {
+                lectures = value;
                 timetable = new String[5][9];
-                lectures = (Lecture[][]) response;
                 updateTimetableGrid(lectures);
             } else {
                 debugLabel.setText("Error: Invalid response type");
             }
+
         } catch (IOException e) {
             System.err.println("Error sending message: " + e.getMessage());
             debugLabel.setText("Error sending message to server!");

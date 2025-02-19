@@ -2,11 +2,8 @@ package ul.cs4076project.Controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import ul.cs4076project.App;
 import ul.cs4076project.Model.Lecture;
+import ul.cs4076project.Model.ResponseType;
 import ul.cs4076project.Model.TCPClient;
 
 import javax.json.JsonException;
@@ -23,7 +21,6 @@ import javax.json.JsonException;
 public class RemoveALecturePopupDialogueController implements Initializable {
     private Stage removeALecturePopupStage;
     private TCPClient client;
-    private List<String> originalToTimes;
 
     @FXML private Button okButton;
     @FXML private ComboBox<String> comboBoxFromTimeField;
@@ -44,14 +41,10 @@ public class RemoveALecturePopupDialogueController implements Initializable {
 
         // Add a listener to the "From Time" ComboBox
         comboBoxFromTimeField.getSelectionModel().selectedItemProperty().addListener((
-                observable, oldValue, newValue) -> {
-            removeEvent(newValue);
-        });
+                observable, oldValue, newValue) -> removeEvent(newValue));
 
         comboBoxDayField.getSelectionModel().selectedItemProperty().addListener((
-                observable, oldValue, newValue) -> {
-            removeEvent(newValue);
-        });
+                observable, oldValue, newValue) -> removeEvent(newValue));
     }
 
     private Lecture getLecture() {
@@ -116,10 +109,9 @@ public class RemoveALecturePopupDialogueController implements Initializable {
                     comboBoxDayField.getValue()
             );
 
-            String response = (String)client.post(lecture.toJson().toString(), headers);
-            noticeLabel.setText("Lecture removed");
-
-            if (response.equals("Lecture removed")) {
+            ResponseType response = client.post(lecture.toJson().toString(), headers);
+            if (response instanceof ResponseType.StringResponse(String value) && value.equals("Lecture removed")) {
+                noticeLabel.setText("Lecture removed");
                 App.loadTimetableView();
                 removeALecturePopupStage.close();
             } else {

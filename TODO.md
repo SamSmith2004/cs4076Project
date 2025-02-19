@@ -61,7 +61,7 @@
 ## Polishing
 - [ ] Replace general exceptions with correct explicit exceptions
 - [ ] Update notice labels to reflect user-friendly messages
-- [ ] Fix Types for API
+- [X] Fix Types for API
 - [ ] Styling
   - [ ] Timetable
   - [ ] Main Menu

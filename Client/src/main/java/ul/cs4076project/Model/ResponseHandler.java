@@ -12,25 +12,25 @@ public class ResponseHandler {
         this.response = response;
     }
 
-    public Object extractResponse() {
+    public ResponseType extractResponse() {
         String contentType = response.getString("Content-Type");
         String status = response.getString("status");
 
         if (status.equals("InvalidActionException")) {
-            return "Invalid Action Exception";
+            return new ResponseType.StringResponse("Invalid Action Exception");
         }
 
         if (status.equals("error")) {
-            return response.getString("content");
+            return new ResponseType.StringResponse(response.getString("content"));
         }
 
-        Object result = null;
+        ResponseType result = null;
         switch (contentType) {
             case "timetable" :
                 result = buildTimetableResponse();
                 break;
             case "addLecture", "test", "Message", "removeLecture":
-                result = response.getString("content");
+                result = new ResponseType.StringResponse(response.getString("content"));
                 break;
             default:
                 System.out.println("Invalid Content-Type");
@@ -40,7 +40,7 @@ public class ResponseHandler {
         return result;
     }
 
-    private Lecture[][] buildTimetableResponse() {
+    private ResponseType buildTimetableResponse() {
         JsonArray contentArray = response.getJsonArray("content");
         ArrayList<Lecture> lectures = new ArrayList<>();
         Lecture[][] timetable = new Lecture[5][9];
@@ -92,7 +92,7 @@ public class ResponseHandler {
             }
         }
 
-        return timetable;
+        return new ResponseType.TimetableResponse(timetable);
     }
 }
 

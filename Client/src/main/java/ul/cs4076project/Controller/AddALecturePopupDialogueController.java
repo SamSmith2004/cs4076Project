@@ -11,14 +11,16 @@ import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import ul.cs4076project.App;
-import ul.cs4076project.Model.Lecture;
+import ul.cs4076project.Model.ResponseType;
 import ul.cs4076project.Model.TCPClient;
+
+import javax.json.Json;
+import javax.json.JsonObject;
 
 public class AddALecturePopupDialogueController implements Initializable {
     private Map<String, String> lm05125_sem1_modules;
@@ -46,9 +48,6 @@ public class AddALecturePopupDialogueController implements Initializable {
 
     @FXML
     private Label noticeLabel;
-
-    @FXML
-    private Button okButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -119,34 +118,32 @@ public class AddALecturePopupDialogueController implements Initializable {
         String fromTime = comboBoxFromTimeField.getValue().substring(0, 2) + ":00";
         String toTime = comboBoxToTimeField.getValue().substring(0, 2) + ":00";
 
-        Lecture lecture = new Lecture(
-                comboBoxModuleField.getValue().split(" - ")[0],
-                lecturerField.getText(),
-                roomNumberField.getText(),
-                fromTime,
-                toTime,
-                comboBoxDayField.getValue()
-        );
+        JsonObject lectureJson = Json.createObjectBuilder()
+                .add("module", comboBoxModuleField.getValue().split(" - ")[0])
+                .add("lecturer", lecturerField.getText())
+                .add("room", roomNumberField.getText())
+                .add("fromTime", fromTime)
+                .add("toTime", toTime)
+                .add("day", comboBoxDayField.getValue())
+                .build();
 
         try {
             HashMap<String, String> headers = new HashMap<>();
             headers.put("Content-Type", "addLecture");
-            Object response = client.post(lecture.toJson().toString(), headers);
-            System.out.println("Server add response: " + response.toString());
-            noticeLabel.setText("Lecture added successfully");
+            ResponseType response = client.post(lectureJson.toString(), headers);
 
-            switch (response.toString()) {
-                case "Lecture added":
-                    noticeLabel.setText("Lecture added successfully");
-                    addALecturePopupStage.close();
-                    App.loadTimetableView();
-                    break;
-                case "Timeslot already taken":
-                    noticeLabel.setText("Timeslot already taken");
-                    break;
-                default:
-                    noticeLabel.setText("Failed to add lecture: " + response);
-                    break;
+            if (response instanceof ResponseType.StringResponse(String value)) {
+                switch (value) {
+                    case "Lecture added" -> {
+                        noticeLabel.setText("Lecture added successfully");
+                        addALecturePopupStage.close();
+                        App.loadTimetableView();
+                    }
+                    case "Timeslot already taken" -> noticeLabel.setText("Timeslot already taken");
+                    default -> noticeLabel.setText("Failed to add lecture: " + value);
+                }
+            } else {
+                noticeLabel.setText("Unexpected response type");
             }
         } catch (IOException e) {
             System.err.println("Error sending message: " + e.getMessage());

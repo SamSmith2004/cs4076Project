@@ -15,7 +15,7 @@ public abstract class RequestHandler {
     protected abstract String responseBuilder(SessionData sessionData) throws IOException;
 
     public static String jsonToString(JsonObject jsonObject) {
-        Map<String, Object> responseConfig = new HashMap<>();
+        Map<String, JsonObject> responseConfig = new HashMap<>();
         // Enable pretty printing (Currently broken)
         // responseConfig.put(JsonGenerator.PRETTY_PRINTING, true);
         JsonWriterFactory writerFactory = Json.createWriterFactory(responseConfig);
