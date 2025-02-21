@@ -82,7 +82,7 @@ public class RemoveALecturePopupDialogueController implements Initializable {
     @FXML
     private void handleOKButton() {
         if (!client.isConnected() || client == null) {
-            noticeLabel.setText("Not connected to server");
+            noticeLabel.setText("Not Connected to Server");
             System.out.println("Client is not connected to server");
             return;
         }
@@ -90,7 +90,7 @@ public class RemoveALecturePopupDialogueController implements Initializable {
         // Check if all fields are filled
         if (comboBoxFromTimeField.getSelectionModel().isEmpty() ||
                 comboBoxDayField.getSelectionModel().isEmpty()) {
-            noticeLabel.setText("All fields must be filled");
+            noticeLabel.setText("All Fields Must Be Filled");
             return;
         }
 
@@ -111,18 +111,18 @@ public class RemoveALecturePopupDialogueController implements Initializable {
 
             ResponseType response = client.post(lecture.toJson().toString(), headers);
             if (response instanceof ResponseType.StringResponse(String value) && value.equals("Lecture removed")) {
-                noticeLabel.setText("Lecture removed");
+                noticeLabel.setText("Lecture Removed");
                 App.loadTimetableView();
                 removeALecturePopupStage.close();
             } else {
-                noticeLabel.setText("Error occurred while removing lecture");
+                noticeLabel.setText("ERROR Occurred While Removing Lecture");
             }
         } catch (IOException e) {
             System.err.println("IOException occurred: " + e.getMessage());
-            noticeLabel.setText("Error occurred while removing lecture");
+            noticeLabel.setText("ERROR Occurred While Removing Lecture");
         } catch (JsonException e) {
             System.err.println("JsonException occurred: " + e.getMessage());
-            noticeLabel.setText("Error occurred while removing lecture");
+            noticeLabel.setText("ERROR Occurred While Removing Lecture");
         }
     }
 
@@ -133,11 +133,11 @@ public class RemoveALecturePopupDialogueController implements Initializable {
 
                 Lecture lecture = getLecture();
                 if (lecture == null) {
-                    noticeLabel.setText("No lecture at that time found");
+                    noticeLabel.setText("No Lecture at That Time Found");
                     return;
                 }
 
-                confirmLabel.setText("Confirm removal:");
+                confirmLabel.setText("Confirm Removal:");
                 moduleName.setText("Module: " + lecture.getModule());
                 lecturerName.setText("Lecturer: " + lecture.getLecturer());
                 roomNumber.setText("Room: " + lecture.getRoom());

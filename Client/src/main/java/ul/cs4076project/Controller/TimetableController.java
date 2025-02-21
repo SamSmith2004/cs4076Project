@@ -38,7 +38,7 @@ public class TimetableController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createEmptyCells();
-        debugLabel.setText("Waiting for client initialization...");
+        debugLabel.setText("Waiting For Client Initialization...");
     }
 
     private void createEmptyCells() {
@@ -53,13 +53,13 @@ public class TimetableController implements Initializable {
                 }
             }
         } catch (Exception e) {
-            debugLabel.setText("Error creating timetable cells: " + e.getMessage());
+            debugLabel.setText("ERROR Creating Timetable Cells: " + e.getMessage());
         }
     }
 
     public void loadTimetableData() {
         if (client == null) {
-            debugLabel.setText("Error: Client not initialized!");
+            debugLabel.setText("ERROR: Client not Initialized!");
             createEmptyCells();
             return;
         }
@@ -74,12 +74,12 @@ public class TimetableController implements Initializable {
                 timetable = new String[5][9];
                 updateTimetableGrid(lectures);
             } else {
-                debugLabel.setText("Error: Invalid response type");
+                debugLabel.setText("ERROR: Invalid Response Type");
             }
 
         } catch (IOException e) {
-            System.err.println("Error sending message: " + e.getMessage());
-            debugLabel.setText("Error sending message to server!");
+            System.err.println("ERROR sending message: " + e.getMessage());
+            debugLabel.setText("ERROR Sending Message to Server!");
         }
     }
 

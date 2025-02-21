@@ -71,22 +71,23 @@ public class AddALecturePopupDialogueController implements Initializable {
         }
 
         // Add a listener to the "From Time" ComboBox
-        comboBoxFromTimeField.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                comboBoxToTimeField.getItems().setAll(originalToTimes);
+        comboBoxFromTimeField.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        comboBoxToTimeField.getItems().setAll(originalToTimes);
 
-                List<String> validToTimes = originalToTimes.stream()
-                        .filter(time -> time.compareTo(newValue) > 0)
-                        .collect(Collectors.toList());
+                        List<String> validToTimes = originalToTimes.stream()
+                                .filter(time -> time.compareTo(newValue) > 0)
+                                .collect(Collectors.toList());
 
-                comboBoxToTimeField.getItems().setAll(validToTimes);
+                        comboBoxToTimeField.getItems().setAll(validToTimes);
 
-                if (comboBoxToTimeField.getSelectionModel().getSelectedItem() == null ||
-                    comboBoxToTimeField.getSelectionModel().getSelectedItem().compareTo(newValue) <= 0) {
-                    comboBoxToTimeField.getSelectionModel().clearSelection();
-                }
-            }
-        });
+                        if (comboBoxToTimeField.getSelectionModel().getSelectedItem() == null ||
+                                comboBoxToTimeField.getSelectionModel().getSelectedItem().compareTo(newValue) <= 0) {
+                            comboBoxToTimeField.getSelectionModel().clearSelection();
+                        }
+                    }
+                });
     }
 
     public void initializeWithClient(TCPClient client) {
@@ -100,18 +101,18 @@ public class AddALecturePopupDialogueController implements Initializable {
     @FXML
     private void handleOKButton() {
         if (!client.isConnected() || client == null) {
-            noticeLabel.setText("Not connected to server");
-            System.out.println("Client is not connected to server");
+            noticeLabel.setText("Not Connected to Server");
+            System.out.println("Client is Not Connected to Server");
             return;
         }
 
         // Check if all fields are filled
         if (comboBoxModuleField.getSelectionModel().isEmpty() ||
-            comboBoxFromTimeField.getSelectionModel().isEmpty() ||
-            comboBoxToTimeField.getSelectionModel().isEmpty() ||
-            comboBoxDayField.getSelectionModel().isEmpty() ||
-            roomNumberField.getText().isEmpty() || lecturerField.getText().isEmpty()) {
-            noticeLabel.setText("All fields must be filled");
+                comboBoxFromTimeField.getSelectionModel().isEmpty() ||
+                comboBoxToTimeField.getSelectionModel().isEmpty() ||
+                comboBoxDayField.getSelectionModel().isEmpty() ||
+                roomNumberField.getText().isEmpty() || lecturerField.getText().isEmpty()) {
+            noticeLabel.setText("All Fields Must Be Filled");
             return;
         }
 
@@ -135,19 +136,19 @@ public class AddALecturePopupDialogueController implements Initializable {
             if (response instanceof ResponseType.StringResponse(String value)) {
                 switch (value) {
                     case "Lecture added" -> {
-                        noticeLabel.setText("Lecture added successfully");
+                        noticeLabel.setText("Lecture Added Successfully");
                         addALecturePopupStage.close();
                         App.loadTimetableView();
                     }
-                    case "Timeslot already taken" -> noticeLabel.setText("Timeslot already taken");
+                    case "Timeslot already taken" -> noticeLabel.setText("Timeslot Already Taken");
                     default -> noticeLabel.setText("Failed to add lecture: " + value);
                 }
             } else {
-                noticeLabel.setText("Unexpected response type");
+                noticeLabel.setText("Unexpected Response Type");
             }
         } catch (IOException e) {
             System.err.println("Error sending message: " + e.getMessage());
-            noticeLabel.setText("Error adding lecture");
+            noticeLabel.setText("ERROR Adding Lecture");
         }
     }
 }

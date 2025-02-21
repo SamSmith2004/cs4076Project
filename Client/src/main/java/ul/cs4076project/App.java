@@ -72,7 +72,8 @@ public class App extends Application {
 
     public static void openAddALecturePopupDialogue() {
         try {
-            FXMLLoader addALecturePopupLoader = new FXMLLoader(App.class.getResource("View/popup-dialogues/add-lecture-popup-dialogue.fxml"));
+            FXMLLoader addALecturePopupLoader = new FXMLLoader(
+                    App.class.getResource("View/popup-dialogues/add-lecture-popup-dialogue.fxml"));
             Scene scene = new Scene(addALecturePopupLoader.load(), 350, 500);
             addALecturePopupStage = new Stage();
             addALecturePopupStage.setTitle("ADD Lecture");
@@ -96,7 +97,8 @@ public class App extends Application {
 
     public static void openRemoveALecturePopupDialogue() {
         try {
-            FXMLLoader removeALecturePopupLoader = new FXMLLoader(App.class.getResource("View/popup-dialogues/remove-lecture-popup-dialogue.fxml"));
+            FXMLLoader removeALecturePopupLoader = new FXMLLoader(
+                    App.class.getResource("View/popup-dialogues/remove-lecture-popup-dialogue.fxml"));
             Scene scene = new Scene(removeALecturePopupLoader.load(), 350, 300);
             removeALecturePopupStage = new Stage();
             removeALecturePopupStage.setTitle("REMOVE Lecture");

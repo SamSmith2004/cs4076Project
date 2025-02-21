@@ -61,7 +61,7 @@ public class MainController implements Initializable {
     @FXML
     protected void onLM11025ButtonClick() {
         if (!client.isConnected() || client == null) {
-            noticeLabel.setText("Not connected to server!");
+            noticeLabel.setText("Not Connected to Server");
             return;
         }
 
@@ -70,18 +70,18 @@ public class MainController implements Initializable {
             if (response instanceof ResponseType.StringResponse(String value) && value.equals("Invalid Action Exception")) {
                 noticeLabel.setText("Invalid Action");
             } else {
-                noticeLabel.setText("Unknown error");
+                noticeLabel.setText("Unknown Error");
             }
         } catch (IOException e) {
             System.err.println("Error sending message: " + e.getMessage());
-            noticeLabel.setText("Error sending message to server!");
+            noticeLabel.setText("ERROR Sending Message to Server");
         }
     }
 
     @FXML
     protected void onLK04925ButtonClick() {
         if (!client.isConnected() || client == null) {
-            noticeLabel.setText("Not connected to server!");
+            noticeLabel.setText("Not Connected to Server");
             return;
         }
 
@@ -93,14 +93,14 @@ public class MainController implements Initializable {
                 if (value.equals("Invalid Action Exception")) {
                     noticeLabel.setText("Invalid Action");
                 } else {
-                    noticeLabel.setText("Unknown error");
+                    noticeLabel.setText("Unknown Error");
                 }
             } else {
-                noticeLabel.setText("Unknown error");
+                noticeLabel.setText("Unknown Error");
             }
         } catch (IOException e) {
             System.err.println("Error sending message: " + e.getMessage());
-            noticeLabel.setText("Error sending message to server!");
+            noticeLabel.setText("ERROR Sending Message to Server!");
         }
     }
 
@@ -114,8 +114,8 @@ public class MainController implements Initializable {
                 client.close();
                 serverStatus.setText("Server Stopped!");
             } catch (Exception e) {
-                System.err.println("Error stopping server: " + e.getMessage());
-                serverStatus.setText("Error Stopping Server!");
+                System.err.println("Error Stopping Server: " + e.getMessage());
+                serverStatus.setText("Error Stopping Server");
             }
             serverStatusButton.setText("Attempt to Connect to Server");
         } else {
@@ -124,7 +124,7 @@ public class MainController implements Initializable {
                 App.updateClientReference(client);
 
                 serverStatusButton.setText("STOP Server");
-                serverStatus.setText("Connected to Server!");
+                serverStatus.setText("Connected to Server");
                 isConnectedToServer = true;
             } catch (IOException e) {
                 System.err.println("Error creating TCPClient: " + e.getMessage());
