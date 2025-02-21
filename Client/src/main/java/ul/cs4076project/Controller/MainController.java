@@ -20,9 +20,11 @@ public class MainController implements Initializable {
     private Label serverStatus;
     @FXML
     private Label serverStatusButton;
-    @FXML private Label noticeLabel;
+    @FXML
+    private Label noticeLabel;
 
-    public MainController() {}
+    public MainController() {
+    }
 
     public void initializeWithClient(TCPClient client) {
         this.client = client;
@@ -53,9 +55,15 @@ public class MainController implements Initializable {
         }
     }
 
+    public void clearNoticeLabels() {
+        noticeLabel.setText("");
+    }
+
     @FXML
     protected void onLM05125ButtonClick() {
         App.loadTimetableView();
+        
+        clearNoticeLabels();
     }
 
     @FXML
@@ -67,7 +75,8 @@ public class MainController implements Initializable {
 
         try {
             ResponseType response = client.create("LM11025", new HashMap<>());
-            if (response instanceof ResponseType.StringResponse(String value) && value.equals("Invalid Action Exception")) {
+            if (response instanceof ResponseType.StringResponse(String value)
+                    && value.equals("Invalid Action Exception")) {
                 noticeLabel.setText("Invalid Action");
             } else {
                 noticeLabel.setText("Unknown Error");
@@ -87,9 +96,7 @@ public class MainController implements Initializable {
 
         try {
             ResponseType response = client.create("LM11025", new HashMap<>());
-            if (response instanceof ResponseType.StringResponse(
-                    String value
-            )) {
+            if (response instanceof ResponseType.StringResponse(String value)) {
                 if (value.equals("Invalid Action Exception")) {
                     noticeLabel.setText("Invalid Action");
                 } else {

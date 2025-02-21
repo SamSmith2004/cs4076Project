@@ -57,6 +57,7 @@
 - [X] RemoveLectureDialogue Edge cases
   - [X] Order of selection bug 
 - [X] Connection error message bug on remove stage
+- [ ] Notice Labels on main view do not disappear after having refreshed the view - If you try to press on LM110-2025 or LK049-2025 buttons while server is not connected, it will display the debug label "Not Connected to Server" and will not disappear if connection to server has been reestablished or if user has clicked on timetable page.
 
 ## Polishing
 - [ ] Replace general exceptions with correct explicit exceptions
