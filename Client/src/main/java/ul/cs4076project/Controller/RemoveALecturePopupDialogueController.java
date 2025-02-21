@@ -127,33 +127,38 @@ public class RemoveALecturePopupDialogueController implements Initializable {
     }
 
     private void removeEvent(String newValue) {
-        if (newValue != null) {
-            if (!comboBoxFromTimeField.getSelectionModel().isEmpty() && !comboBoxDayField.getSelectionModel().isEmpty() ) {
-                okButton.setVisible(true);
+        try {
+            if (newValue != null) {
+                if (!comboBoxFromTimeField.getSelectionModel().isEmpty() && !comboBoxDayField.getSelectionModel().isEmpty() ) {
+                    okButton.setVisible(true);
 
-                Lecture lecture = getLecture();
-                if (lecture == null) {
-                    noticeLabel.setText("No Lecture at That Time Found");
-                    confirmLabel.setText("");
-                    moduleName.setText("");
-                    lecturerName.setText("");
-                    roomNumber.setText("");
-                    timeOfLecture.setText("");
-                    dayOfLecture.setText("");
-                    okButton.setVisible(false);
-                    return;
+                    Lecture lecture = getLecture();
+                    if (lecture == null) {
+                        noticeLabel.setText("No Lecture at That Time Found");
+                        confirmLabel.setText("");
+                        moduleName.setText("");
+                        lecturerName.setText("");
+                        roomNumber.setText("");
+                        timeOfLecture.setText("");
+                        dayOfLecture.setText("");
+                        okButton.setVisible(false);
+                        return;
+                    }
+
+                    confirmLabel.setText("Confirm Removal:");
+                    moduleName.setText("Module: " + lecture.getModule());
+                    lecturerName.setText("Lecturer: " + lecture.getLecturer());
+                    roomNumber.setText("Room: " + lecture.getRoom());
+                    timeOfLecture.setText("Time: " + lecture.getTime());
+                    dayOfLecture.setText("Day: " + lecture.getDay());
+                    noticeLabel.setText("");
+
+                    resizeStage(500);
                 }
-
-                confirmLabel.setText("Confirm Removal:");
-                moduleName.setText("Module: " + lecture.getModule());
-                lecturerName.setText("Lecturer: " + lecture.getLecturer());
-                roomNumber.setText("Room: " + lecture.getRoom());
-                timeOfLecture.setText("Time: " + lecture.getTime());
-                dayOfLecture.setText("Day: " + lecture.getDay());
-                noticeLabel.setText("");
-
-                resizeStage(500);
             }
+        } catch (NullPointerException e) {
+            System.err.println("NullPointerException occurred: " + e.getMessage());
+            noticeLabel.setText("ERROR Occurred While Removing Lecture");
         }
     }
 

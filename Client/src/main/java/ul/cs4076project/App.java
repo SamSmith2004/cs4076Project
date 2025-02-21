@@ -77,10 +77,7 @@ public class App extends Application {
             Scene scene = new Scene(addALecturePopupLoader.load(), 350, 500);
             addALecturePopupStage = new Stage();
             addALecturePopupStage.setTitle("ADD Lecture");
-            addALecturePopupStage.initStyle(StageStyle.UTILITY);
-            addALecturePopupStage.initModality(Modality.WINDOW_MODAL);
-            addALecturePopupStage.initOwner(primaryStage);
-            addALecturePopupStage.setScene(scene);
+            setStage(addALecturePopupStage, scene);
 
             // Get the controller and set the dialog stage
             addALecturePopupDialogueController = addALecturePopupLoader.getController();
@@ -90,7 +87,7 @@ public class App extends Application {
             addALecturePopupStage.setResizable(false);
 
             addALecturePopupStage.showAndWait();
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             System.err.println("Error loading AddALecturePopupDialogue: " + e.getMessage());
         }
     }
@@ -102,10 +99,7 @@ public class App extends Application {
             Scene scene = new Scene(removeALecturePopupLoader.load(), 350, 300);
             removeALecturePopupStage = new Stage();
             removeALecturePopupStage.setTitle("REMOVE Lecture");
-            removeALecturePopupStage.initStyle(StageStyle.UTILITY);
-            removeALecturePopupStage.initModality(Modality.WINDOW_MODAL);
-            removeALecturePopupStage.initOwner(primaryStage);
-            removeALecturePopupStage.setScene(scene);
+           setStage(removeALecturePopupStage, scene);
 
             // Get the controller and set the dialog stage
             removeALecturePopupDialogueController = removeALecturePopupLoader.getController();
@@ -117,6 +111,18 @@ public class App extends Application {
             removeALecturePopupStage.showAndWait();
         } catch (IOException e) {
             System.err.println("Error loading RemoveALecturePopupDialogue: " + e.getMessage());
+        }
+    }
+
+    private static void setStage(Stage stage, Scene scene) {
+        try {
+            stage.initStyle(StageStyle.UTILITY);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(primaryStage);
+            stage.setScene(scene);
+            stage.setResizable(false);
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.err.println("Error setting stage: " + e.getMessage());
         }
     }
 

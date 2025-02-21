@@ -20,6 +20,7 @@ import ul.cs4076project.Model.ResponseType;
 import ul.cs4076project.Model.TCPClient;
 
 import javax.json.Json;
+import javax.json.JsonException;
 import javax.json.JsonObject;
 
 public class AddALecturePopupDialogueController implements Initializable {
@@ -146,9 +147,15 @@ public class AddALecturePopupDialogueController implements Initializable {
             } else {
                 noticeLabel.setText("Unexpected Response Type");
             }
+        } catch (JsonException e) {
+            System.err.println("JSON error occurred" + e.getMessage());
+            noticeLabel.setText("Error occurred while processing response");
+        } catch (NullPointerException e) {
+            System.err.println("NullPointerException occurred" + e.getMessage());
+            noticeLabel.setText("Error occurred while processing response");
         } catch (IOException e) {
-            System.err.println("Error sending message: " + e.getMessage());
-            noticeLabel.setText("ERROR Adding Lecture");
+            System.err.println("IOError occurred" + e.getMessage());
+            noticeLabel.setText("Error occurred while processing response");
         }
     }
 }

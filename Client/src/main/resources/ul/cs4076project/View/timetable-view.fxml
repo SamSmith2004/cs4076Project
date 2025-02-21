@@ -116,6 +116,6 @@
 
     <!-- Footer (Bottom) -->
     <bottom>
-        <Label fx:id="debugLabel" alignment="CENTER" />
+        <Label fx:id="noticeLabel" alignment="CENTER" />
     </bottom>
 </BorderPane>

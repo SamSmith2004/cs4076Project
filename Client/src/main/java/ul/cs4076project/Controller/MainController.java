@@ -117,13 +117,8 @@ public class MainController implements Initializable {
             serverStatusButton.setText("STOP Server");
             isConnectedToServer = false;
 
-            try {
-                client.close();
-                serverStatus.setText("Server Stopped!");
-            } catch (Exception e) {
-                System.err.println("Error Stopping Server: " + e.getMessage());
-                serverStatus.setText("Error Stopping Server");
-            }
+            client.close();
+            serverStatus.setText("Server Stopped!");
             serverStatusButton.setText("Attempt to Connect to Server");
         } else {
             try {

@@ -26,9 +26,6 @@ public abstract class RequestHandler {
         } catch (JsonException e) {
             System.err.println("JsonException occurred: " + e.getMessage());
             return errorBuilder(e);
-        } catch (Exception e) {
-            System.err.println("Exception occurred: " + e.getMessage());
-            return errorBuilder(e);
         }
     }
 

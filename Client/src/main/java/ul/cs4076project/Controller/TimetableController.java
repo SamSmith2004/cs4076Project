@@ -23,7 +23,7 @@ public class TimetableController implements Initializable {
     private Lecture[][] lectures;
 
     @FXML
-    private Label debugLabel;
+    private Label noticeLabel;
     @FXML
     private GridPane timetableGrid;
 
@@ -38,7 +38,7 @@ public class TimetableController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createEmptyCells();
-        debugLabel.setText("Waiting For Client Initialization...");
+        noticeLabel.setText("Waiting For Client Initialization...");
     }
 
     private void createEmptyCells() {
@@ -52,14 +52,14 @@ public class TimetableController implements Initializable {
                     timetableGrid.add(cellPane, col, row);
                 }
             }
-        } catch (Exception e) {
-            debugLabel.setText("ERROR Creating Timetable Cells: " + e.getMessage());
+        } catch (NullPointerException | IllegalArgumentException e) {
+            noticeLabel.setText("ERROR Creating Timetable");
         }
     }
 
     public void loadTimetableData() {
         if (client == null) {
-            debugLabel.setText("ERROR: Client not Initialized!");
+            noticeLabel.setText("ERROR: Client not Initialized!");
             createEmptyCells();
             return;
         }
@@ -74,12 +74,12 @@ public class TimetableController implements Initializable {
                 timetable = new String[5][9];
                 updateTimetableGrid(lectures);
             } else {
-                debugLabel.setText("ERROR: Invalid Response Type");
+                noticeLabel.setText("ERROR: Invalid Response Type");
             }
 
         } catch (IOException e) {
             System.err.println("ERROR sending message: " + e.getMessage());
-            debugLabel.setText("ERROR Sending Message to Server!");
+            noticeLabel.setText("ERROR Sending Message to Server!");
         }
     }
 
@@ -99,7 +99,7 @@ public class TimetableController implements Initializable {
 
                     VBox labelContainer = new VBox(2);
                     labelContainer.setStyle("-fx-padding: 5;");
-                    labelContainer.setAlignment(javafx.geometry.Pos.CENTER); // Center the labels within the VBox
+                    labelContainer.setAlignment(javafx.geometry.Pos.CENTER);
                     labelContainer.getChildren().addAll(
                             createStyledLabel(lecture.getModule(), "-fx-font-size: 16; -fx-font-weight: bold;"),
                             createStyledLabel(lecture.getLecturer(), "-fx-font-size: 16;"),
@@ -107,19 +107,18 @@ public class TimetableController implements Initializable {
                             createStyledLabel(lecture.getTime(), "-fx-font-size: 16;"));
 
                     cellPane.getChildren().add(labelContainer);
-                    StackPane.setAlignment(labelContainer, javafx.geometry.Pos.CENTER); // Center the VBox within the
-                                                                                        // StackPane
+                    StackPane.setAlignment(labelContainer, javafx.geometry.Pos.CENTER);
                     timetableGrid.add(cellPane, col, row);
                 }
             }
         }
-        debugLabel.setText("");
+        noticeLabel.setText("");
     }
 
     private Label createStyledLabel(String text, String style) {
         Label label = new Label(text);
         label.setStyle(style);
-        label.setAlignment(javafx.geometry.Pos.CENTER); // Center the text within the label
+        label.setAlignment(javafx.geometry.Pos.CENTER);
         return label;
     }
 

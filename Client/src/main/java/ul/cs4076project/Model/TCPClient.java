@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Map;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
+import javax.json.*;
 
 public class TCPClient {
     private static final int PORT = 8080;
@@ -25,6 +25,14 @@ public class TCPClient {
             in = new BufferedReader(new InputStreamReader(link.getInputStream()));
             out = new PrintWriter(link.getOutputStream(), true);
             isConnected = true;
+        } catch (UnknownHostException e) {
+            System.err.println("Unknown host: " + e.getMessage());
+            isConnected = false;
+            throw e;
+        } catch (ConnectException e) {
+            System.err.println("Connection refused: " + e.getMessage());
+            isConnected = false;
+            throw e;
         } catch (IOException e) {
             System.err.println("Error creating socket: " + e.getMessage());
             isConnected = false;
@@ -76,6 +84,13 @@ public class TCPClient {
 
             JsonReader jsonReader = Json.createReader(new StringReader(response));
             return new ResponseHandler(jsonReader.readObject()).extractResponse();
+        } catch (JsonException e) {
+            System.err.println("JSON error during " + methodType + ": " + e.getMessage());
+            throw e;
+        } catch (SocketException e) {
+            System.err.println("Socket error during " + methodType + ": " + e.getMessage());
+            isConnected = false;
+            throw e;
         } catch (IOException e) {
             System.err.println("IO Error during " + methodType + ": " + e.getMessage());
             isConnected = false;

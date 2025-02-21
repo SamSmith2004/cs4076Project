@@ -1,6 +1,7 @@
 package ul.cs4076project.Model;
 
 import javax.json.JsonArray;
+import javax.json.JsonException;
 import javax.json.JsonObject;
 import java.util.ArrayList;
 
@@ -13,31 +14,39 @@ public class ResponseHandler {
     }
 
     public ResponseType extractResponse() {
-        String contentType = response.getString("Content-Type");
-        String status = response.getString("status");
+        try {
+            String contentType = response.getString("Content-Type");
+            String status = response.getString("status");
 
-        if (status.equals("InvalidActionException")) {
-            return new ResponseType.StringResponse("Invalid Action Exception");
+            if (status.equals("InvalidActionException")) {
+                return new ResponseType.StringResponse("Invalid Action Exception");
+            }
+
+            if (status.equals("error")) {
+                return new ResponseType.StringResponse(response.getString("content"));
+            }
+
+            ResponseType result = null;
+            switch (contentType) {
+                case "timetable" :
+                    result = buildTimetableResponse();
+                    break;
+                case "addLecture", "test", "Message", "removeLecture":
+                    result = new ResponseType.StringResponse(response.getString("content"));
+                    break;
+                default:
+                    System.out.println("Invalid Content-Type");
+                    break;
+            }
+
+            return result;
+        } catch (JsonException e) {
+            System.err.println("JSON error" + e.getMessage());
+            return new ResponseType.StringResponse("Error occurred while processing response");
+        } catch (NullPointerException e) {
+            System.err.println("NullPointerException occurred" + e.getMessage());
+            return new ResponseType.StringResponse("Error occurred while processing response");
         }
-
-        if (status.equals("error")) {
-            return new ResponseType.StringResponse(response.getString("content"));
-        }
-
-        ResponseType result = null;
-        switch (contentType) {
-            case "timetable" :
-                result = buildTimetableResponse();
-                break;
-            case "addLecture", "test", "Message", "removeLecture":
-                result = new ResponseType.StringResponse(response.getString("content"));
-                break;
-            default:
-                System.out.println("Invalid Content-Type");
-                break;
-        }
-
-        return result;
     }
 
     private ResponseType buildTimetableResponse() {

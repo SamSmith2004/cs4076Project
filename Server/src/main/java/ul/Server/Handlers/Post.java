@@ -36,8 +36,8 @@ public class Post extends RequestHandler {
         } catch (JsonException e) {
             System.err.println("JsonException occurred: " + e.getMessage());
             return errorBuilder(e);
-        } catch (Exception e) {
-            System.err.println("Exception occurred: " + e.getMessage());
+        } catch (NullPointerException e) {
+            System.err.println("NullPointerException occurred: " + e.getMessage());
             return errorBuilder(e);
         }
     }
