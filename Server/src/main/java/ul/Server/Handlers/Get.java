@@ -17,17 +17,12 @@ public class Get extends RequestHandler {
     }
 
     @Override
-    public String responseBuilder(SessionData sessionData) throws IOException {
+    public String responseBuilder(SessionData sessionData) {
         JsonObject responseData;
         try {
             String contentType = headers.getString("Content-Type");
 
-            responseData = switch (contentType) {
-                case "timetable" -> buildTimetableResponse(sessionData);
-                case "lecture" -> buildLectureResponse(sessionData);
-                default -> buildInvalidResponse();
-            };
-
+            responseData = (contentType.equals("timetable")) ? buildTimetableResponse(sessionData) : buildInvalidResponse();
             return jsonToString(responseData);
 
         } catch (JsonException e) {
@@ -40,32 +35,35 @@ public class Get extends RequestHandler {
     }
 
     private JsonObject buildInvalidResponse() {
-        return Json.createObjectBuilder()
-                .add("status", "error")
-                .add("content", "Invalid Content-Type")
-                .add("Content-Type", "Error")
-                .build();
+        try {
+            return Json.createObjectBuilder()
+                    .add("status", "error")
+                    .add("content", "Invalid Content-Type")
+                    .add("Content-Type", "Error")
+                    .build();
+        } catch (JsonException e) {
+            return serialError(e);
+        }
     }
 
     private JsonObject buildTimetableResponse(SessionData sessionData) {
-        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+        try {
+            JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 
-        for (Lecture lecture : sessionData.getTimeTable()) {
-            JsonObjectBuilder lectureBuilder = Json.createObjectBuilder()
-                    .add("module", lecture.getModule())
-                    .add("lecturer", lecture.getLecturer())
-                    .add("room", lecture.getRoom())
-                    .add("fromTime", lecture.getFromTime())
-                    .add("toTime", lecture.getToTime())
-                    .add("day", lecture.getDay());
-            arrayBuilder.add(lectureBuilder);
+            for (Lecture lecture : sessionData.getTimeTable()) {
+                JsonObjectBuilder lectureBuilder = Json.createObjectBuilder()
+                        .add("module", lecture.getModule())
+                        .add("lecturer", lecture.getLecturer())
+                        .add("room", lecture.getRoom())
+                        .add("fromTime", lecture.getFromTime())
+                        .add("toTime", lecture.getToTime())
+                        .add("day", lecture.getDay());
+                arrayBuilder.add(lectureBuilder);
+            }
+
+            return Json.createObjectBuilder().add("status", "success").add("Content-Type", "timetable").add("content", arrayBuilder).build();
+        } catch (JsonException | ArrayStoreException e) {
+            return serialError(e);
         }
-
-        return Json.createObjectBuilder().add("status", "success").add("Content-Type", "timetable").add("content", arrayBuilder).build();
-    }
-
-    private JsonObject buildLectureResponse(SessionData sessionData) {
-        // TODO
-        return null;
     }
 }

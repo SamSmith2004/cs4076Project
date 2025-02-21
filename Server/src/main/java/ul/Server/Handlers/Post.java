@@ -43,53 +43,65 @@ public class Post extends RequestHandler {
     }
 
     private JsonObject buildInvalidResponse() {
-        return Json.createObjectBuilder()
-                .add("status", "error")
-                .add("content", "Invalid Content-Type")
-                .add("Content-Type", "Error")
-                .build();
+        try {
+            return Json.createObjectBuilder()
+                    .add("status", "error")
+                    .add("content", "Invalid Content-Type")
+                    .add("Content-Type", "Error")
+                    .build();
+        } catch (JsonException e) {
+            return serialError(e);
+        }
     }
 
     private JsonObject buildTestResponse() {
-        return Json.createObjectBuilder()
-                .add("status", "success")
-                .add("content", "Test response")
-                .add("Content-Type", "test")
-                .build();
+        try {
+            return Json.createObjectBuilder()
+                    .add("status", "success")
+                    .add("content", "Test response")
+                    .add("Content-Type", "test")
+                    .build();
+        } catch (JsonException e) {
+            return serialError(e);
+        }
     }
 
     private JsonObject buildAddLectureResponse(SessionData sessionData) {
-        String module = content.getString("module");
-        String lecturer = content.getString("lecturer");
-        String room = content.getString("room");
-        String fromTime = content.getString("fromTime");
-        String toTime = content.getString("toTime");
-        String day = content.getString("day");
+        try {
+            String module = content.getString("module");
+            String lecturer = content.getString("lecturer");
+            String room = content.getString("room");
+            String fromTime = content.getString("fromTime");
+            String toTime = content.getString("toTime");
+            String day = content.getString("day");
 
-        // Normalize time to prevent comparison failures
-        String normalizedFromTime = fromTime.replaceFirst("^0", "");
-        String normalizedToTime = toTime.replaceFirst("^0", "");
+            // Normalize time to prevent comparison failures
+            String normalizedFromTime = fromTime.replaceFirst("^0", "");
+            String normalizedToTime = toTime.replaceFirst("^0", "");
 
-        Lecture newLecture = new Lecture(module, lecturer, room, normalizedFromTime, normalizedToTime, day);
+            Lecture newLecture = new Lecture(module, lecturer, room, normalizedFromTime, normalizedToTime, day);
 
-        // Check if timeslot overlaps with existing lectures
-        ArrayList<Lecture> lectures = sessionData.getTimeTable();
-        for (Lecture existingLecture : lectures) {
-            if (newLecture.overlaps(existingLecture)) {
-                return Json.createObjectBuilder()
-                        .add("status", "error")
-                        .add("content", "Timeslot already taken")
-                        .add("Content-Type", "addLecture")
-                        .build();
+            // Check if timeslot overlaps with existing lectures
+            ArrayList<Lecture> lectures = sessionData.getTimeTable();
+            for (Lecture existingLecture : lectures) {
+                if (newLecture.overlaps(existingLecture)) {
+                    return Json.createObjectBuilder()
+                            .add("status", "error")
+                            .add("content", "Timeslot already taken")
+                            .add("Content-Type", "addLecture")
+                            .build();
+                }
             }
-        }
 
-        sessionData.addLecture(newLecture);
-        return Json.createObjectBuilder()
-                .add("status", "success")
-                .add("content", "Lecture added")
-                .add("Content-Type", "addLecture")
-                .build();
+            sessionData.addLecture(newLecture);
+            return Json.createObjectBuilder()
+                    .add("status", "success")
+                    .add("content", "Lecture added")
+                    .add("Content-Type", "addLecture")
+                    .build();
+        } catch (JsonException e) {
+            return serialError(e);
+        }
     }
 
     private JsonObject buildRemoveLectureResponse(SessionData sessionData) {
@@ -106,7 +118,7 @@ public class Post extends RequestHandler {
                          .add("content", "Lecture removed")
                          .add("Content-Type", "removeLecture")
                          .build();
-             } catch (Exception e) {
+             } catch (JsonException e) {
                  return serialError(e);
              }
          } else {
@@ -116,13 +128,5 @@ public class Post extends RequestHandler {
                         .add("Content-Type", "removeLecture")
                         .build();
          }
-    }
-
-    private JsonObject serialError (Exception e) {
-        return Json.createObjectBuilder()
-                .add("status", "error")
-                .add("content", e.getMessage())
-                .add("Content-Type", "error")
-                .build();
     }
 }
