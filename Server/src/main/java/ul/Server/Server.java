@@ -95,13 +95,13 @@ public class Server {
                                 out.flush();
                             }
                         }
-                        System.out.println("Client disconnected: " + link.getInetAddress().getHostAddress());
+                        System.out.println("Client Disconnected: " + link.getInetAddress().getHostAddress());
 
                     } catch (IOException e) {
-                        System.err.println("IO Error in client handling: " + e.getMessage());
+                        System.err.println("IO ERROR in Client Handling: " + e.getMessage());
                     }
                 } catch (IOException e) {
-                    System.err.println("IO Error during accept: " + e.getMessage());
+                    System.err.println("IO ERROR During Accept: " + e.getMessage());
                 } finally {
                     try {
                         if (link != null && !link.isClosed()) {
@@ -112,7 +112,7 @@ public class Server {
                     }
                 }
             }
-            out.println("Server shutting down.");
+            out.println("Server Shutting Down.");
 
         } catch (IOException e) {
             System.err.println("IO Error: " + e.getMessage());
