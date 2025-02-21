@@ -134,6 +134,13 @@ public class RemoveALecturePopupDialogueController implements Initializable {
                 Lecture lecture = getLecture();
                 if (lecture == null) {
                     noticeLabel.setText("No Lecture at That Time Found");
+                    confirmLabel.setText("");
+                    moduleName.setText("");
+                    lecturerName.setText("");
+                    roomNumber.setText("");
+                    timeOfLecture.setText("");
+                    dayOfLecture.setText("");
+                    okButton.setVisible(false);
                     return;
                 }
 

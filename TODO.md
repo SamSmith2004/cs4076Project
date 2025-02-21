@@ -54,8 +54,8 @@
 - [X] Bug with loading Timetable data when starting app before server - No logic to re-fetch timetable once connection to server has been reestablished
 - [x] Bug with displaying "Added Lectures" on timetable after connection to server has been restarted - Client keeps previous "Added Lecture and does not remove it - potential flushing issue
 - [ ] Bug with loading of scenes - when going between scenes and the application happens to be a differerent size than what was initialised (so not 1280x720), it will resize itself to 1280x720 from whatever the previous window size was. So if you are in fullscreen and switch to timetable view, it will resize the window to what was initialised as 1280x720
-- [ ] RemoveLectureDialogue Edge cases
-  - [ ] Selecting correct lecture, then swapping to an incorrect lecture then hitting confirm causes an error
+- [X] RemoveLectureDialogue Edge cases
+  - [X] Selecting correct lecture, then swapping to an incorrect lecture then hitting confirm causes an error
   - [X] Order of selection bug 
 - [X] Connection error message bug on remove stage
 - [x] Notice Labels on main view do not disappear after having refreshed the view - If you try to press on LM110-2025 or LK049-2025 buttons while server is not connected, it will display the debug label "Not Connected to Server" and will not disappear if connection to server has been reestablished or if user has clicked on timetable page.
