@@ -64,11 +64,11 @@
 - [X] Replace general exceptions with correct explicit exceptions
 - [x] Update notice labels to reflect user-friendly messages
 - [X] Fix Types for API
-- [ ] Styling
-  - [ ] Timetable
-  - [ ] Main Menu
-  - [ ] Add Lecture
-  - [ ] Remove Lecture
+- [x] Styling
+  - [x] Timetable
+  - [x] Main Menu
+  - [x] Add Lecture
+  - [x] Remove Lecture
 - [ ] Remove redundancies
 
 ## Submission Requirements
