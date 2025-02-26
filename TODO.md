@@ -71,7 +71,7 @@
 - [ ] Remove redundancies
 
 ## Revamp:
-- [ ] PGSQL schema 
+- [X] PGSQL schema 
 - [ ] Update client data structures to reflect new schema
 - [ ] Update server to use schema
   - [ ] GETs
