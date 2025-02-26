@@ -12,6 +12,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.file.Paths;
+
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -29,11 +31,7 @@ public class Server {
 
     private static Connection initializeDatabase() throws SQLException {
         // Painful method to get the path of the .env file
-        String envPath = Server.class.getProtectionDomain()
-                .getCodeSource()
-                .getLocation()
-                .getPath()
-                .replace("target/classes/", "src/main/java/ul/Server/");
+        String envPath = Paths.get("Server", "src", "main", "java", "ul", "Server").toString();
         Dotenv dotenv = Dotenv.configure().directory(envPath).load();
 
         // Get env data
