@@ -70,5 +70,18 @@
   - [x] Remove Lecture
 - [ ] Remove redundancies
 
+## Revamp:
+- [ ] PGSQL schema 
+- [ ] Update client data structures to reflect new schema
+- [ ] Update server to use schema
+  - [ ] GETs
+  - [ ] POSTs
+- [?] Make client and executable 
+
+## Documentation
+- [ ] Server/API
+- [ ] Client
+- [ ] Database
+
 ## Submission Requirements
 - studentId1_studentId2.zip
