@@ -31,7 +31,7 @@
 
             <!-- Time Field -->
             <HBox spacing="5" alignment="CENTER">
-                <Label text="Time:" style="-fx-font-size: 14;" />
+                <Label text="Start Time:" style="-fx-font-size: 14;" />
                 <ComboBox fx:id="comboBoxFromTimeField" prefWidth="150" style="-fx-font-size: 14;" />
             </HBox>
 
