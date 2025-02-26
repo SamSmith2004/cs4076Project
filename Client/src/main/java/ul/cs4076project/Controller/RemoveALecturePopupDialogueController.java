@@ -16,7 +16,9 @@ import ul.cs4076project.Model.Lecture;
 import ul.cs4076project.Model.ResponseType;
 import ul.cs4076project.Model.TCPClient;
 
+import javax.json.Json;
 import javax.json.JsonException;
+import javax.json.JsonObject;
 
 public class RemoveALecturePopupDialogueController implements Initializable {
     private Stage removeALecturePopupStage;
@@ -81,7 +83,7 @@ public class RemoveALecturePopupDialogueController implements Initializable {
 
     @FXML
     private void handleOKButton() {
-        if (!client.isConnected() || client == null) {
+        if (client == null || !client.isConnected()) {
             noticeLabel.setText("Not Connected to Server");
             System.out.println("Client is not connected to server");
             return;
@@ -94,22 +96,21 @@ public class RemoveALecturePopupDialogueController implements Initializable {
             return;
         }
 
-        String fromTime = comboBoxFromTimeField.getValue().substring(0, 2) + ":00";
-
         try {
             HashMap<String, String> headers = new HashMap<>();
             headers.put("Content-Type", "removeLecture");
 
-            Lecture lecture = new Lecture(
-                    "test",
-                    "test",
-                    "test",
-                    fromTime,
-                    "",
-                    comboBoxDayField.getValue()
-            );
+            Lecture lecture = getLecture();
+            if (lecture == null) {
+                noticeLabel.setText("No lecture found at selected time");
+                return;
+            }
 
-            ResponseType response = client.post(lecture.toJson().toString(), headers);
+            JsonObject removeJson = Json.createObjectBuilder()
+                    .add("id", Integer.parseInt(lecture.getId()))
+                    .build();
+
+            ResponseType response = client.post(removeJson.toString(), headers);
             if (response instanceof ResponseType.StringResponse(String value) && value.equals("Lecture removed")) {
                 noticeLabel.setText("Lecture Removed");
                 App.loadTimetableView();
@@ -123,11 +124,20 @@ public class RemoveALecturePopupDialogueController implements Initializable {
         } catch (JsonException e) {
             System.err.println("JsonException occurred: " + e.getMessage());
             noticeLabel.setText("ERROR Occurred While Removing Lecture");
+        } catch (NumberFormatException e) {
+            System.err.println("NumberFormatException occurred: " + e.getMessage());
+            noticeLabel.setText("ERROR Occurred While Removing Lecture");
         }
     }
 
     private void removeEvent(String newValue) {
         try {
+            if (client == null || !client.isConnected()) {
+                noticeLabel.setText("Not Connected to Server");
+                System.out.println("Client is not connected to server");
+                return;
+            }
+
             if (newValue != null) {
                 if (!comboBoxFromTimeField.getSelectionModel().isEmpty() && !comboBoxDayField.getSelectionModel().isEmpty() ) {
                     okButton.setVisible(true);
@@ -146,11 +156,11 @@ public class RemoveALecturePopupDialogueController implements Initializable {
                     }
 
                     confirmLabel.setText("Confirm Removal:");
-                    moduleName.setText("Module: " + lecture.getModule());
+                    moduleName.setText("Module: " + lecture.getModuleString());
                     lecturerName.setText("Lecturer: " + lecture.getLecturer());
                     roomNumber.setText("Room: " + lecture.getRoom());
                     timeOfLecture.setText("Time: " + lecture.getTime());
-                    dayOfLecture.setText("Day: " + lecture.getDay());
+                    dayOfLecture.setText("Day: " + lecture.getDayString());
                     noticeLabel.setText("");
 
                     resizeStage(500);

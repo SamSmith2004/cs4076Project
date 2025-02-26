@@ -68,13 +68,12 @@
   - [x] Main Menu
   - [x] Add Lecture
   - [x] Remove Lecture
-- [ ] Remove redundancies
 
 ## Revamp:
 - [X] PGSQL schema 
 - [ ] Update client data structures to reflect new schema
-- [ ] Update API to use schema
-  - [ ] Client
+- [X] Update API to use schema
+  - [X] Client
   - [X] Server
 - [?] Make client an executable 
 

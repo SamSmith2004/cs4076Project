@@ -41,7 +41,7 @@ public class TCPClient {
     }
 
     public boolean isConnected() {
-        return isConnected;
+        return isConnected && link != null && link.isConnected() && !link.isClosed();
     }
 
     public ResponseType get(String message, Map<String, String> headers) throws IOException {

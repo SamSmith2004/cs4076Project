@@ -62,26 +62,49 @@ public class ResponseHandler {
         }
 
         for (int i = 0; i < contentArray.size(); i++) {
-            JsonObject lectureJson = contentArray.getJsonObject(i);
-            Lecture lecture = new Lecture(
-                    lectureJson.getString("module"),
-                    lectureJson.getString("lecturer"),
-                    lectureJson.getString("room"),
-                    lectureJson.getString("fromTime"),
-                    lectureJson.getString("toTime"),
-                    lectureJson.getString("day")
-            );
-            lectures.add(lecture);
+            try {
+                JsonObject lectureJson = contentArray.getJsonObject(i);
+
+                // Type conversion and validations
+                String id = String.valueOf(lectureJson.getInt("id"));
+                Module module;
+                try {
+                    module = Module.valueOf(lectureJson.getString("module"));
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid module: " + lectureJson.getString("module"));
+                    continue; // Skip this lecture
+                }
+                DayOfWeek day;
+                try {
+                    day = DayOfWeek.valueOf(lectureJson.getString("day"));
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid day: " + lectureJson.getString("day"));
+                    continue;
+                }
+
+                Lecture lecture = new Lecture(
+                        id,
+                        module,
+                        lectureJson.getString("lecturer"),
+                        lectureJson.getString("room"),
+                        lectureJson.getString("fromTime"),
+                        lectureJson.getString("toTime"),
+                        day
+                );
+                lectures.add(lecture);
+            } catch (JsonException | IllegalArgumentException e) {
+                System.err.println("Error parsing lecture: " + e.getMessage());
+            }
         }
 
         // Create timetable and assign index based on day and time
         for (Lecture lecture : lectures) {
             int day = switch (lecture.getDay()) {
-                case "Monday" -> 0;
-                case "Tuesday" -> 1;
-                case "Wednesday" -> 2;
-                case "Thursday" -> 3;
-                case "Friday" -> 4;
+                case MONDAY -> 0;
+                case TUESDAY -> 1;
+                case WEDNESDAY -> 2;
+                case THURSDAY -> 3;
+                case FRIDAY -> 4;
                 default -> -1;
             };
             int time = switch (lecture.getFromTime()) {

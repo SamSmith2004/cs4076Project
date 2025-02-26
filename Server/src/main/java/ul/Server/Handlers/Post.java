@@ -99,10 +99,26 @@ public class Post extends RequestHandler {
 
             // Validate time range
             if (Integer.parseInt(fromTime.split(":")[0]) < 9 || Integer.parseInt(fromTime.split(":")[0]) > 17 ||
-                    Integer.parseInt(toTime.split(":")[0]) < 9 || Integer.parseInt(toTime.split(":")[0]) > 17) {
+                    Integer.parseInt(toTime.split(":")[0]) < 9 || Integer.parseInt(toTime.split(":")[0]) > 18) {
                 return Json.createObjectBuilder()
                         .add("status", "error")
                         .add("content", "Invalid time")
+                        .add("Content-Type", "addLecture")
+                        .build();
+            }
+
+            // Validate lecturer and room length
+            if (lecturer.length() > 100) {
+                return Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("content", "Lecturer name too long (max 100 characters)")
+                        .add("Content-Type", "addLecture")
+                        .build();
+            }
+            if (room.length() > 50) {
+                return Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("content", "Room name too long (max 50 characters)")
                         .add("Content-Type", "addLecture")
                         .build();
             }

@@ -90,7 +90,7 @@ public class TimetableController implements Initializable {
             for (int col = 0; col < 5; col++) {
                 Lecture lecture = lectures[col][row - 1];
                 if (lecture != null) {
-                    timetable[col][row - 1] = lecture.getModule();
+                    timetable[col][row - 1] = lecture.getModuleString();
 
                     StackPane cellPane = new StackPane();
                     cellPane.setStyle("-fx-background-color: white; -fx-border-color: lightgray;");
@@ -101,7 +101,7 @@ public class TimetableController implements Initializable {
                     labelContainer.setStyle("-fx-padding: 5;");
                     labelContainer.setAlignment(javafx.geometry.Pos.CENTER);
                     labelContainer.getChildren().addAll(
-                            createStyledLabel(lecture.getModule(), "-fx-font-size: 16; -fx-font-weight: bold;"),
+                            createStyledLabel(lecture.getModuleString(), "-fx-font-size: 16; -fx-font-weight: bold;"),
                             createStyledLabel(lecture.getLecturer(), "-fx-font-size: 16;"),
                             createStyledLabel(lecture.getRoom(), "-fx-font-size: 16;"),
                             createStyledLabel(lecture.getTime(), "-fx-font-size: 16;"));
