@@ -1,5 +1,7 @@
 package ul.Server.Handlers;
 
+import ul.Server.Utils.DayOfWeek;
+import ul.Server.Utils.Module;
 import ul.Server.Utils.Lecture;
 import ul.Server.Utils.SessionData;
 
@@ -68,17 +70,46 @@ public class Post extends RequestHandler {
 
     private JsonObject buildAddLectureResponse(SessionData sessionData) {
         try {
-            String module = content.getString("module");
+            int id = content.getInt("id");
             String lecturer = content.getString("lecturer");
             String room = content.getString("room");
             String fromTime = content.getString("fromTime");
             String toTime = content.getString("toTime");
-            String day = content.getString("day");
+            Module module;
+            DayOfWeek day;
+            try {
+                module = Module.valueOf(content.getString("module"));
+                day = DayOfWeek.valueOf(content.getString("day"));
+            } catch (IllegalArgumentException e) {
+                return Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("content", "Invalid module or day")
+                        .add("Content-Type", "addLecture")
+                        .build();
+            }
 
-            // Normalize time to prevent comparison failures
+            // Validate time formats
+            if (!fromTime.matches("\\d{1,2}:\\d{2}") || !toTime.matches("\\d{1,2}:\\d{2}")) {
+                return Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("content", "Time must be in format HH:MM")
+                        .add("Content-Type", "addLecture")
+                        .build();
+            }
+
+            // Validate time range
+            if (Integer.parseInt(fromTime.split(":")[0]) < 9 || Integer.parseInt(fromTime.split(":")[0]) > 17 ||
+                    Integer.parseInt(toTime.split(":")[0]) < 9 || Integer.parseInt(toTime.split(":")[0]) > 17) {
+                return Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("content", "Invalid time")
+                        .add("Content-Type", "addLecture")
+                        .build();
+            }
+
+            // For consistency, remove leading 0 from times
             String normalizedFromTime = fromTime.replaceFirst("^0", "");
             String normalizedToTime = toTime.replaceFirst("^0", "");
-
             Lecture newLecture = new Lecture(module, lecturer, room, normalizedFromTime, normalizedToTime, day);
 
             // Check if timeslot overlaps with existing lectures
@@ -105,13 +136,8 @@ public class Post extends RequestHandler {
     }
 
     private JsonObject buildRemoveLectureResponse(SessionData sessionData) {
-        String fromTime = content.getString("fromTime");
-        String day = content.getString("day");
-
-        // Normalize time to prevent comparison failures
-        String normalizedFromTime = fromTime.replaceFirst("^0", "");
-
-         if (sessionData.removeLecture(day, normalizedFromTime)) {
+         int id = content.getInt("id");
+         if (sessionData.removeLecture(id)) {
              try {
                  return Json.createObjectBuilder()
                          .add("status", "success")

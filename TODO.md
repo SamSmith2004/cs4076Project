@@ -73,10 +73,10 @@
 ## Revamp:
 - [X] PGSQL schema 
 - [ ] Update client data structures to reflect new schema
-- [ ] Update server to use schema
-  - [ ] GETs
-  - [ ] POSTs
-- [?] Make client and executable 
+- [ ] Update API to use schema
+  - [ ] Client
+  - [X] Server
+- [?] Make client an executable 
 
 ## Documentation
 - [ ] Server/API

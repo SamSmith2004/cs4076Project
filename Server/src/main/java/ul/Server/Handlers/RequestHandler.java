@@ -14,8 +14,6 @@ public abstract class RequestHandler {
     public static String jsonToString(JsonObject jsonObject) {
         try {
             Map<String, JsonObject> responseConfig = new HashMap<>();
-            // Enable pretty printing (Currently broken)
-            // responseConfig.put(JsonGenerator.PRETTY_PRINTING, true);
             JsonWriterFactory writerFactory = Json.createWriterFactory(responseConfig);
 
             StringWriter stringWriter = new StringWriter();
@@ -33,8 +31,8 @@ public abstract class RequestHandler {
         JsonObject errorResponse =
                 Json.createObjectBuilder()
                         .add("status", "error")
-                        .add("message", "Server error: " + e.getMessage())
-                        .add("Content-Type", "Error")
+                        .add("content", "Server error: " + e.getMessage())
+                        .add("Content-Type", "error")
                         .build();
         return jsonToString(errorResponse);
     }

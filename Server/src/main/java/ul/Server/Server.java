@@ -170,19 +170,20 @@ public class Server {
         try {
             var result = dbConnection.createStatement().executeQuery("SELECT * FROM lectures");
             int count = 0;
-            String response = "";
+            StringBuilder response = new StringBuilder();
             while (result.next()) {
                 count++;
-                response = "ID: " + result.getInt("id") +
-                                ", Module: " + result.getString("module") +
-                                ", Lecturer: " + result.getString("lecturer") +
-                                ", Room: " + result.getString("room") +
-                                ", Time: " + result.getString("from_time") +
-                                "-" + result.getString("to_time") +
-                                ", Day: " + result.getString("day");
+                response.append("ID: ").append(result.getInt("id"))
+                        .append(", Module: ").append(result.getString("module"))
+                        .append(", Lecturer: ").append(result.getString("lecturer"))
+                        .append(", Room: ").append(result.getString("room"))
+                        .append(", Time: ").append(result.getString("from_time"))
+                        .append("-").append(result.getString("to_time"))
+                        .append(", Day: ").append(result.getString("day"))
+                        .append("\n");
             }
             System.out.println("Query completed. Found " + count + " rows.");
-            return response;
+            return response.toString();
         } catch (SQLException e) {
             System.err.println("Database query failed: " + e.getMessage());
             return "Database query failed: " + e.getMessage();

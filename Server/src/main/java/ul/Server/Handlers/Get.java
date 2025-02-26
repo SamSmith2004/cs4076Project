@@ -52,12 +52,13 @@ public class Get extends RequestHandler {
 
             for (Lecture lecture : sessionData.getTimeTable()) {
                 JsonObjectBuilder lectureBuilder = Json.createObjectBuilder()
-                        .add("module", lecture.getModule())
+                        .add("id", lecture.getId())
+                        .add("module", lecture.getModuleString())
                         .add("lecturer", lecture.getLecturer())
                         .add("room", lecture.getRoom())
                         .add("fromTime", lecture.getFromTime())
                         .add("toTime", lecture.getToTime())
-                        .add("day", lecture.getDay());
+                        .add("day", lecture.getDayString());
                 arrayBuilder.add(lectureBuilder);
             }
 
