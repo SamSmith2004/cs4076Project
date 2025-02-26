@@ -80,11 +80,11 @@ public class Server {
                             System.out.println("Received: " + request);
 
                             // Debug
-//                            if (request.equals("DEBUG")) {
-//                                out.println(testDB());
-//                                out.flush();
-//                                continue;
-//                            }
+                            if (request.equals("DEBUG")) {
+                                out.println(testDB());
+                                out.flush();
+                                continue;
+                            }
                             //
 
                             if (request.equals("STOP")) {
