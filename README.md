@@ -24,9 +24,12 @@ TODO
 #### Database:
 ##### Schema:
 **Objects:** <br>
-Custom enum type for days of the week:
+Custom enum type for days of the week.
+Custom enum type for modules.
 ```sql
 CREATE TYPE day_of_week AS ENUM ('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY');
+
+CREATE TYPE modules AS ENUM ('CS4006', 'CS4076', 'CS4115', 'CS4185', 'MA4413');
 ```
 
 **Tables:** <br>
@@ -36,7 +39,7 @@ Unique Key constraint on the day and from_time columns to ensure that no two lec
 ```sql
 CREATE TABLE lectures (
     id SERIAL PRIMARY KEY,
-    module VARCHAR(100) NOT NULL,
+    module modules NOT NULL,
     lecturer VARCHAR(100) NOT NULL,
     room VARCHAR(50) NOT NULL,
     from_time CHAR(5) NOT NULL CHECK (from_time >= '09:00' AND from_time <= '17:00'),
