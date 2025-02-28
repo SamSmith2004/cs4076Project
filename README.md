@@ -29,12 +29,17 @@ Custom enum type for modules.
 ```sql
 CREATE TYPE day_of_week AS ENUM ('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY');
 
-CREATE TYPE modules AS ENUM ('CS4006', 'CS4076', 'CS4115', 'CS4185', 'MA4413');
+CREATE TYPE modules AS ENUM ('CS4006', 'CS4076', 'CS4115', 'CS4815', 'MA4413');
+```
+
+**Indexes:** <br>
+Index to improve overlap query performance.
+```sql
+CREATE INDEX idx_lectures_overlap ON lectures (day, from_time, to_time);
 ```
 
 **Tables:** <br>
-Used the day_of_week enum type for the day column to ensure that only valid days are entered.
-Added a check to ensure times are within the valid range of `09:00` - `17:00` for the from_time column and `10:00` - `18:00` for the to_time column.
+Used the day_of_week & module enum type for the day & module columns to ensure that only valid days & modules are entered.
 Unique Key constraint on the day and from_time columns to ensure that no two lectures are scheduled at the same time on the same day.
 ```sql
 CREATE TABLE lectures (
@@ -42,8 +47,8 @@ CREATE TABLE lectures (
     module modules NOT NULL,
     lecturer VARCHAR(100) NOT NULL,
     room VARCHAR(50) NOT NULL,
-    from_time CHAR(5) NOT NULL CHECK (from_time >= '09:00' AND from_time <= '17:00'),
-    to_time CHAR(5) NOT NULL CHECK (to_time >= '10:00' AND to_time <= '18:00'),
+    from_time CHAR(5) NOT NULL, 
+    to_time CHAR(5) NOT NULL, 
     day day_of_week NOT NULL,
     UNIQUE(day, from_time)
 );

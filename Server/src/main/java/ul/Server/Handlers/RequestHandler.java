@@ -1,7 +1,5 @@
 package ul.Server.Handlers;
 
-import ul.Server.Utils.SessionData;
-
 import javax.json.*;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -9,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class RequestHandler {
-    protected abstract String responseBuilder(SessionData sessionData) throws IOException;
+    protected abstract String responseBuilder() throws IOException;
 
     public static String jsonToString(JsonObject jsonObject) {
         try {
@@ -28,19 +26,21 @@ public abstract class RequestHandler {
     }
 
     public static String errorBuilder(Exception e) {
+        System.err.println("Error: " + e.getMessage());
         JsonObject errorResponse =
                 Json.createObjectBuilder()
                         .add("status", "error")
-                        .add("content", "Server error: " + e.getMessage())
+                        .add("content", "An unexpected error occurred.")
                         .add("Content-Type", "error")
                         .build();
         return jsonToString(errorResponse);
     }
 
     protected JsonObject serialError (Exception e) {
+        System.err.println("Serial error: " + e.getMessage());
         return Json.createObjectBuilder()
                 .add("status", "error")
-                .add("content", e.getMessage())
+                .add("content", "An error occurred while building the response.")
                 .add("Content-Type", "error")
                 .build();
     }

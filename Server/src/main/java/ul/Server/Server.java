@@ -2,8 +2,8 @@ package ul.Server;
 
 import ul.Server.Handlers.Get;
 import ul.Server.Handlers.Post;
+import ul.Server.Utils.DBManager;
 import ul.Server.Utils.IncorrectActionException;
-import ul.Server.Utils.SessionData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,6 +28,7 @@ import static java.lang.System.out;
 public class Server {
     private static final int PORT = 8080;
     private static Connection dbConnection;
+    private static DBManager dbManager;
 
     private static Connection initializeDatabase() throws SQLException {
         // Painful method to get the path of the .env file
@@ -43,17 +44,20 @@ public class Server {
         String user = dotenv.get("DB_USER");
         String password = dotenv.get("DB_PASSWORD");
 
-        // Connect to database
         return DriverManager.getConnection(url, user, password);
+    }
+
+    public static DBManager getDatabaseManager() {
+        return dbManager;
     }
 
     public static void main(String[] args) {
         boolean serverRunning = true;
-        SessionData sessionData = new SessionData();
 
         // Initialize database connection
         try {
             dbConnection = initializeDatabase();
+            dbManager = new DBManager(dbConnection);
             System.out.println("Connected to database successfully");
         } catch (SQLException e) {
             System.err.println("Database connection failed: " + e.getMessage());
@@ -62,7 +66,6 @@ public class Server {
 
         try (ServerSocket servSock = new ServerSocket(PORT)) {
             out.println("Server listening on port " + PORT);
-            sessionData.fillMockData();
 
             while (serverRunning) {
                 Socket link = null;
@@ -103,14 +106,14 @@ public class Server {
                                 switch (requestData.getString("method")) {
                                     case "GET" -> {
                                         Get get = new Get(requestData);
-                                        response = get.responseBuilder(sessionData);
+                                        response = get.responseBuilder();
                                     }
                                     case "POST" -> {
                                         Post post = new Post(requestData);
-                                        response =  post.responseBuilder(sessionData);
+                                        response =  post.responseBuilder();
                                     }
                                     default -> throw new IncorrectActionException();
-                                };
+                                }
 
                                 System.out.println("Sending: " + response);
                                 out.println(response);

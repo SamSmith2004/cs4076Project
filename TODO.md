@@ -71,10 +71,12 @@
 
 ## Revamp:
 - [X] PGSQL schema 
-- [ ] Update client data structures to reflect new schema
+- [X] Update client data structures to reflect new schema
 - [X] Update API to use schema
   - [X] Client
   - [X] Server
+- [X] Full DB implementation 
+- [X] Indexes
 - [?] Make client an executable 
 
 ## Documentation

@@ -36,22 +36,10 @@ public class Lecture {
     public String getModuleString() { return module.name(); }
     public String getLecturer() { return lecturer; }
     public String getRoom() { return room; }
-    public String getTime() { return fromTime + "-" + toTime; }
     public String getFromTime() { return fromTime; }
     public String getToTime() { return toTime; }
     public DayOfWeek getDay() { return day; }
     public String getDayString() { return day.name(); }
-
-    public boolean overlaps(Lecture other) {
-        if (this.day != other.day) return false;
-
-        int thisFrom = Integer.parseInt(this.fromTime.replace(":", ""));
-        int thisTo = Integer.parseInt(this.toTime.replace(":", ""));
-        int otherFrom = Integer.parseInt(other.fromTime.replace(":", ""));
-        int otherTo = Integer.parseInt(other.toTime.replace(":", ""));
-
-        return (thisFrom < otherTo && thisTo > otherFrom);
-    }
 
     public String toString() {
         return String.format("ID: %d, Module: %s, Lecturer: %s, Room: %s, Time: %s-%s, Day: %s",

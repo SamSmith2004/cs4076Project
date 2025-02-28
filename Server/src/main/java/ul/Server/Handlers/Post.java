@@ -1,15 +1,15 @@
 package ul.Server.Handlers;
 
+import ul.Server.Server;
 import ul.Server.Utils.DayOfWeek;
 import ul.Server.Utils.Module;
 import ul.Server.Utils.Lecture;
-import ul.Server.Utils.SessionData;
 
 import javax.json.Json;
 import javax.json.JsonException;
 import javax.json.JsonObject;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.sql.SQLException;
 
 public class Post extends RequestHandler {
     JsonObject headers;
@@ -21,14 +21,14 @@ public class Post extends RequestHandler {
     }
 
     @Override
-    public String responseBuilder(SessionData sessionData) throws IOException {
+    public String responseBuilder() throws IOException {
         JsonObject responseData;
         try {
             String contentType = headers.getString("Content-Type");
 
             responseData = switch (contentType) {
-                case "addLecture" -> buildAddLectureResponse(sessionData);
-                case "removeLecture" -> buildRemoveLectureResponse(sessionData);
+                case "addLecture" -> buildAddLectureResponse();
+                case "removeLecture" -> buildRemoveLectureResponse();
                 case "test" -> buildTestResponse();
                 default -> buildInvalidResponse();
             };
@@ -68,13 +68,13 @@ public class Post extends RequestHandler {
         }
     }
 
-    private JsonObject buildAddLectureResponse(SessionData sessionData) {
+    private JsonObject buildAddLectureResponse() {
         try {
-            int id = content.getInt("id");
             String lecturer = content.getString("lecturer");
             String room = content.getString("room");
             String fromTime = content.getString("fromTime");
             String toTime = content.getString("toTime");
+
             Module module;
             DayOfWeek day;
             try {
@@ -84,6 +84,15 @@ public class Post extends RequestHandler {
                 return Json.createObjectBuilder()
                         .add("status", "error")
                         .add("content", "Invalid module or day")
+                        .add("Content-Type", "addLecture")
+                        .build();
+            }
+
+            // Validate nothing is empty (try-catch handles module and day)
+            if (lecturer.isEmpty() || room.isEmpty() || fromTime.isEmpty() || toTime.isEmpty()) {
+                return Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("content", "All fields must be filled")
                         .add("Content-Type", "addLecture")
                         .build();
             }
@@ -124,51 +133,83 @@ public class Post extends RequestHandler {
             }
 
             // For consistency, remove leading 0 from times
-            String normalizedFromTime = fromTime.replaceFirst("^0", "");
-            String normalizedToTime = toTime.replaceFirst("^0", "");
-            Lecture newLecture = new Lecture(module, lecturer, room, normalizedFromTime, normalizedToTime, day);
+            String normalizedFromTime = fromTime.replaceFirst("^0", "").trim();
+            String normalizedToTime = toTime.replaceFirst("^0", "").trim();
 
             // Check if timeslot overlaps with existing lectures
-            ArrayList<Lecture> lectures = sessionData.getTimeTable();
-            for (Lecture existingLecture : lectures) {
-                if (newLecture.overlaps(existingLecture)) {
+            try {
+                if (Server.getDatabaseManager().lectureOverlaps(day, normalizedFromTime, normalizedToTime)) {
                     return Json.createObjectBuilder()
                             .add("status", "error")
                             .add("content", "Timeslot already taken")
                             .add("Content-Type", "addLecture")
                             .build();
                 }
+            } catch (SQLException e) {
+                System.err.println("SQL Exception during overlap check: " + e.getMessage());
+                return Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("content", "Database error")
+                        .add("Content-Type", "addLecture")
+                        .build();
             }
 
-            sessionData.addLecture(newLecture);
-            return Json.createObjectBuilder()
-                    .add("status", "success")
-                    .add("content", "Lecture added")
-                    .add("Content-Type", "addLecture")
-                    .build();
+            Lecture newLecture = new Lecture(module, lecturer, room, normalizedFromTime, normalizedToTime, day);
+            try {
+                if (Server.getDatabaseManager().addLecture(newLecture)) {
+                    return Json.createObjectBuilder()
+                            .add("status", "success")
+                            .add("content", "Lecture added")
+                            .add("Content-Type", "addLecture")
+                            .build();
+                } else {
+                    return Json.createObjectBuilder()
+                            .add("status", "error")
+                            .add("content", "Failed to add lecture to database")
+                            .add("Content-Type", "addLecture")
+                            .build();
+                }
+            } catch (SQLException e) {
+                System.err.println("SQL Exception: " + e.getMessage());
+                return Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("content", "Database error")
+                        .add("Content-Type", "addLecture")
+                        .build();
+            }
         } catch (JsonException e) {
             return serialError(e);
         }
     }
 
-    private JsonObject buildRemoveLectureResponse(SessionData sessionData) {
-         int id = content.getInt("id");
-         if (sessionData.removeLecture(id)) {
-             try {
-                 return Json.createObjectBuilder()
-                         .add("status", "success")
-                         .add("content", "Lecture removed")
-                         .add("Content-Type", "removeLecture")
-                         .build();
-             } catch (JsonException e) {
-                 return serialError(e);
-             }
-         } else {
+    private JsonObject buildRemoveLectureResponse() {
+        try {
+            int id = content.getInt("id");
+
+            try {
+                if (Server.getDatabaseManager().removeLecture(id)) {
+                    return Json.createObjectBuilder()
+                            .add("status", "success")
+                            .add("content", "Lecture removed")
+                            .add("Content-Type", "removeLecture")
+                            .build();
+                } else {
+                    return Json.createObjectBuilder()
+                            .add("status", "error")
+                            .add("content", "Lecture not found")
+                            .add("Content-Type", "removeLecture")
+                            .build();
+                }
+            } catch (SQLException e) {
+                System.err.println("SQL Exception: " + e.getMessage());
                 return Json.createObjectBuilder()
                         .add("status", "error")
-                        .add("content", "Lecture not found")
+                        .add("content", "Database error")
                         .add("Content-Type", "removeLecture")
                         .build();
-         }
+            }
+        } catch (JsonException e) {
+            return serialError(e);
+        }
     }
 }
