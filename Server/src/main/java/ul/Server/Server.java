@@ -2,8 +2,8 @@ package ul.Server;
 
 import ul.Server.Handlers.Get;
 import ul.Server.Handlers.Post;
-import ul.Server.Utils.DBManager;
-import ul.Server.Utils.IncorrectActionException;
+import ul.Server.Handlers.DBManager;
+import ul.Server.Models.IncorrectActionException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,9 +14,9 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.nio.file.Paths;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 import java.io.StringReader;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.Connection;

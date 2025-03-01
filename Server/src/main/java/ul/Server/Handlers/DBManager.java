@@ -1,4 +1,8 @@
-package ul.Server.Utils;
+package ul.Server.Handlers;
+
+import ul.Server.Models.DayOfWeek;
+import ul.Server.Models.Lecture;
+import ul.Server.Models.Module;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,7 +27,7 @@ public class DBManager {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
-                Module module = Module.valueOf(rs.getString("module"));
+                ul.Server.Models.Module module = Module.valueOf(rs.getString("module"));
                 String lecturer = rs.getString("lecturer");
                 String room = rs.getString("room");
                 String fromTime = rs.getString("from_time").trim();

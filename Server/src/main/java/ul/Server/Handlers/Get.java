@@ -1,9 +1,9 @@
 package ul.Server.Handlers;
 
 import ul.Server.Server;
-import ul.Server.Utils.Lecture;
+import ul.Server.Models.Lecture;
 
-import javax.json.*;
+import jakarta.json.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Set;

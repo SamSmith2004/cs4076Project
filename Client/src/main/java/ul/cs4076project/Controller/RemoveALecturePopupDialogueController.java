@@ -16,9 +16,9 @@ import ul.cs4076project.Model.Lecture;
 import ul.cs4076project.Model.ResponseType;
 import ul.cs4076project.Model.TCPClient;
 
-import javax.json.Json;
-import javax.json.JsonException;
-import javax.json.JsonObject;
+import jakarta.json.Json;
+import jakarta.json.JsonException;
+import jakarta.json.JsonObject;
 
 public class RemoveALecturePopupDialogueController implements Initializable {
     private Stage removeALecturePopupStage;

@@ -1,13 +1,13 @@
 package ul.Server.Handlers;
 
 import ul.Server.Server;
-import ul.Server.Utils.DayOfWeek;
-import ul.Server.Utils.Module;
-import ul.Server.Utils.Lecture;
+import ul.Server.Models.DayOfWeek;
+import ul.Server.Models.Module;
+import ul.Server.Models.Lecture;
 
-import javax.json.Json;
-import javax.json.JsonException;
-import javax.json.JsonObject;
+import jakarta.json.Json;
+import jakarta.json.JsonException;
+import jakarta.json.JsonObject;
 import java.io.IOException;
 import java.sql.SQLException;
 

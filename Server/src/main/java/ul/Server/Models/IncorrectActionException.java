@@ -1,4 +1,4 @@
-package ul.Server.Utils;
+package ul.Server.Models;
 
 public class IncorrectActionException extends Exception {
     public IncorrectActionException() {

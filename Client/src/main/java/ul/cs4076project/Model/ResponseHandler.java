@@ -1,8 +1,8 @@
 package ul.cs4076project.Model;
 
-import javax.json.JsonArray;
-import javax.json.JsonException;
-import javax.json.JsonObject;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonException;
+import jakarta.json.JsonObject;
 import java.util.ArrayList;
 
 

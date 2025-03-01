@@ -1,4 +1,4 @@
-package ul.Server.Utils;
+package ul.Server.Models;
 
 public class Lecture {
     private final int id;
