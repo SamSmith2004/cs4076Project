@@ -68,7 +68,7 @@ public class MainController implements Initializable {
 
     @FXML
     protected void onLM11025ButtonClick() {
-        if (!client.isConnected() || client == null) {
+        if (client == null || !client.isConnected()) {
             noticeLabel.setText("Not Connected to Server");
             return;
         }
@@ -89,7 +89,7 @@ public class MainController implements Initializable {
 
     @FXML
     protected void onLK04925ButtonClick() {
-        if (!client.isConnected() || client == null) {
+        if (client == null || !client.isConnected()) {
             noticeLabel.setText("Not Connected to Server");
             return;
         }

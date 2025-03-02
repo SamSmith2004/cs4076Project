@@ -10,7 +10,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Map;
-import javax.json.*;
+import jakarta.json.*;
 
 public class TCPClient {
     private static final int PORT = 8080;
@@ -41,7 +41,7 @@ public class TCPClient {
     }
 
     public boolean isConnected() {
-        return isConnected;
+        return isConnected && link != null && link.isConnected() && !link.isClosed();
     }
 
     public ResponseType get(String message, Map<String, String> headers) throws IOException {

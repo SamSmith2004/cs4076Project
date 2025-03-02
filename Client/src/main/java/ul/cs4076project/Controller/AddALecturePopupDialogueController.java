@@ -19,9 +19,9 @@ import ul.cs4076project.App;
 import ul.cs4076project.Model.ResponseType;
 import ul.cs4076project.Model.TCPClient;
 
-import javax.json.Json;
-import javax.json.JsonException;
-import javax.json.JsonObject;
+import jakarta.json.Json;
+import jakarta.json.JsonException;
+import jakarta.json.JsonObject;
 
 public class AddALecturePopupDialogueController implements Initializable {
     private Map<String, String> lm05125_sem1_modules;
@@ -57,7 +57,7 @@ public class AddALecturePopupDialogueController implements Initializable {
         lm05125_sem1_modules.put("CS4006", "CS4006 - Intelligent Systems");
         lm05125_sem1_modules.put("CS4076", "CS4076 - Event Driven Programming");
         lm05125_sem1_modules.put("CS4115", "CS4115 - Data Structures and Algorithms");
-        lm05125_sem1_modules.put("CS4185", "CS4815 - Computer Graphics");
+        lm05125_sem1_modules.put("CS4815", "CS4815 - Computer Graphics");
         lm05125_sem1_modules.put("MA4413", "MA4413 - Statistics for Computing");
 
         comboBoxDayField.getItems().addAll("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
@@ -101,7 +101,7 @@ public class AddALecturePopupDialogueController implements Initializable {
 
     @FXML
     private void handleOKButton() {
-        if (!client.isConnected() || client == null) {
+        if (client == null || !client.isConnected()) {
             noticeLabel.setText("Not Connected to Server");
             System.out.println("Client is Not Connected to Server");
             return;
@@ -119,14 +119,17 @@ public class AddALecturePopupDialogueController implements Initializable {
 
         String fromTime = comboBoxFromTimeField.getValue().substring(0, 2) + ":00";
         String toTime = comboBoxToTimeField.getValue().substring(0, 2) + ":00";
+        String moduleCode = comboBoxModuleField.getValue().split(" - ")[0];
+        String day = comboBoxDayField.getValue().toUpperCase();
 
         JsonObject lectureJson = Json.createObjectBuilder()
-                .add("module", comboBoxModuleField.getValue().split(" - ")[0])
+                .add("id", -1) // ID placeholder
+                .add("module", moduleCode)
                 .add("lecturer", lecturerField.getText())
                 .add("room", roomNumberField.getText())
                 .add("fromTime", fromTime)
                 .add("toTime", toTime)
-                .add("day", comboBoxDayField.getValue())
+                .add("day", day)
                 .build();
 
         try {
