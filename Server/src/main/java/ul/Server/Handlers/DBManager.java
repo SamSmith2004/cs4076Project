@@ -7,23 +7,56 @@ import ul.Server.Models.Module;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * The {@code DBManager} class provides methods to interact with the database.
+ * It allows for the retrieval, addition, and removal of lectures. This class
+ * uses a {@link Connection} object to perform SQL operations and
+ * ensures data integrity through the use of transactions.
+ */
 public class DBManager {
+    /**
+     * The connection object used to interact with the database.
+     */
     private final Connection connection;
 
+    /**
+     * Constructs a {@link DBManager} with the specified database connection.
+     * 
+     * @param connection The {@link Connection} object used to interact with the
+     *                   database.
+     */
     public DBManager(Connection connection) {
         this.connection = connection;
     }
 
     /**
-     * Get all lectures from the database
-     * @return ArrayList<Lecture> timetable data
+     * All the lectures are retrived from the database through the use of an SQL
+     * command. Each lecture from the Lecture db table has it's properites broken
+     * down into:
+     * <ul>
+     * <li>{@link String} lecturer</li>
+     * <li>{@link String} room</li>
+     * <li>{@link String} fromTime</li>
+     * <li>{@link String} toTime</li>
+     * <li>{@link DayOfWeek} day</li>
+     * <li>{@link</li>
+     * </ul>
+     * and created into a {@link Lecture} java
+     * object which subsequently gets added to an {@link ArrayList<Lecture>} which
+     * is ready to be processed further by other methods.
+     * 
+     * @return An {@link ArrayList<Lecture>} of relevant timetable data.
+     * @throws SQLException If a database error occurs.
+     * @see ul.Server.Models.Lecture
+     * @see ul.Server.Models.DayOfWeek
+     * @see ul.Server.Models.Module
      */
     public ArrayList<Lecture> getLectures() throws SQLException {
         ArrayList<Lecture> lectures = new ArrayList<>();
         String query = "SELECT * FROM lectures";
 
         try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+                ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -46,9 +79,24 @@ public class DBManager {
     }
 
     /**
-     * Add a lecture to the database
-     * @param lecture Lecture object to add
-     * @return boolean success
+     * Add a lecture to the database through the use of a SQL command. A
+     * {@link Lecture} object is passed in as the parameter which contains all the
+     * Lecture properties. These include:
+     * <ul>
+     * <li>{@link String} lecturer</li>
+     * <li>{@link String} room</li>
+     * <li>{@link String} fromTime</li>
+     * <li>{@link String} toTime</li>
+     * <li>{@link DayOfWeek} day</li>
+     * <li>{@link</li>
+     * </ul>
+     * 
+     * @param lecture Lecture object containing all the relevant properties.
+     * @return {@code true} If the operation was successfull, {@code false}
+     *         otherwise.
+     * @throws SQLException If a database access error occurs.
+     * @see ul.Server.Models.Lecture
+     * @see ul.Server.Models.DayOfWeek
      */
     public boolean addLecture(Lecture lecture) throws SQLException {
         String query = "INSERT INTO lectures (module, lecturer, room, from_time, to_time, day) VALUES (?, ?, ?, ?, ?, ?)";
@@ -91,9 +139,12 @@ public class DBManager {
     }
 
     /**
-     * Update a lecture in the database
-     * @param id id of the lecture to update
-     * @return boolean success
+     * Remove a lecture from the database given the lecture ID.
+     * 
+     * @param id The ID of the lecture to remove
+     * @return {@code true} If the operation was successfull, {@code false}
+     *         otherwise.
+     * @throws SQLException If a database access error occurs.
      */
     public boolean removeLecture(int id) throws SQLException {
         String query = "DELETE FROM lectures WHERE id = ?";
@@ -126,11 +177,20 @@ public class DBManager {
     }
 
     /**
-     * Check if a lecture overlaps with existing lectures
-     * @param day ENUM DayOfWeek
-     * @param fromTime String in range 09:00-17:00
-     * @param toTime String in range 10:00-18:00
-     * @return boolean isOverlapping
+     * Check if a lecture overlaps with existing lectures in the database. The
+     * method first checks if there is an exact matc hfor the lecture's day and
+     * start time. If no exact match is found, it then checks for any overlapping
+     * lectures on the same day. An overlap is defined by an existing lecture
+     * starting before the new lecture ending and ends after the new lecture starts.
+     * 
+     * @param day      The {@link DayOfWeek} of the lecture.
+     * @param fromTime {@link String} The start time of the lecture, in range
+     *                 09:00-17:00.
+     * @param toTime   {@link String} The end time of the lecture, in range
+     *                 10:00-18:00.
+     * @return {@code true} if the lecture overlaps with existing lectures,
+     *         {@code false} otherwise.
+     * @throws SQLException If a database error occurs.
      */
     public boolean lectureOverlaps(DayOfWeek day, String fromTime, String toTime) throws SQLException {
         //// This first check is necessary due to the UNIQUE(day, from_time) constraint which runs before the overlap check.
@@ -149,9 +209,9 @@ public class DBManager {
             }
         }
 
-
         //// If no exact match, check for overlaps
-        // Checks if there's a lecture that starts before the new lecture ends and ends after the new lecture starts
+        // Checks if there's a lecture that starts before the new lecture ends and ends
+        // after the new lecture starts
         String overlapQuery = "SELECT COUNT(*) FROM lectures WHERE day = ? AND " +
                 "to_timestamp(to_time, 'HH24:MI') > to_timestamp(?, 'HH24:MI') AND " +
                 "to_timestamp(from_time, 'HH24:MI') < to_timestamp(?, 'HH24:MI')";

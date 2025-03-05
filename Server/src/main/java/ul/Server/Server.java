@@ -26,10 +26,33 @@ import java.sql.SQLException;
 import static java.lang.System.out;
 
 public class Server {
+    /**
+     * The port number on which the server listens for. Can be changed to any other
+     * port if 8080 is already being used on the host system.
+     */
     private static final int PORT = 8080;
+    /**
+     * The connection object used to interact with the database.
+     */
     private static Connection dbConnection;
+    /**
+     * The manager responsible for handling database operations.
+     * 
+     * @see ul.Server.Handlers.DBManager
+     */
     private static DBManager dbManager;
 
+    /**
+     * Method used to initialise a connection with the PostgreSQL database by
+     * loading the database credentials from the .env file provided in the current
+     * directory. The method first gets the path of the enviroment variable and
+     * parses it to retrieve the url and databse host, port, name and user
+     * credentials.
+     * 
+     * @return A {@link Connection} object that represents a connection to the
+     *         database.
+     * @throws SQLException If a database error occurs, or the URL is null.
+     */
     private static Connection initializeDatabase() throws SQLException {
         // Painful method to get the path of the .env file
         String envPath = Paths.get("Server", "src", "main", "java", "ul", "Server").toString();
@@ -39,18 +62,39 @@ public class Server {
         String url = String.format("jdbc:postgresql://%s:%s/%s",
                 dotenv.get("DB_HOST"),
                 dotenv.get("DB_PORT"),
-                dotenv.get("DB_NAME")
-        );
+                dotenv.get("DB_NAME"));
         String user = dotenv.get("DB_USER");
         String password = dotenv.get("DB_PASSWORD");
 
         return DriverManager.getConnection(url, user, password);
     }
 
+    /**
+     * Accessor method used to retrieve the database instance. This database manager
+     * is responsible for handling all relevant database operations
+     * 
+     * @return The {@link DBManager} instance
+     * @see ul.Server.Handlers.DBManager
+     */
     public static DBManager getDatabaseManager() {
         return dbManager;
     }
 
+    /**
+     * The main method is used to initiate the server application. It first
+     * initialises the database connection, then proceeds to start the server socket
+     * which then allows the server to listen for any incoming client connections.
+     * The server is able to handle custom GET and POST requests. The server is able
+     * to be terminted through the use of a 'STOP' reaquest received from the
+     * client. If the user in the client tries to achieve outside the scope of the
+     * server's capability, a custom {@link IncorrectActionException} error is
+     * thrown.
+     * 
+     * @param args (not used)
+     * @see ul.Server.Handlers.Get
+     * @see ul.Server.Handlers.Post
+     * @see ul.Server.Models.IncorrectActionException
+     */
     public static void main(String[] args) {
         boolean serverRunning = true;
 
@@ -74,19 +118,11 @@ public class Server {
                     out.println("Client connected: " + link.getInetAddress().getHostAddress());
 
                     try (BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));
-                         PrintWriter out = new PrintWriter(link.getOutputStream(), true)) {
+                            PrintWriter out = new PrintWriter(link.getOutputStream(), true)) {
 
                         String request;
                         while ((request = in.readLine()) != null) {
                             System.out.println("Received: " + request);
-
-                            // Debug
-                            if (request.equals("DEBUG")) {
-                                out.println(testDB());
-                                out.flush();
-                                continue;
-                            }
-                            //
 
                             if (request.equals("STOP")) {
                                 System.out.println("Client requested termination. Shutting down server.");
@@ -110,7 +146,7 @@ public class Server {
                                     }
                                     case "POST" -> {
                                         Post post = new Post(requestData);
-                                        response =  post.responseBuilder();
+                                        response = post.responseBuilder();
                                     }
                                     default -> throw new IncorrectActionException();
                                 }
@@ -166,30 +202,6 @@ public class Server {
 
         } catch (IOException e) {
             System.err.println("IO Error: " + e.getMessage());
-        }
-    }
-
-    private static String testDB() {
-        try {
-            var result = dbConnection.createStatement().executeQuery("SELECT * FROM lectures");
-            int count = 0;
-            StringBuilder response = new StringBuilder();
-            while (result.next()) {
-                count++;
-                response.append("ID: ").append(result.getInt("id"))
-                        .append(", Module: ").append(result.getString("module"))
-                        .append(", Lecturer: ").append(result.getString("lecturer"))
-                        .append(", Room: ").append(result.getString("room"))
-                        .append(", Time: ").append(result.getString("from_time"))
-                        .append("-").append(result.getString("to_time"))
-                        .append(", Day: ").append(result.getString("day"))
-                        .append("\n");
-            }
-            System.out.println("Query completed. Found " + count + " rows.");
-            return response.toString();
-        } catch (SQLException e) {
-            System.err.println("Database query failed: " + e.getMessage());
-            return "Database query failed: " + e.getMessage();
         }
     }
 }
