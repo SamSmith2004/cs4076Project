@@ -25,6 +25,14 @@ import java.sql.SQLException;
 
 import static java.lang.System.out;
 
+/**
+ * The {@code Server} class is responsible for initiating and running the server
+ * application.
+ * It initializes the database connection, starts the server socket, and listens
+ * for incoming client connections.
+ * The server handles custom GET and POST requests and can be terminated by a
+ * client sending a "STOP" request.
+ */
 public class Server {
     /**
      * The port number on which the server listens for. Can be changed to any other
@@ -84,7 +92,8 @@ public class Server {
      * The main method is used to initiate the server application. It first
      * initialises the database connection, then proceeds to start the server socket
      * which then allows the server to listen for any incoming client connections.
-     * The server is able to handle custom GET and POST requests. The server is able
+     * The server is able to handle custom {@link ul.Server.Handlers.Get} and
+     * {@link ul.Server.Handlers.Post} requests. The server is able
      * to be terminted through the use of a 'STOP' reaquest received from the
      * client. If the user in the client tries to achieve outside the scope of the
      * server's capability, a custom {@link IncorrectActionException} error is

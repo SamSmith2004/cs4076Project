@@ -39,7 +39,6 @@ public class DBManager {
      * <li>{@link String} fromTime</li>
      * <li>{@link String} toTime</li>
      * <li>{@link DayOfWeek} day</li>
-     * <li>{@link</li>
      * </ul>
      * and created into a {@link Lecture} java
      * object which subsequently gets added to an {@link ArrayList<Lecture>} which
@@ -88,7 +87,6 @@ public class DBManager {
      * <li>{@link String} fromTime</li>
      * <li>{@link String} toTime</li>
      * <li>{@link DayOfWeek} day</li>
-     * <li>{@link</li>
      * </ul>
      * 
      * @param lecture Lecture object containing all the relevant properties.
