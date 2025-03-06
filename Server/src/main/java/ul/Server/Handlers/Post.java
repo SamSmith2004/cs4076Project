@@ -10,23 +10,38 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Set;
 
 /**
+ * The {@code Post} class handles POST requests to the server.
+ * It processes the request data, extracts headers and content, and generates
+ * appropriate responses based on the request.
  * 
+ * <p>
+ * This class extends {@link RequestHandler} and overrides the
+ * {@link #responseBuilder()} method to build the response.
+ * 
+ * @see ul.Server.Handlers.RequestHandler
+ * @see ul.Server.Models.Lecture
+ * @see ul.Server.Models.DayOfWeek
+ * @see ul.Server.Models.Module
  */
 public class Post extends RequestHandler {
     /**
-     * 
+     * A {@link JsonObject} containing the headers from the request data. These
+     * headers are used to determine the type of response to generate.
      */
     JsonObject headers;
     /**
-     * 
+     * A {@link JsonObject} containing the content from the request data. This
+     * content is used to process the specific POST request.
      */
     JsonObject content;
 
     /**
+     * Constructs a {@code Post} request handler with the specified request data.
      * 
-     * @param requestData
+     * @param requestData The {@link JsonObject} containing the request data.
      */
     public Post(JsonObject requestData) {
         this.headers = requestData.getJsonObject("headers");
@@ -34,9 +49,12 @@ public class Post extends RequestHandler {
     }
 
     /**
+     * Builds the response for the POST request.
+     * The response is generated based on the "Content-Type" header in the request
+     * data.
      * 
-     * @return
-     * @throws IOException
+     * @return A {@link String} representing the response.
+     * @throws IOException If an I/O error occurs.
      */
     @Override
     public String responseBuilder() throws IOException {
@@ -63,8 +81,10 @@ public class Post extends RequestHandler {
     }
 
     /**
+     * Builds an invalid response indicating an error with the "Content-Type"
+     * header.
      * 
-     * @return
+     * @return A {@link JsonObject} representing the invalid response.
      */
     private JsonObject buildInvalidResponse() {
         try {
@@ -79,8 +99,9 @@ public class Post extends RequestHandler {
     }
 
     /**
+     * Builds a test response for testing purposes.
      * 
-     * @return
+     * @return A {@link JsonObject} representing the test response.
      */
     private JsonObject buildTestResponse() {
         try {
@@ -95,8 +116,10 @@ public class Post extends RequestHandler {
     }
 
     /**
+     * Builds the response for adding a lecture. The response is generated based on
+     * the content of the request data.
      * 
-     * @return
+     * @return A {@link JsonObject} representing the add lecture response.
      * @see ul.Server.Models.Module
      * @see ul.Server.Models.DayOfWeek
      * @see ul.Server.Models.Lecture
@@ -216,8 +239,10 @@ public class Post extends RequestHandler {
     }
 
     /**
+     * Builds the response for removing a lecture. The response is generated based
+     * on the content of the request data.
      * 
-     * @return
+     * @return A {@link JsonObject} representing the remove lecture response.
      */
     private JsonObject buildRemoveLectureResponse() {
         try {

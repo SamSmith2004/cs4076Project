@@ -13,6 +13,12 @@ import java.util.Map;
  */
 public abstract class RequestHandler {
     /**
+     * Default arg-less {@link RequestHandler} constructor - not used.
+     */
+    public RequestHandler() {
+    }
+
+    /**
      * Builds the response for the request. This method must be implemented by the
      * subclass it's called by to generate an appropriate response.
      * 

@@ -51,6 +51,13 @@ public class Server {
     private static DBManager dbManager;
 
     /**
+     * Default arg-less {@link Server} constructor - not used
+     */
+    public Server() {
+
+    }
+
+    /**
      * Method used to initialise a connection with the PostgreSQL database by
      * loading the database credentials from the .env file provided in the current
      * directory. The method first gets the path of the enviroment variable and

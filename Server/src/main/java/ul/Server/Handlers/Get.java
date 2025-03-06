@@ -16,7 +16,6 @@ import java.util.Set;
  * <p>
  * This class extends {@link RequestHandler} and overrides the
  * {@link #responseBuilder()} method to build the response.
- * </p>
  * 
  * @see ul.Server.Handlers.RequestHandler
  * @see ul.Server.Models.Lecture
