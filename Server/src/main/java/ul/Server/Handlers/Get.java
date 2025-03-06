@@ -8,15 +8,32 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Set;
 
+/**
+ * 
+ */
 public class Get extends RequestHandler {
+    /**
+     * 
+     */
     JsonObject headers;
+    /**
+     * 
+     */
     Set<String> headerKeys;
 
+    /**
+     * 
+     * @param requestData
+     */
     public Get(JsonObject requestData) {
         this.headers = requestData.getJsonObject("headers");
         this.headerKeys = headers.keySet();
     }
 
+    /**
+     * 
+     * @return
+     */
     @Override
     public String responseBuilder() {
         JsonObject responseData;
@@ -35,6 +52,10 @@ public class Get extends RequestHandler {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     private JsonObject buildInvalidResponse() {
         try {
             return Json.createObjectBuilder()
@@ -47,6 +68,10 @@ public class Get extends RequestHandler {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     private JsonObject buildTimetableResponse() {
         try {
             JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();

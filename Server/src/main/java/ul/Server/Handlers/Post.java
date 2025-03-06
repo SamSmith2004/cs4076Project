@@ -11,15 +11,33 @@ import jakarta.json.JsonObject;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * 
+ */
 public class Post extends RequestHandler {
+    /**
+     * 
+     */
     JsonObject headers;
+    /**
+     * 
+     */
     JsonObject content;
 
+    /**
+     * 
+     * @param requestData
+     */
     public Post(JsonObject requestData) {
         this.headers = requestData.getJsonObject("headers");
         this.content = requestData.getJsonObject("content");
     }
 
+    /**
+     * 
+     * @return
+     * @throws IOException
+     */
     @Override
     public String responseBuilder() throws IOException {
         JsonObject responseData;
@@ -44,6 +62,10 @@ public class Post extends RequestHandler {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     private JsonObject buildInvalidResponse() {
         try {
             return Json.createObjectBuilder()
@@ -56,6 +78,10 @@ public class Post extends RequestHandler {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     private JsonObject buildTestResponse() {
         try {
             return Json.createObjectBuilder()
@@ -68,6 +94,13 @@ public class Post extends RequestHandler {
         }
     }
 
+    /**
+     * 
+     * @return
+     * @see ul.Server.Models.Module
+     * @see ul.Server.Models.DayOfWeek
+     * @see ul.Server.Models.Lecture
+     */
     private JsonObject buildAddLectureResponse() {
         try {
             String lecturer = content.getString("lecturer");
@@ -182,6 +215,10 @@ public class Post extends RequestHandler {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     private JsonObject buildRemoveLectureResponse() {
         try {
             int id = content.getInt("id");
