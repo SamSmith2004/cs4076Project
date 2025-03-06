@@ -64,7 +64,6 @@ public class Post extends RequestHandler {
             responseData = switch (contentType) {
                 case "addLecture" -> buildAddLectureResponse();
                 case "removeLecture" -> buildRemoveLectureResponse();
-                case "test" -> buildTestResponse();
                 default -> buildInvalidResponse();
             };
 
@@ -91,23 +90,6 @@ public class Post extends RequestHandler {
                     .add("status", "error")
                     .add("content", "Invalid Content-Type")
                     .add("Content-Type", "Error")
-                    .build();
-        } catch (JsonException e) {
-            return serialError(e);
-        }
-    }
-
-    /**
-     * Builds a test response for testing purposes.
-     * 
-     * @return A {@link JsonObject} representing the test response.
-     */
-    private JsonObject buildTestResponse() {
-        try {
-            return Json.createObjectBuilder()
-                    .add("status", "success")
-                    .add("content", "Test response")
-                    .add("Content-Type", "test")
                     .build();
         } catch (JsonException e) {
             return serialError(e);
