@@ -10,7 +10,6 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Set;
 
 /**
  * The {@code Post} class handles POST requests to the server.
