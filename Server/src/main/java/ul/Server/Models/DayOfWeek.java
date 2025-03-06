@@ -13,5 +13,24 @@ package ul.Server.Models;
  * </ul>
  */
 public enum DayOfWeek {
-    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY
+    /**
+     * Monday
+     */
+    MONDAY,
+    /**
+     * Tuesday
+     */
+    TUESDAY,
+    /**
+     * Wednesday
+     */
+    WEDNESDAY,
+    /**
+     * Thursday
+     */
+    THURSDAY,
+    /**
+     * Friday
+     */
+    FRIDAY
 }

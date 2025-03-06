@@ -69,7 +69,7 @@ public class Get extends RequestHandler {
 
     /**
      * Builds an invalid response indicating an error with the "Content-Type"
-     * header. It does this by concatenating strings into a {@link JsonObjct}.
+     * header. It does this by concatenating strings into a {@link JsonObject}.
      * 
      * @return A {@link JsonObject} representing the invalid response.
      */

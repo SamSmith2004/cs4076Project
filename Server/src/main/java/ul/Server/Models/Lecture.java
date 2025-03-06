@@ -9,12 +9,33 @@ package ul.Server.Models;
  * @see ul.Server.Models.Module
  */
 public class Lecture {
+    /**
+     * The ID of the lecture.
+     */
     private final int id;
+    /**
+     * The module associated with the lecture.
+     */
     private final Module module;
+    /**
+     * The lecturer conducting the lecture.
+     */
     private final String lecturer;
+    /**
+     * The room where the lecture is held.
+     */
     private final String room;
+    /**
+     * The start time of the lecture.
+     */
     private final String fromTime;
+    /**
+     * The end time of the lecture.
+     */
     private final String toTime;
+    /**
+     * The day of the week when the lecture is scheduled.
+     */
     private final DayOfWeek day;
 
     /**
