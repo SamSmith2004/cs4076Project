@@ -23,33 +23,82 @@ import jakarta.json.Json;
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 
+/**
+ * Controller class for managing the "Add a Lecture" popup dialogue.
+ * Handles user input and validation for adding new lectures to the timetable.
+ */
 public class AddALecturePopupDialogueController implements Initializable {
+    /**
+     * Map storing module codes and their full titles for LM05125 semester 1.
+     */
     private Map<String, String> lm05125_sem1_modules;
+
+    /**
+     * Stage for the add lecture popup dialogue.
+     */
     private Stage addALecturePopupStage;
+
+    /**
+     * List of available end times for lectures.
+     */
     private List<String> originalToTimes;
+
+    /**
+     * The {@link TCPClient} instance for server communication.
+     */
     private TCPClient client;
 
+
+    /**
+     * ComboBox for selecting lecture start time.
+     */
     @FXML
     private ComboBox<String> comboBoxFromTimeField;
 
+    /**
+     * ComboBox for selecting lecture end time.
+     */
     @FXML
     private ComboBox<String> comboBoxToTimeField;
 
+    /**
+     * ComboBox for selecting the day of the week.
+     */
     @FXML
     private ComboBox<String> comboBoxDayField;
 
+    /**
+     * ComboBox for selecting the module.
+     */
     @FXML
     private ComboBox<String> comboBoxModuleField;
 
+    /**
+     * TextField for entering the room number.
+     */
     @FXML
     private TextField roomNumberField;
 
+    /**
+     * TextField for entering the lecturer's name.
+     */
     @FXML
     private TextField lecturerField;
 
+    /**
+     * Label for displaying status messages to the user.
+     */
     @FXML
     private Label noticeLabel;
 
+
+    /**
+     * Initializes the controller and populates dropdown menus with available options.
+     * Sets up listeners for time selection validation.
+     *
+     * @param location The location used to resolve relative paths for the root object
+     * @param resources The resources used to localize the root object
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Add module_id and module title to HashMap
@@ -71,8 +120,9 @@ public class AddALecturePopupDialogueController implements Initializable {
             comboBoxModuleField.getItems().add(module.getValue());
         }
 
-        // Add a listener to the "From Time" ComboBox
+        // Add an event listener to the "From Time" ComboBox
         comboBoxFromTimeField.getSelectionModel().selectedItemProperty()
+                // Remove invalid end times when a start time is selected
                 .addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         comboBoxToTimeField.getItems().setAll(originalToTimes);
@@ -91,14 +141,33 @@ public class AddALecturePopupDialogueController implements Initializable {
                 });
     }
 
+    /**
+     * Initializes the controller with a TCP client for server communication.
+     *
+     * @param client The {@link TCPClient} instance to be used
+     */
     public void initializeWithClient(TCPClient client) {
         this.client = client;
     }
 
+    /**
+     * Sets the stage for this dialogue.
+     *
+     * @param addALecturePopupStage The stage for this popup dialogue
+     */
     public void setDialogStage(Stage addALecturePopupStage) {
         this.addALecturePopupStage = addALecturePopupStage;
     }
 
+    /**
+     * Handles the OK button click event.
+     * Validates input fields and sends the new lecture data to the server.
+     * Updates the timetable view if successful.
+     *
+     * @see ul.cs4076project.Model.TCPClient
+     * @see ul.cs4076project.Model.ResponseHandler
+     * @see ul.cs4076project.Model.ResponseType
+     */
     @FXML
     private void handleOKButton() {
         if (client == null || !client.isConnected()) {

@@ -20,22 +20,78 @@ import jakarta.json.Json;
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 
+/**
+ * Controller class for managing the "Remove a Lecture" popup dialogue.
+ * Handles user input and validation for removing lectures from the timetable.
+ */
 public class RemoveALecturePopupDialogueController implements Initializable {
+    /**
+     * Stage for the remove lecture popup dialogue.
+     */
     private Stage removeALecturePopupStage;
+
+    /**
+     * The {@link TCPClient} instance for server communication.
+     */
     private TCPClient client;
 
+    /**
+     * Button for confirming the removal of a lecture.
+     */
     @FXML private Button okButton;
+
+    /**
+     * ComboBox for selecting the start time of the lecture to be removed.
+     */
     @FXML private ComboBox<String> comboBoxFromTimeField;
+
+    /**
+     * ComboBox for selecting the day of the week of the lecture to be removed.
+     */
     @FXML private ComboBox<String> comboBoxDayField;
 
+    /**
+     * Label for displaying confirmation message.
+     */
     @FXML private Label confirmLabel;
+
+    /**
+     * Label for displaying status messages to the user.
+     */
     @FXML private Label noticeLabel;
+
+    /**
+     * Label for displaying the module name of the lecture to be removed.
+     */
     @FXML private Label moduleName;
+
+    /**
+     * Label for displaying the lecturer's name of the lecture to be removed.
+     */
     @FXML private Label lecturerName;
+
+    /**
+     * Label for displaying the room number of the lecture to be removed.
+     */
     @FXML private Label roomNumber;
+
+    /**
+     * Label for displaying the time of the lecture to be removed.
+     */
     @FXML private Label timeOfLecture;
+
+    /**
+     * Label for displaying the day of the lecture to be removed.
+     */
     @FXML private Label dayOfLecture;
 
+    /**
+     * Initializes the controller and populates dropdown menus with available options.
+     * Sets up listeners for time and day selection validation.
+     *
+     * @param location The location used to resolve relative paths for the root object
+     * @param resources The resources used to localize the root object
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         comboBoxDayField.getItems().addAll("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
@@ -48,6 +104,13 @@ public class RemoveALecturePopupDialogueController implements Initializable {
         comboBoxDayField.getSelectionModel().selectedItemProperty().addListener((
                 observable, oldValue, newValue) -> removeEvent(newValue));
     }
+
+    /**
+     * Retrieves the lecture object based on the selected day and time.
+     *
+     * @return The {@link Lecture} object corresponding to the selected day and time
+     * @see ul.cs4076project.Controller.TimetableController
+     */
 
     private Lecture getLecture() {
         int row = switch (comboBoxDayField.getValue()) {
@@ -73,14 +136,33 @@ public class RemoveALecturePopupDialogueController implements Initializable {
         return App.getTimetableController().getLectures()[row][col];
     }
 
+    /**
+     * Sets the stage for this dialogue.
+     *
+     * @param dialogStage The stage for this popup dialogue
+     */
     public void setDialogStage(Stage dialogStage) {
         this.removeALecturePopupStage = dialogStage;
     }
 
+    /**
+     * Initializes the controller with a TCP client for server communication.
+     *
+     * @param client The {@link TCPClient} instance to be used
+     */
     public void initializeWithClient(TCPClient client) {
         this.client = client;
     }
 
+    /**
+     * Handles the OK button click event.
+     * Validates input fields and sends the remove lecture request to the server.
+     * Updates the timetable view if successful.
+     *
+     * @see ul.cs4076project.Model.TCPClient
+     * @see ul.cs4076project.Model.ResponseHandler
+     * @see ul.cs4076project.Model.ResponseType
+     */
     @FXML
     private void handleOKButton() {
         if (client == null || !client.isConnected()) {
@@ -130,6 +212,12 @@ public class RemoveALecturePopupDialogueController implements Initializable {
         }
     }
 
+    /**
+     * Handles the event when a new value is selected in the ComboBoxes.
+     * Updates the confirmation labels and visibility of the OK button.
+     *
+     * @param newValue The new value selected in the ComboBox
+     */
     private void removeEvent(String newValue) {
         try {
             if (client == null || !client.isConnected()) {
@@ -172,6 +260,11 @@ public class RemoveALecturePopupDialogueController implements Initializable {
         }
     }
 
+    /**
+     * Resizes the stage to the specified height.
+     *
+     * @param h The new height of the stage
+     */
     private void resizeStage(int h) {
         Stage stage = (Stage) moduleName.getScene().getWindow();
         stage.setHeight(h);

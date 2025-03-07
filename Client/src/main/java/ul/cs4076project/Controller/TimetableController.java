@@ -17,30 +17,77 @@ import ul.cs4076project.Model.Lecture;
 import ul.cs4076project.Model.ResponseType;
 import ul.cs4076project.Model.TCPClient;
 
+/**
+ * Controller class for managing the timetable view and its interactions.
+ * Handles displaying, updating, and managing the grid-based timetable interface.
+ */
 public class TimetableController implements Initializable {
+    /**
+     * The TCP client instance used for server communication.
+     *
+     * @see ul.cs4076project.Model.TCPClient
+     */
     private TCPClient client;
+
+    /**
+     * 2D array storing string representations of timetable entries.
+     */
     private String[][] timetable;
+
+    /**
+     * 2D array storing {@link Lecture} objects for the timetable grid.
+     */
     private Lecture[][] lectures;
 
+    /**
+     * Label for displaying status messages to the user.
+     */
     @FXML
     private Label noticeLabel;
+
+    /**
+     * GridPane container for the timetable display.
+     */
     @FXML
     private GridPane timetableGrid;
 
+    /**
+     * Default constructor for the TimetableController class.
+     */
     public TimetableController() {
     }
 
+    /**
+     * Initializes the controller with a TCP client connection.
+     * Triggers loading of timetable data from the server.
+     *
+     * @param client The TCP client used for server communication
+     */
     public void initializeWithClient(TCPClient client) {
         this.client = client;
         loadTimetableData();
     }
 
+    /**
+     * Initializes the controller with an empty timetable grid and notification message.
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createEmptyCells();
         noticeLabel.setText("Waiting For Client Initialization...");
     }
 
+    /**
+     * Creates the initial empty timetable grid structure.
+     * Sets up a 5x9 grid of empty white cells with light gray borders.
+     */
     private void createEmptyCells() {
         try {
             for (int row = 1; row < 10; row++) {
@@ -57,6 +104,14 @@ public class TimetableController implements Initializable {
         }
     }
 
+    /**
+     * Fetches and loads timetable data from the server.
+     * Updates the grid view with lecture information if successful.
+     *
+     * @see ul.cs4076project.Model.TCPClient
+     * @see ul.cs4076project.Model.ResponseHandler
+     * @see ul.cs4076project.Model.ResponseType
+     */
     public void loadTimetableData() {
         if (client == null) {
             noticeLabel.setText("ERROR: Client not Initialized!");
@@ -83,6 +138,12 @@ public class TimetableController implements Initializable {
         }
     }
 
+    /**
+     * Updates the timetable grid with lecture information.
+     * Populates cells with module, lecturer, room, and time details.
+     *
+     * @param lectures 2D array of {@link Lecture} objects representing the timetable
+     */
     private void updateTimetableGrid(Lecture[][] lectures) {
         createEmptyCells();
 
@@ -115,6 +176,13 @@ public class TimetableController implements Initializable {
         noticeLabel.setText("");
     }
 
+    /**
+     * Creates a styled label with specified text and CSS styling.
+     *
+     * @param text The text content for the label
+     * @param style CSS styling to be applied
+     * @return A styled Label object
+     */
     private Label createStyledLabel(String text, String style) {
         Label label = new Label(text);
         label.setStyle(style);
@@ -122,21 +190,44 @@ public class TimetableController implements Initializable {
         return label;
     }
 
+    /**
+     * Opens the dialog for adding a new lecture.
+     *
+     * @see ul.cs4076project.App
+     * @see ul.cs4076project.Controller.AddALecturePopupDialogueController
+     */
     @FXML
     protected void onAddLectureClick() {
         App.openAddALecturePopupDialogue();
     }
 
+    /**
+     * Opens the dialog for removing an existing lecture.
+     *
+     * @see ul.cs4076project.App
+     * @see ul.cs4076project.Controller.RemoveALecturePopupDialogueController
+     */
     @FXML
     protected void onRemoveLectureClick() {
         App.openRemoveALecturePopupDialogue();
     }
 
+    /**
+     * Navigates back to the main menu view.
+     *
+     * @see ul.cs4076project.App
+     * @see ul.cs4076project.Controller.MainController
+     */
     @FXML
     protected void onBackToMenuClick() {
         App.loadMainView();
     }
 
+    /**
+     * Retrieves the current lecture array representing the timetable.
+     *
+     * @return 2D array of {@link Lecture} objects
+     */
     public Lecture[][] getLectures() {
         return lectures;
     }

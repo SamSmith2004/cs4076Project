@@ -214,6 +214,9 @@ public class App extends Application {
 
     /**
      * Configures a stage with common settings for popup dialogues.
+     *
+     * @param stage The stage to be configured.
+     * @param scene The scene to be displayed in the stage.
      */
     private static void setStage(Stage stage, Scene scene) {
         try {

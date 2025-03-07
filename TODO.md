@@ -81,7 +81,7 @@
 
 ## Documentation
 - [X] Server/API
-- [ ] Client
+- [X] Client
 - [X] Database
 
 ## Submission Requirements

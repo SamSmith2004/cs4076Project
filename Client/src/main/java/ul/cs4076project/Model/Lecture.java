@@ -14,7 +14,7 @@ public class Lecture {
      */
     private String id;
     /**
-     * The module associated with the lecture.
+     * The {@link Module} associated with the lecture.
      */
     private Module module;
     /**
@@ -34,7 +34,7 @@ public class Lecture {
      */
     private String toTime;
     /**
-     * The day of the week when the lecture is scheduled.
+     * The {@link DayOfWeek} when the lecture is scheduled.
      */
     private DayOfWeek day;
 

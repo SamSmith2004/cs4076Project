@@ -87,7 +87,6 @@ public class TCPClient {
      * @param message the message content to send
      * @param headers a map of headers to include in the request
      * @return a {@link ResponseType} object containing the server's response
-     * @see ul.cs4076project.Model.ResponseType
      * @throws IOException if there is an error during communication
      */
     public ResponseType get(String message, Map<String, String> headers) throws IOException {
@@ -100,7 +99,6 @@ public class TCPClient {
      * @param message the message content to send
      * @param headers a map of headers to include in the request
      * @return a {@link ResponseType} object containing the server's response
-     * @see ul.cs4076project.Model.ResponseType
      * @throws IOException if there is an error during communication
      */
     public ResponseType post(String message, Map<String, String> headers) throws IOException {
@@ -113,7 +111,6 @@ public class TCPClient {
      * @param message the message content to send
      * @param headers a map of headers to include in the request
      * @return a {@link ResponseType} object containing the server's response
-     * @see ul.cs4076project.Model.ResponseType
      * @throws IOException if there is an error during communication
      */
     public ResponseType create(String message, Map<String, String> headers) throws IOException {
@@ -128,7 +125,6 @@ public class TCPClient {
      * @param message the message content to send
      * @param headers a map of headers to include in the request
      * @return a {@link ResponseType} object containing the server's response
-     * @see ul.cs4076project.Model.ResponseType
      * @see ul.cs4076project.Model.ResponseHandler
      * @throws IOException if there is an error during communication
      * @throws JsonException if there is an error processing JSON
