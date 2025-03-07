@@ -63,7 +63,7 @@ public class Lecture {
 
     /**
      * Constructs a {@code Lecture} without an ID. This is not to be used to add to
-     * the daabase.
+     * the database.
      * 
      * @param mod  The module associated with the lecture.
      * @param lec  The lecturer teaching the lecture.

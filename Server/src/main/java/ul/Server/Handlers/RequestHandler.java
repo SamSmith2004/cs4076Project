@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * The {@code RequestHandler} class is an abstract class for handling server
- * requests. It provides methods for building responses and handling erros in a
+ * requests. It provides methods for building responses and handling errors in a
  * consistent manner.
  */
 public abstract class RequestHandler {
@@ -31,7 +31,7 @@ public abstract class RequestHandler {
      * Converts a {@link JsonObject} to it's {@link String} representation.
      * 
      * @param jsonObject The {@link JsonObject} to convert.
-     * @return A {@link String} representing the Json objct.
+     * @return A {@link String} representing the Json object.
      */
     public static String jsonToString(JsonObject jsonObject) {
         try {
