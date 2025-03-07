@@ -47,7 +47,7 @@ public class Get extends RequestHandler {
      * Builds the response for the GET request. The response is generated based on
      * the "Content-Type" header in the request data.
      * 
-     * @return A {@link String} representing the resonse.
+     * @return A {@link String} representing the response.
      */
     @Override
     public String responseBuilder() {
@@ -87,7 +87,7 @@ public class Get extends RequestHandler {
 
     /**
      * Builds the response containing the timetable data. The timetable data is
-     * retrieved from the database and foramtted as a JSON array.
+     * retrieved from the database and formatted as a JSON array.
      * 
      * @return A {@link JsonObject} representing the timetable response
      * @see ul.Server.Models.Lecture

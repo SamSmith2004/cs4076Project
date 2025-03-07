@@ -58,10 +58,10 @@ public class Server {
     }
 
     /**
-     * Method used to initialise a connection with the PostgreSQL database by
+     * Method used to initialise a connection with the PostgresSQL database by
      * loading the database credentials from the .env file provided in the current
-     * directory. The method first gets the path of the enviroment variable and
-     * parses it to retrieve the url and databse host, port, name and user
+     * directory. The method first gets the path of the environment variable and
+     * parses it to retrieve the url and database host, port, name and user
      * credentials.
      * 
      * @return A {@link Connection} object that represents a connection to the
@@ -101,7 +101,7 @@ public class Server {
      * which then allows the server to listen for any incoming client connections.
      * The server is able to handle custom {@link ul.Server.Handlers.Get} and
      * {@link ul.Server.Handlers.Post} requests. The server is able
-     * to be terminted through the use of a 'STOP' reaquest received from the
+     * to be terminated through the use of a 'STOP' request received from the
      * client. If the user in the client tries to achieve outside the scope of the
      * server's capability, a custom {@link IncorrectActionException} error is
      * thrown.

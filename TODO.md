@@ -80,9 +80,9 @@
 - [?] Make client an executable 
 
 ## Documentation
-- [ ] Server/API
+- [X] Server/API
 - [ ] Client
-- [ ] Database
+- [X] Database
 
 ## Submission Requirements
 - studentId1_studentId2.zip

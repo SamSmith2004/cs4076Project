@@ -30,8 +30,8 @@ public class DBManager {
     }
 
     /**
-     * All the lectures are retrived from the database through the use of an SQL
-     * command. Each lecture from the Lecture db table has it's properites broken
+     * All the lectures are retrieved from the database through the use of an SQL
+     * command. Each lecture from the Lecture db table has it's properties broken
      * down into:
      * <ul>
      * <li>{@link String} lecturer</li>
@@ -90,7 +90,7 @@ public class DBManager {
      * </ul>
      * 
      * @param lecture Lecture object containing all the relevant properties.
-     * @return {@code true} If the operation was successfull, {@code false}
+     * @return {@code true} If the operation was successful, {@code false}
      *         otherwise.
      * @throws SQLException If a database access error occurs.
      * @see ul.Server.Models.Lecture
@@ -140,7 +140,7 @@ public class DBManager {
      * Remove a lecture from the database given the lecture ID.
      * 
      * @param id The ID of the lecture to remove
-     * @return {@code true} If the operation was successfull, {@code false}
+     * @return {@code true} If the operation was successful, {@code false}
      *         otherwise.
      * @throws SQLException If a database access error occurs.
      */
@@ -176,7 +176,7 @@ public class DBManager {
 
     /**
      * Check if a lecture overlaps with existing lectures in the database. The
-     * method first checks if there is an exact matc hfor the lecture's day and
+     * method first checks if there is an exact match for the lecture's day and
      * start time. If no exact match is found, it then checks for any overlapping
      * lectures on the same day. An overlap is defined by an existing lecture
      * starting before the new lecture ending and ends after the new lecture starts.
@@ -191,7 +191,7 @@ public class DBManager {
      * @throws SQLException If a database error occurs.
      */
     public boolean lectureOverlaps(DayOfWeek day, String fromTime, String toTime) throws SQLException {
-        //// This first check is necessary due to the UNIQUE(day, from_time) constraint which runs before the overlap check.
+        // This first check is necessary due to the UNIQUE(day, from_time) constraint which runs before the overlap check.
         // Check if there's already a lecture at the exact same time
         String exactMatchQuery = "SELECT COUNT(*) FROM lectures WHERE day = ? AND from_time = ?";
 
@@ -207,7 +207,7 @@ public class DBManager {
             }
         }
 
-        //// If no exact match, check for overlaps
+        // If no exact match, check for overlaps
         // Checks if there's a lecture that starts before the new lecture ends and ends
         // after the new lecture starts
         String overlapQuery = "SELECT COUNT(*) FROM lectures WHERE day = ? AND " +
