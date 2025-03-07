@@ -87,7 +87,7 @@ public class Lecture {
     /**
      * Gets the ID of the lecture.
      * 
-     * @return An {@link int} of the lecture's ID.
+     * @return The the lecture's ID.
      */
     public int getId() {
         return id;
@@ -106,7 +106,7 @@ public class Lecture {
     /**
      * Gets the module name as a string.
      * 
-     * @return The {@ink Module} name as a string.
+     * @return The {@link Module} name as a string.
      */
     public String getModuleString() {
         return module.name();
