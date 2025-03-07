@@ -38,58 +38,77 @@ public class RemoveALecturePopupDialogueController implements Initializable {
     /**
      * Button for confirming the removal of a lecture.
      */
-    @FXML private Button okButton;
+    @FXML
+    private Button okButton;
 
     /**
      * ComboBox for selecting the start time of the lecture to be removed.
      */
-    @FXML private ComboBox<String> comboBoxFromTimeField;
+    @FXML
+    private ComboBox<String> comboBoxFromTimeField;
 
     /**
      * ComboBox for selecting the day of the week of the lecture to be removed.
      */
-    @FXML private ComboBox<String> comboBoxDayField;
+    @FXML
+    private ComboBox<String> comboBoxDayField;
 
     /**
      * Label for displaying confirmation message.
      */
-    @FXML private Label confirmLabel;
+    @FXML
+    private Label confirmLabel;
 
     /**
      * Label for displaying status messages to the user.
      */
-    @FXML private Label noticeLabel;
+    @FXML
+    private Label noticeLabel;
 
     /**
      * Label for displaying the module name of the lecture to be removed.
      */
-    @FXML private Label moduleName;
+    @FXML
+    private Label moduleName;
 
     /**
      * Label for displaying the lecturer's name of the lecture to be removed.
      */
-    @FXML private Label lecturerName;
+    @FXML
+    private Label lecturerName;
 
     /**
      * Label for displaying the room number of the lecture to be removed.
      */
-    @FXML private Label roomNumber;
+    @FXML
+    private Label roomNumber;
 
     /**
      * Label for displaying the time of the lecture to be removed.
      */
-    @FXML private Label timeOfLecture;
+    @FXML
+    private Label timeOfLecture;
 
     /**
      * Label for displaying the day of the lecture to be removed.
      */
-    @FXML private Label dayOfLecture;
+    @FXML
+    private Label dayOfLecture;
 
     /**
-     * Initializes the controller and populates dropdown menus with available options.
-     * Sets up listeners for time and day selection validation.
+     * Default constructor for the {@code RemoveALecturePopupDialogueController}.
+     * Initializes a new instance of the controller.
+     */
+    public RemoveALecturePopupDialogueController() {
+
+    }
+
+    /**
+     * Initializes the controller and populates dropdown menus with available
+     * options. Sets up listeners for time and day selection validation.
      *
-     * @param location The location used to resolve relative paths for the root object
+     * @param location  The location used to resolve relative paths for the root
+     *                  object
      * @param resources The resources used to localize the root object
      */
     @Override
@@ -155,9 +174,9 @@ public class RemoveALecturePopupDialogueController implements Initializable {
     }
 
     /**
-     * Handles the OK button click event.
-     * Validates input fields and sends the remove lecture request to the server.
-     * Updates the timetable view if successful.
+     * Handles the OK button click event. Validates input fields and sends the
+     * remove lecture request to the server. Updates the timetable view if
+     * successful.
      *
      * @see ul.cs4076project.Model.TCPClient
      * @see ul.cs4076project.Model.ResponseHandler
@@ -213,8 +232,8 @@ public class RemoveALecturePopupDialogueController implements Initializable {
     }
 
     /**
-     * Handles the event when a new value is selected in the ComboBoxes.
-     * Updates the confirmation labels and visibility of the OK button.
+     * Handles the event when a new value is selected in the ComboBoxes. Updates the
+     * confirmation labels and visibility of the OK button.
      *
      * @param newValue The new value selected in the ComboBox
      */
@@ -227,7 +246,8 @@ public class RemoveALecturePopupDialogueController implements Initializable {
             }
 
             if (newValue != null) {
-                if (!comboBoxFromTimeField.getSelectionModel().isEmpty() && !comboBoxDayField.getSelectionModel().isEmpty() ) {
+                if (!comboBoxFromTimeField.getSelectionModel().isEmpty()
+                        && !comboBoxDayField.getSelectionModel().isEmpty()) {
                     okButton.setVisible(true);
 
                     Lecture lecture = getLecture();

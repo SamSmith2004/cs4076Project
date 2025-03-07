@@ -16,8 +16,10 @@ import ul.cs4076project.Model.TCPClient;
 import java.io.IOException;
 
 /**
- * Main application class that handles the JavaFX GUI application lifecycle and scene management.
- * This class is responsible for initializing the application, loading views, managing scene transitions,
+ * Main application class that handles the JavaFX GUI application lifecycle and
+ * scene management.
+ * This class is responsible for initializing the application, loading views,
+ * managing scene transitions,
  * and handling popup dialogues.
  *
  * @see ul.cs4076project.Controller.MainController
@@ -86,8 +88,16 @@ public class App extends Application {
     private static TCPClient client;
 
     /**
-     * Initializes the JavaFX application, loads the main scenes, and sets up the controllers.
-     * This method is called automatically by the JavaFX runtime.
+     * Default constructor for the {@code App} class. Initializes a new instance of
+     * the application.
+     */
+    public App() {
+
+    }
+
+    /**
+     * Initializes the JavaFX application, loads the main scenes, and sets up the
+     * controllers. This method is called automatically by the JavaFX runtime.
      *
      * @param stage The primary stage for this application.
      * @throws IOException If an error occurs while loading the FXML files.
@@ -129,7 +139,8 @@ public class App extends Application {
     }
 
     /**
-     * Displays the timetable view in the primary stage and loads the timetable data.
+     * Displays the timetable view in the primary stage and loads the timetable
+     * data.
      *
      * @see #timetableScene
      * @see #primaryStage
@@ -184,8 +195,8 @@ public class App extends Application {
     }
 
     /**
-     * Opens a modal popup dialogue for removing an existing lecture.
-     * The dialogue is initialized with the current TCP client instance.
+     * Opens a modal popup dialogue for removing an existing lecture. The dialogue
+     * is initialized with the current TCP client instance.
      *
      * @see #removeALecturePopupStage
      * @see #removeALecturePopupDialogueController

@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 /**
- * Controller class for the main application view.
- * Manages server connection status and navigation between different course timetables.
+ * Controller class for the main application view. Manages server connection
+ * status and navigation between different course timetables.
  */
 public class MainController implements Initializable {
 
@@ -53,8 +53,8 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Initializes the controller with a TCP client connection.
-     * Updates the server connection status display.
+     * Initializes the controller with a TCP client connection. Updates the server
+     * connection status display.
      *
      * @param client The {@link TCPClient} used for server communication
      */
@@ -65,10 +65,11 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Initializes the controller for JavaFX.
-     * Sets up initial server status display based on connection state.
+     * Initializes the controller for JavaFX. Sets up initial server status display
+     * based on connection state.
      *
-     * @param location The location used to resolve relative paths for the root object
+     * @param location  The location used to resolve relative paths for the root
+     *                  object
      * @param resources The resources used to localize the root object
      *
      * @see ul.cs4076project.Model.TCPClient
@@ -85,8 +86,8 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Updates the visual indicators of server connection status.
-     * Changes text labels based on connection state.
+     * Updates the visual indicators of server connection status. Changes text
+     * labels based on connection state.
      *
      * @see ul.cs4076project.Model.TCPClient
      */
@@ -117,13 +118,13 @@ public class MainController implements Initializable {
     @FXML
     protected void onLM05125ButtonClick() {
         App.loadTimetableView();
-        
+
         clearNoticeLabels();
     }
 
     /**
-     * Attempts to access the LM11025 timetable.
-     * Currently, returns an invalid action response.
+     * Attempts to access the LM11025 timetable. Currently, returns an invalid
+     * action response.
      *
      * @see ul.cs4076project.Model.TCPClient
      * @see ul.cs4076project.Model.ResponseType
@@ -150,8 +151,8 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Attempts to access the LK04925 timetable.
-     * Currently, returns an invalid action response.
+     * Attempts to access the LK04925 timetable. Currently, returns an invalid
+     * action response.
      *
      * @see ul.cs4076project.Model.TCPClient
      * @see ul.cs4076project.Model.ResponseType
@@ -181,8 +182,8 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Handles the server connection button click event.
-     * Toggles between connecting to and disconnecting from the server.
+     * Handles the server connection button click event. Toggles between connecting
+     * to and disconnecting from the server.
      *
      * @see ul.cs4076project.Model.TCPClient
      */

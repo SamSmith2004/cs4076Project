@@ -91,6 +91,14 @@ public class AddALecturePopupDialogueController implements Initializable {
     private Label noticeLabel;
 
     /**
+     * Default constructor for the {@code AddALecturePopupDialogueController}.
+     * Initializes a new instance of the controller.
+     */
+    public AddALecturePopupDialogueController() {
+
+    }
+
+    /**
      * Initializes the controller and populates dropdown menus with available
      * options. Sets up listeners for time selection validation.
      *

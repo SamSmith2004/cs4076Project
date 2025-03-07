@@ -13,6 +13,8 @@ package ul.cs4076project.Model;
 public sealed interface ResponseType {
     /**
      * Represents a response that contains a single string value.
+     * 
+     * @param value The string value of the response.
      */
     record StringResponse(String value) implements ResponseType {
     }
@@ -20,6 +22,8 @@ public sealed interface ResponseType {
     /**
      * Represents a response that contains a 2D array of {@link Lecture} objects,
      * representing a timetable.
+     * 
+     * @param value The 2D array of {@link Lecture} objects representing the timetable.
      */
     record TimetableResponse(Lecture[][] value) implements ResponseType {
     }

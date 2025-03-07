@@ -19,7 +19,8 @@ import ul.cs4076project.Model.TCPClient;
 
 /**
  * Controller class for managing the timetable view and its interactions.
- * Handles displaying, updating, and managing the grid-based timetable interface.
+ * Handles displaying, updating, and managing the grid-based timetable
+ * interface.
  */
 public class TimetableController implements Initializable {
     /**
@@ -58,8 +59,8 @@ public class TimetableController implements Initializable {
     }
 
     /**
-     * Initializes the controller with a TCP client connection.
-     * Triggers loading of timetable data from the server.
+     * Initializes the controller with a TCP client connection. Triggers loading of
+     * timetable data from the server.
      *
      * @param client The TCP client used for server communication
      */
@@ -69,14 +70,18 @@ public class TimetableController implements Initializable {
     }
 
     /**
-     * Initializes the controller with an empty timetable grid and notification message.
+     * Initializes the controller with an empty timetable grid and notification
+     * message.
+     * 
      * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
+     *                  The location used to resolve relative paths for the root
+     *                  object, or
+     *                  {@code null} if the location is not known.
      *
      * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     *                  The resources used to localize the root object, or
+     *                  {@code null} if
+     *                  the root object was not localized.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -85,8 +90,8 @@ public class TimetableController implements Initializable {
     }
 
     /**
-     * Creates the initial empty timetable grid structure.
-     * Sets up a 5x9 grid of empty white cells with light gray borders.
+     * Creates the initial empty timetable grid structure. Sets up a 5x9 grid of
+     * empty white cells with light gray borders.
      */
     private void createEmptyCells() {
         try {
@@ -105,8 +110,8 @@ public class TimetableController implements Initializable {
     }
 
     /**
-     * Fetches and loads timetable data from the server.
-     * Updates the grid view with lecture information if successful.
+     * Fetches and loads timetable data from the server. Updates the grid view with
+     * lecture information if successful.
      *
      * @see ul.cs4076project.Model.TCPClient
      * @see ul.cs4076project.Model.ResponseHandler
@@ -139,10 +144,11 @@ public class TimetableController implements Initializable {
     }
 
     /**
-     * Updates the timetable grid with lecture information.
-     * Populates cells with module, lecturer, room, and time details.
+     * Updates the timetable grid with lecture information. Populates cells with
+     * module, lecturer, room, and time details.
      *
-     * @param lectures 2D array of {@link Lecture} objects representing the timetable
+     * @param lectures 2D array of {@link Lecture} objects representing the
+     *                 timetable
      */
     private void updateTimetableGrid(Lecture[][] lectures) {
         createEmptyCells();
@@ -179,7 +185,7 @@ public class TimetableController implements Initializable {
     /**
      * Creates a styled label with specified text and CSS styling.
      *
-     * @param text The text content for the label
+     * @param text  The text content for the label
      * @param style CSS styling to be applied
      * @return A styled Label object
      */

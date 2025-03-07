@@ -13,9 +13,10 @@ import java.util.Map;
 import jakarta.json.*;
 
 /**
- * A TCP client implementation that handles communication with a server using JSON messages.
- * This class manages socket connections and provides methods for sending GET, POST and CREATE requests.
- * All communication is done using JSON formatted messages.
+ * A TCP client implementation that handles communication with a server using
+ * JSON messages. This class manages socket connections and provides methods for
+ * sending GET, POST and CREATE requests. All communication is done using JSON
+ * formatted messages.
  */
 public class TCPClient {
     /**
@@ -44,12 +45,13 @@ public class TCPClient {
     private boolean isConnected = false;
 
     /**
-     * Constructs a new TCPClient and establishes a connection to the server.
-     * The client connects to localhost on the specified PORT.
+     * Constructs a new TCPClient and establishes a connection to the server. The
+     * client connects to localhost on the specified PORT.
      *
-     * @throws IOException if there is an error creating the socket connection
+     * @throws IOException          if there is an error creating the socket
+     *                              connection
      * @throws UnknownHostException if the host cannot be found
-     * @throws ConnectException if the connection is refused
+     * @throws ConnectException     if the connection is refused
      */
     public TCPClient() throws IOException {
         try {
@@ -75,7 +77,8 @@ public class TCPClient {
     /**
      * Checks if the client is currently connected to the server.
      *
-     * @return true if the client is connected and the socket is open, false otherwise
+     * @return true if the client is connected and the socket is open, false
+     *         otherwise
      */
     public boolean isConnected() {
         return isConnected && link != null && link.isConnected() && !link.isClosed();
@@ -118,16 +121,16 @@ public class TCPClient {
     }
 
     /**
-     * Sends a request to the server with the specified method type.
-     * The request is formatted as a JSON object containing the method type, headers, and content.
+     * Sends a request to the server with the specified method type. The request is
+     * formatted as a JSON object containing the method type, headers, and content.
      *
      * @param methodType the method type (GET, POST, CREATE)
-     * @param message the message content to send
-     * @param headers a map of headers to include in the request
+     * @param message    the message content to send
+     * @param headers    a map of headers to include in the request
      * @return a {@link ResponseType} object containing the server's response
      * @see ul.cs4076project.Model.ResponseHandler
-     * @throws IOException if there is an error during communication
-     * @throws JsonException if there is an error processing JSON
+     * @throws IOException     if there is an error during communication
+     * @throws JsonException   if there is an error processing JSON
      * @throws SocketException if there is an error with the socket connection
      */
     private ResponseType sendRequest(String methodType, String message, Map<String, String> headers)
@@ -174,9 +177,9 @@ public class TCPClient {
     }
 
     /**
-     * Closes the connection to the server.
-     * Sends a STOP message and waits for a TERMINATE response before closing all streams and the socket.
-     * Any errors during closing are logged but not thrown.
+     * Closes the connection to the server. Sends a STOP message and waits for a
+     * TERMINATE response before closing all streams and the socket. Any errors
+     * during closing are logged but not thrown.
      */
     public void close() {
         try {
