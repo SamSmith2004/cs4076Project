@@ -12,13 +12,35 @@ import java.net.UnknownHostException;
 import java.util.Map;
 import jakarta.json.*;
 
+/**
+ * 
+ */
 public class TCPClient {
+    /**
+     * 
+     */
     private static final int PORT = 8080;
+    /**
+     * 
+     */
     private final Socket link;
+    /**
+     * 
+     */
     private final BufferedReader in;
+    /**
+     * 
+     */
     private final PrintWriter out;
+    /**
+     * 
+     */
     private boolean isConnected = false;
 
+    /**
+     * 
+     * @throws IOException
+     */
     public TCPClient() throws IOException {
         try {
             link = new Socket("localhost", PORT);
@@ -40,23 +62,57 @@ public class TCPClient {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public boolean isConnected() {
         return isConnected && link != null && link.isConnected() && !link.isClosed();
     }
 
+    /**
+     * 
+     * @param message
+     * @param headers
+     * @return
+     * @throws IOException
+     */
     public ResponseType get(String message, Map<String, String> headers) throws IOException {
         return sendRequest("GET", message, headers);
     }
 
+    /**
+     * 
+     * @param message
+     * @param headers
+     * @return
+     * @throws IOException
+     */
     public ResponseType post(String message, Map<String, String> headers) throws IOException {
         return sendRequest("POST", message, headers);
     }
 
+    /**
+     * 
+     * @param message
+     * @param headers
+     * @return
+     * @throws IOException
+     */
     public ResponseType create(String message, Map<String, String> headers) throws IOException {
         return sendRequest("CREATE", message, headers);
     }
 
-    private ResponseType sendRequest(String methodType, String message, Map<String, String> headers) throws IOException {
+    /**
+     * 
+     * @param methodType
+     * @param message
+     * @param headers
+     * @return
+     * @throws IOException
+     */
+    private ResponseType sendRequest(String methodType, String message, Map<String, String> headers)
+            throws IOException {
         try {
             // Headers
             JsonObjectBuilder headersBuilder = Json.createObjectBuilder();
@@ -98,6 +154,9 @@ public class TCPClient {
         }
     }
 
+    /**
+     * 
+     */
     public void close() {
         try {
             out.println("STOP");

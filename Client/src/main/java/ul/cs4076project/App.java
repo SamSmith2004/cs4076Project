@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
 import ul.cs4076project.Controller.AddALecturePopupDialogueController;
 import ul.cs4076project.Controller.MainController;
 import ul.cs4076project.Controller.RemoveALecturePopupDialogueController;
@@ -14,18 +15,55 @@ import ul.cs4076project.Model.TCPClient;
 
 import java.io.IOException;
 
+/**
+ * 
+ */
 public class App extends Application {
+    /**
+     * 
+     */
     private static Stage primaryStage;
+    /**
+     * 
+     */
     private static Stage addALecturePopupStage;
+    /**
+     * 
+     */
     private static Stage removeALecturePopupStage;
+    /**
+     * 
+     */
     private static Scene mainScene;
+    /**
+     * 
+     */
     private static Scene timetableScene;
+    /**
+     * 
+     */
     private static MainController mainController;
+    /**
+     * 
+     */
     private static TimetableController timetableController;
+    /**
+     * 
+     */
     private static AddALecturePopupDialogueController addALecturePopupDialogueController;
+    /**
+     * 
+     */
     private static RemoveALecturePopupDialogueController removeALecturePopupDialogueController;
+    /**
+     * 
+     */
     private static TCPClient client;
 
+    /**
+     * @param stage
+     * @throws IOException
+     */
     @Override
     public void start(Stage stage) throws IOException {
         try {
@@ -50,12 +88,18 @@ public class App extends Application {
         loadMainView();
     }
 
+    /**
+     * 
+     */
     public static void loadMainView() {
         primaryStage.setTitle("Main Menu");
         primaryStage.setScene(mainScene);
         primaryStage.show();
     }
 
+    /**
+     * 
+     */
     public static void loadTimetableView() {
         primaryStage.setTitle("Lecture Timetable");
         primaryStage.setScene(timetableScene);
@@ -65,11 +109,18 @@ public class App extends Application {
         primaryStage.show();
     }
 
+    /**
+     * 
+     * @param newClient
+     */
     public static void updateClientReference(TCPClient newClient) {
         timetableController.initializeWithClient(newClient);
         client = newClient;
     }
 
+    /**
+     * 
+     */
     public static void openAddALecturePopupDialogue() {
         try {
             FXMLLoader addALecturePopupLoader = new FXMLLoader(
@@ -92,6 +143,9 @@ public class App extends Application {
         }
     }
 
+    /**
+     * 
+     */
     public static void openRemoveALecturePopupDialogue() {
         try {
             FXMLLoader removeALecturePopupLoader = new FXMLLoader(
@@ -99,7 +153,7 @@ public class App extends Application {
             Scene scene = new Scene(removeALecturePopupLoader.load(), 350, 300);
             removeALecturePopupStage = new Stage();
             removeALecturePopupStage.setTitle("REMOVE Lecture");
-           setStage(removeALecturePopupStage, scene);
+            setStage(removeALecturePopupStage, scene);
 
             // Get the controller and set the dialog stage
             removeALecturePopupDialogueController = removeALecturePopupLoader.getController();
@@ -114,6 +168,11 @@ public class App extends Application {
         }
     }
 
+    /**
+     * 
+     * @param stage
+     * @param scene
+     */
     private static void setStage(Stage stage, Scene scene) {
         try {
             stage.initStyle(StageStyle.UTILITY);
@@ -126,10 +185,18 @@ public class App extends Application {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public static TimetableController getTimetableController() {
         return timetableController;
     }
 
+    /**
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
         launch();
     }
