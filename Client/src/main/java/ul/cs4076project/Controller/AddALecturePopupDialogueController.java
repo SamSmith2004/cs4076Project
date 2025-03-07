@@ -24,8 +24,8 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 
 /**
- * Controller class for managing the "Add a Lecture" popup dialogue.
- * Handles user input and validation for adding new lectures to the timetable.
+ * Controller class for managing the "Add a Lecture" popup dialogue. Handles
+ * user input and validation for adding new lectures to the timetable.
  */
 public class AddALecturePopupDialogueController implements Initializable {
     /**
@@ -47,7 +47,6 @@ public class AddALecturePopupDialogueController implements Initializable {
      * The {@link TCPClient} instance for server communication.
      */
     private TCPClient client;
-
 
     /**
      * ComboBox for selecting lecture start time.
@@ -91,12 +90,12 @@ public class AddALecturePopupDialogueController implements Initializable {
     @FXML
     private Label noticeLabel;
 
-
     /**
-     * Initializes the controller and populates dropdown menus with available options.
-     * Sets up listeners for time selection validation.
+     * Initializes the controller and populates dropdown menus with available
+     * options. Sets up listeners for time selection validation.
      *
-     * @param location The location used to resolve relative paths for the root object
+     * @param location  The location used to resolve relative paths for the root
+     *                  object
      * @param resources The resources used to localize the root object
      */
     @Override
@@ -160,9 +159,8 @@ public class AddALecturePopupDialogueController implements Initializable {
     }
 
     /**
-     * Handles the OK button click event.
-     * Validates input fields and sends the new lecture data to the server.
-     * Updates the timetable view if successful.
+     * Handles the OK button click event. Validates input fields and sends the new
+     * lecture data to the server. Updates the timetable view if successful.
      *
      * @see ul.cs4076project.Model.TCPClient
      * @see ul.cs4076project.Model.ResponseHandler
