@@ -16,53 +16,81 @@ import ul.cs4076project.Model.TCPClient;
 import java.io.IOException;
 
 /**
- * 
+ * Main application class that handles the JavaFX GUI application lifecycle and scene management.
+ * This class is responsible for initializing the application, loading views, managing scene transitions,
+ * and handling popup dialogues.
+ *
+ * @see ul.cs4076project.Controller.MainController
+ * @see ul.cs4076project.Controller.TimetableController
+ * @see ul.cs4076project.Model.TCPClient
  */
 public class App extends Application {
     /**
-     * 
+     * The primary stage of the application that serves as the main window.
      */
     private static Stage primaryStage;
+
     /**
-     * 
+     * Stage for the "Add a Lecture" popup dialogue.
      */
     private static Stage addALecturePopupStage;
+
     /**
-     * 
+     * Stage for the "Remove a Lecture" popup dialogue.
      */
     private static Stage removeALecturePopupStage;
+
     /**
-     * 
+     * Scene containing the main menu view.
      */
     private static Scene mainScene;
+
     /**
-     * 
+     * Scene containing the timetable view.
      */
     private static Scene timetableScene;
+
     /**
-     * 
+     * Controller for managing the main menu view.
+     *
+     * @see ul.cs4076project.Controller.MainController
      */
     private static MainController mainController;
+
     /**
-     * 
+     * Controller for managing the timetable view.
+     *
+     * @see ul.cs4076project.Controller.AddALecturePopupDialogueController
      */
     private static TimetableController timetableController;
+
     /**
-     * 
+     * Controller for managing the "Add a Lecture" popup dialogue.
+     *
+     * @see ul.cs4076project.Controller.AddALecturePopupDialogueController
      */
     private static AddALecturePopupDialogueController addALecturePopupDialogueController;
+
     /**
-     * 
+     * Controller for managing the "Remove a Lecture" popup dialogue.
+     *
+     * @see ul.cs4076project.Controller.RemoveALecturePopupDialogueController
      */
     private static RemoveALecturePopupDialogueController removeALecturePopupDialogueController;
+
     /**
-     * 
+     * TCP client instance for handling network communications.
+     *
+     * @see ul.cs4076project.Model.TCPClient
      */
     private static TCPClient client;
 
     /**
-     * @param stage
-     * @throws IOException
+     * Initializes the JavaFX application, loads the main scenes, and sets up the controllers.
+     * This method is called automatically by the JavaFX runtime.
+     *
+     * @param stage The primary stage for this application.
+     * @throws IOException If an error occurs while loading the FXML files.
      */
     @Override
     public void start(Stage stage) throws IOException {
@@ -89,7 +117,10 @@ public class App extends Application {
     }
 
     /**
-     * 
+     * Displays the main menu view in the primary stage.
+     *
+     * @see #mainScene
+     * @see #primaryStage
      */
     public static void loadMainView() {
         primaryStage.setTitle("Main Menu");
@@ -98,7 +129,10 @@ public class App extends Application {
     }
 
     /**
-     * 
+     * Displays the timetable view in the primary stage and loads the timetable data.
+     *
+     * @see #timetableScene
+     * @see #primaryStage
      */
     public static void loadTimetableView() {
         primaryStage.setTitle("Lecture Timetable");
@@ -110,8 +144,10 @@ public class App extends Application {
     }
 
     /**
-     * 
-     * @param newClient
+     * Updates the TCP client reference across all controllers that need it.
+     *
+     * @param newClient The new TCP client instance to be used.
+     * @see ul.cs4076project.Model.TCPClient
      */
     public static void updateClientReference(TCPClient newClient) {
         timetableController.initializeWithClient(newClient);
@@ -119,7 +155,11 @@ public class App extends Application {
     }
 
     /**
-     * 
+     * Opens a modal popup dialogue for adding a new lecture.
+     * The dialogue is initialized with the current TCP client instance.
+     *
+     * @see #addALecturePopupStage
+     * @see #addALecturePopupDialogueController
      */
     public static void openAddALecturePopupDialogue() {
         try {
@@ -144,7 +184,11 @@ public class App extends Application {
     }
 
     /**
-     * 
+     * Opens a modal popup dialogue for removing an existing lecture.
+     * The dialogue is initialized with the current TCP client instance.
+     *
+     * @see #removeALecturePopupStage
+     * @see #removeALecturePopupDialogueController
      */
     public static void openRemoveALecturePopupDialogue() {
         try {
@@ -169,9 +213,7 @@ public class App extends Application {
     }
 
     /**
-     * 
-     * @param stage
-     * @param scene
+     * Configures a stage with common settings for popup dialogues.
      */
     private static void setStage(Stage stage, Scene scene) {
         try {
@@ -186,16 +228,19 @@ public class App extends Application {
     }
 
     /**
-     * 
-     * @return
+     * Returns the timetable controller instance.
+     *
+     * @return The current TimetableController instance.
+     * @see ul.cs4076project.Controller.TimetableController
      */
     public static TimetableController getTimetableController() {
         return timetableController;
     }
 
     /**
-     * 
-     * @param args
+     * The main entry point for the application.
+     *
+     * @param args CLI arguments.
      */
     public static void main(String[] args) {
         launch();
