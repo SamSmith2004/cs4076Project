@@ -87,7 +87,7 @@ public class Lecture {
     /**
      * Gets the ID of the lecture.
      * 
-     * @return The ID of the lecture.
+     * @return An {@link int} of the lecture's ID.
      */
     public int getId() {
         return id;
@@ -96,7 +96,7 @@ public class Lecture {
     /**
      * Gets the module associated with the lecture.
      * 
-     * @return The module associated with the lecture.
+     * @return The {@link Module} associated with the lecture.
      * @see ul.Server.Models.Module
      */
     public Module getModule() {
@@ -106,7 +106,7 @@ public class Lecture {
     /**
      * Gets the module name as a string.
      * 
-     * @return The module name as a string.
+     * @return The {@ink Module} name as a string.
      */
     public String getModuleString() {
         return module.name();
@@ -115,7 +115,7 @@ public class Lecture {
     /**
      * Gets the lecturer teaching the lecture.
      * 
-     * @return The lecturer conducting the lecture.
+     * @return A {@link String} of the lecturer conducting the lecture.
      */
     public String getLecturer() {
         return lecturer;
@@ -124,7 +124,7 @@ public class Lecture {
     /**
      * Gets the room where the lecture is held.
      * 
-     * @return The room where the lecture is held.
+     * @return A {@link String} of the room name.
      */
     public String getRoom() {
         return room;
@@ -133,7 +133,7 @@ public class Lecture {
     /**
      * Gets the start time of the lecture.
      * 
-     * @return The start time of the lecture.
+     * @return A {@link String} of the start time of the lecture.
      */
     public String getFromTime() {
         return fromTime;
@@ -142,7 +142,7 @@ public class Lecture {
     /**
      * Gets the end time of the lecture.
      * 
-     * @return The end time of the lecture.
+     * @return A {@link String} of the end time of the lecture.
      */
     public String getToTime() {
         return toTime;
@@ -151,7 +151,8 @@ public class Lecture {
     /**
      * Gets the day of the week when the lecture is scheduled.
      * 
-     * @return The day of the week when the lecture is scheduled.
+     * @return A {@link DayOfWeek} object of the day of the week when the lecture is
+     *         scheduled.
      * @see ul.Server.Models.DayOfWeek
      */
     public DayOfWeek getDay() {
@@ -161,7 +162,7 @@ public class Lecture {
     /**
      * Gets the day of the week as a string.
      * 
-     * @return The day of the week as a string.
+     * @return A {@link String} of the day of the week as a string.
      */
     public String getDayString() {
         return day.name();
@@ -170,7 +171,7 @@ public class Lecture {
     /**
      * Returns a string representation of the lecture.
      * 
-     * @return A string representation of the lecture.
+     * @return A {@link String} representation of the lecture.
      */
     @Override
     public String toString() {
