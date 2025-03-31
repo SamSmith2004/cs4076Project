@@ -166,6 +166,17 @@ public class AddALecturePopupDialogueController implements Initializable {
         this.addALecturePopupStage = addALecturePopupStage;
     }
 
+    public void setDateTime(String day, String fromTime, String toTime) {
+        comboBoxDayField.setValue(day);
+        comboBoxFromTimeField.setValue(fromTime);
+        comboBoxToTimeField.setValue(toTime);
+
+        // I think it's nicer to make it have filled in values that are unchangeable rather than separate labels hence this:
+        comboBoxDayField.setDisable(true);
+        comboBoxFromTimeField.setDisable(true);
+        comboBoxToTimeField.setDisable(true);
+    }
+
     /**
      * Handles the OK button click event. Validates input fields and sends the new
      * lecture data to the server. Updates the timetable view if successful.

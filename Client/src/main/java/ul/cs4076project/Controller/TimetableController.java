@@ -115,6 +115,16 @@ public class TimetableController implements Initializable {
                     contextMenu.getItems().add(addItem);
                     contextMenu.setStyle("-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-radius: 3px;");
 
+                    // Get cell data for adding
+                    final int finalRow = row - 1;
+                    Map<String, String> cellDateTime = getCellDateTime(col, finalRow);
+                    // ADD press event:
+                    addItem.setOnAction(event ->
+                            App.openAddALecturePopupDialogue(
+                                    cellDateTime.get("day"),
+                                    cellDateTime.get("fromTime"),
+                                    cellDateTime.get("toTime")));
+
                     // Context menu handler
                     cellPane.setOnMouseClicked(event -> {
                         if (event.getButton() == MouseButton.SECONDARY) {
@@ -242,17 +252,6 @@ public class TimetableController implements Initializable {
     }
 
     /**
-     * Opens the dialog for adding a new lecture.
-     *
-     * @see ul.cs4076project.App
-     * @see ul.cs4076project.Controller.AddALecturePopupDialogueController
-     */
-    @FXML
-    protected void onAddLectureClick() {
-        App.openAddALecturePopupDialogue();
-    }
-
-    /**
      * Navigates back to the main menu view.
      *
      * @see ul.cs4076project.App
@@ -261,15 +260,6 @@ public class TimetableController implements Initializable {
     @FXML
     protected void onBackToMenuClick() {
         App.loadMainView();
-    }
-
-    /**
-     * Retrieves the current lecture array representing the timetable.
-     *
-     * @return 2D array of {@link Lecture} objects
-     */
-    public Lecture[][] getLectures() {
-        return lectures;
     }
 
     private void removeLecture(Lecture lecture) {
@@ -303,5 +293,28 @@ public class TimetableController implements Initializable {
             System.err.println("NumberFormatException occurred: " + e.getMessage());
             noticeLabel.setText("ERROR Occurred While Removing Lecture");
         }
+    }
+
+    private Map<String, String> getCellDateTime(int col, int row) {
+        Map<String, String> dateTime = new HashMap<>();
+
+        // col -> day
+        String day = switch (col) {
+            case 0 -> "Monday";
+            case 1 -> "Tuesday";
+            case 2 -> "Wednesday";
+            case 3 -> "Thursday";
+            case 4 -> "Friday";
+            default -> "";
+        };
+
+        // row -> time
+        String fromTime = String.format("%02d00", row + 9);
+        String toTime = String.format("%02d00", row + 10);
+
+        dateTime.put("day", day);
+        dateTime.put("fromTime", fromTime);
+        dateTime.put("toTime", toTime);
+        return dateTime;
     }
 }

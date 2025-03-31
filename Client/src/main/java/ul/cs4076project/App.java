@@ -159,54 +159,32 @@ public class App extends Application {
      * @see #addALecturePopupStage
      * @see #addALecturePopupDialogueController
      */
-    public static void openAddALecturePopupDialogue() {
+    public static void openAddALecturePopupDialogue(String day, String fromTime, String toTime) {
         try {
             FXMLLoader addALecturePopupLoader = new FXMLLoader(
                     App.class.getResource("View/popup-dialogues/add-lecture-popup-dialogue.fxml"));
-            Scene scene = new Scene(addALecturePopupLoader.load(), 350, 500);
-            addALecturePopupStage = new Stage();
-            addALecturePopupStage.setTitle("ADD Lecture");
-            setStage(addALecturePopupStage, scene);
+            Scene scene = new Scene(addALecturePopupLoader.load());
 
-            // Get the controller and set the dialog stage
+            if (addALecturePopupStage == null) {
+                addALecturePopupStage = new Stage();
+                addALecturePopupStage.initStyle(StageStyle.UTILITY);
+                addALecturePopupStage.initModality(Modality.WINDOW_MODAL);
+                addALecturePopupStage.initOwner(primaryStage);
+                addALecturePopupStage.setResizable(false);
+            }
+
+            addALecturePopupStage.setTitle("ADD Lecture");
+            addALecturePopupStage.setScene(scene);
+
             addALecturePopupDialogueController = addALecturePopupLoader.getController();
             addALecturePopupDialogueController.initializeWithClient(client);
             addALecturePopupDialogueController.setDialogStage(addALecturePopupStage);
-
-            addALecturePopupStage.setResizable(false);
+            addALecturePopupDialogueController.setDateTime(day, fromTime, toTime);
 
             addALecturePopupStage.showAndWait();
         } catch (IOException | NullPointerException e) {
             System.err.println("Error loading AddALecturePopupDialogue: " + e.getMessage());
         }
-    }
-
-    /**
-     * Configures a stage with common settings for popup dialogues.
-     *
-     * @param stage The stage to be configured.
-     * @param scene The scene to be displayed in the stage.
-     */
-    private static void setStage(Stage stage, Scene scene) {
-        try {
-            stage.initStyle(StageStyle.UTILITY);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(primaryStage);
-            stage.setScene(scene);
-            stage.setResizable(false);
-        } catch (NullPointerException | IllegalArgumentException e) {
-            System.err.println("Error setting stage: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Returns the timetable controller instance.
-     *
-     * @return The current TimetableController instance.
-     * @see ul.cs4076project.Controller.TimetableController
-     */
-    public static TimetableController getTimetableController() {
-        return timetableController;
     }
 
     /**

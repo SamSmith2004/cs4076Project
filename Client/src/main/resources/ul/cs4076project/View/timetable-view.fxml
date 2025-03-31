@@ -35,17 +35,7 @@
     <center>
         <VBox spacing="15" style="-fx-padding: 15 150 0 150;">
             <!-- Control buttons -->
-            <HBox spacing="10" alignment="CENTER">
-                <Button onAction="#onAddLectureClick">
-                    <graphic>
-                        <StackPane>
-                            <Label text="ADD Lecture"
-                                style="-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 6px;"
-                                StackPane.alignment="CENTER" />
-                        </StackPane>
-                    </graphic>
-                </Button>
-
+            <HBox alignment="CENTER">
                 <Button onAction="#onBackToMenuClick">
                     <graphic>
                         <StackPane>
