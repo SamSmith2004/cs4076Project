@@ -7,8 +7,11 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.fxml.Initializable;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -101,6 +104,21 @@ public class TimetableController implements Initializable {
                     cellPane.setStyle("-fx-background-color: white; -fx-border-color: lightgray;");
                     cellPane.setMinSize(100, 50);
                     cellPane.setPrefSize(100, 50);
+
+                    // Context menu for empty cells
+                    ContextMenu contextMenu = new ContextMenu();
+                    MenuItem addItem = new MenuItem("ADD");
+                    addItem.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+                    contextMenu.getItems().add(addItem);
+                    contextMenu.setStyle("-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-radius: 3px;");
+
+                    // Context menu handler
+                    cellPane.setOnMouseClicked(event -> {
+                        if (event.getButton() == MouseButton.SECONDARY) {
+                            contextMenu.show(cellPane, event.getScreenX(), event.getScreenY());
+                        }
+                    });
+
                     timetableGrid.add(cellPane, col, row);
                 }
             }
@@ -172,6 +190,24 @@ public class TimetableController implements Initializable {
                             createStyledLabel(lecture.getLecturer(), "-fx-font-size: 16;"),
                             createStyledLabel(lecture.getRoom(), "-fx-font-size: 16;"),
                             createStyledLabel(lecture.getTime(), "-fx-font-size: 16;"));
+
+                    // Create context menu for content cells
+                    ContextMenu contextMenu = new ContextMenu();
+                    MenuItem removeItem = new MenuItem("REMOVE");
+                    MenuItem replaceItem = new MenuItem("REPLACE");
+
+                    String menuItemStyle = "-fx-font-size: 14px; -fx-font-weight: bold;";
+                    removeItem.setStyle(menuItemStyle);
+                    replaceItem.setStyle(menuItemStyle);
+
+                    contextMenu.getItems().addAll(removeItem, replaceItem);
+                    contextMenu.setStyle("-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-radius: 3px;");
+
+                    cellPane.setOnMouseClicked(event -> {
+                        if (event.getButton() == MouseButton.SECONDARY) {
+                            contextMenu.show(cellPane, event.getScreenX(), event.getScreenY());
+                        }
+                    });
 
                     cellPane.getChildren().add(labelContainer);
                     StackPane.setAlignment(labelContainer, javafx.geometry.Pos.CENTER);
