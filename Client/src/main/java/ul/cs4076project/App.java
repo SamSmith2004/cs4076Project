@@ -9,7 +9,6 @@ import javafx.stage.StageStyle;
 
 import ul.cs4076project.Controller.AddALecturePopupDialogueController;
 import ul.cs4076project.Controller.MainController;
-import ul.cs4076project.Controller.RemoveALecturePopupDialogueController;
 import ul.cs4076project.Controller.TimetableController;
 import ul.cs4076project.Model.TCPClient;
 
@@ -36,11 +35,6 @@ public class App extends Application {
      * Stage for the "Add a Lecture" popup dialogue.
      */
     private static Stage addALecturePopupStage;
-
-    /**
-     * Stage for the "Remove a Lecture" popup dialogue.
-     */
-    private static Stage removeALecturePopupStage;
 
     /**
      * Scene containing the main menu view.
@@ -72,13 +66,6 @@ public class App extends Application {
      * @see ul.cs4076project.Controller.AddALecturePopupDialogueController
      */
     private static AddALecturePopupDialogueController addALecturePopupDialogueController;
-
-    /**
-     * Controller for managing the "Remove a Lecture" popup dialogue.
-     *
-     * @see ul.cs4076project.Controller.RemoveALecturePopupDialogueController
-     */
-    private static RemoveALecturePopupDialogueController removeALecturePopupDialogueController;
 
     /**
      * TCP client instance for handling network communications.
@@ -191,35 +178,6 @@ public class App extends Application {
             addALecturePopupStage.showAndWait();
         } catch (IOException | NullPointerException e) {
             System.err.println("Error loading AddALecturePopupDialogue: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Opens a modal popup dialogue for removing an existing lecture. The dialogue
-     * is initialized with the current TCP client instance.
-     *
-     * @see #removeALecturePopupStage
-     * @see #removeALecturePopupDialogueController
-     */
-    public static void openRemoveALecturePopupDialogue() {
-        try {
-            FXMLLoader removeALecturePopupLoader = new FXMLLoader(
-                    App.class.getResource("View/popup-dialogues/remove-lecture-popup-dialogue.fxml"));
-            Scene scene = new Scene(removeALecturePopupLoader.load(), 350, 300);
-            removeALecturePopupStage = new Stage();
-            removeALecturePopupStage.setTitle("REMOVE Lecture");
-            setStage(removeALecturePopupStage, scene);
-
-            // Get the controller and set the dialog stage
-            removeALecturePopupDialogueController = removeALecturePopupLoader.getController();
-            removeALecturePopupDialogueController.initializeWithClient(client);
-            removeALecturePopupDialogueController.setDialogStage(removeALecturePopupStage);
-
-            removeALecturePopupStage.setResizable(false);
-
-            removeALecturePopupStage.showAndWait();
-        } catch (IOException e) {
-            System.err.println("Error loading RemoveALecturePopupDialogue: " + e.getMessage());
         }
     }
 

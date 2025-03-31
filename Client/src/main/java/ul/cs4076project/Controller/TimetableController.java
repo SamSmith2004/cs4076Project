@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import jakarta.json.Json;
+import jakarta.json.JsonException;
+import jakarta.json.JsonObject;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -200,6 +203,12 @@ public class TimetableController implements Initializable {
                     removeItem.setStyle(menuItemStyle);
                     replaceItem.setStyle(menuItemStyle);
 
+                    // Lecture index
+                    final int finalCol = col;
+                    final int finalRow = row - 1;
+                    // passes lecture at cell index to removeLecture method
+                    removeItem.setOnAction(event -> removeLecture(lectures[finalCol][finalRow]));
+
                     contextMenu.getItems().addAll(removeItem, replaceItem);
                     contextMenu.setStyle("-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-radius: 3px;");
 
@@ -244,17 +253,6 @@ public class TimetableController implements Initializable {
     }
 
     /**
-     * Opens the dialog for removing an existing lecture.
-     *
-     * @see ul.cs4076project.App
-     * @see ul.cs4076project.Controller.RemoveALecturePopupDialogueController
-     */
-    @FXML
-    protected void onRemoveLectureClick() {
-        App.openRemoveALecturePopupDialogue();
-    }
-
-    /**
      * Navigates back to the main menu view.
      *
      * @see ul.cs4076project.App
@@ -272,5 +270,38 @@ public class TimetableController implements Initializable {
      */
     public Lecture[][] getLectures() {
         return lectures;
+    }
+
+    private void removeLecture(Lecture lecture) {
+        if (client == null || !client.isConnected()) {
+            noticeLabel.setText("Not Connected to Server");
+            return;
+        }
+
+        try {
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("Content-Type", "removeLecture");
+
+            JsonObject removeJson = Json.createObjectBuilder()
+                    .add("id", Integer.parseInt(lecture.getId()))
+                    .build();
+
+            ResponseType response = client.post(removeJson.toString(), headers);
+            if (response instanceof ResponseType.StringResponse(String value) && value.equals("Lecture removed")) {
+                noticeLabel.setText("Lecture Removed");
+                loadTimetableData();
+            } else {
+                noticeLabel.setText("ERROR Occurred While Removing Lecture");
+            }
+        } catch (IOException e) {
+            System.err.println("IOException occurred: " + e.getMessage());
+            noticeLabel.setText("ERROR Occurred While Removing Lecture");
+        } catch (JsonException e) {
+            System.err.println("JsonException occurred: " + e.getMessage());
+            noticeLabel.setText("ERROR Occurred While Removing Lecture");
+        } catch (NumberFormatException e) {
+            System.err.println("NumberFormatException occurred: " + e.getMessage());
+            noticeLabel.setText("ERROR Occurred While Removing Lecture");
+        }
     }
 }

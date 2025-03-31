@@ -46,16 +46,6 @@
                     </graphic>
                 </Button>
 
-                <Button onAction="#onRemoveLectureClick">
-                    <graphic>
-                        <StackPane>
-                            <Label text="REMOVE Lecture"
-                                style="-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 6px;"
-                                StackPane.alignment="CENTER" />
-                        </StackPane>
-                    </graphic>
-                </Button>
-
                 <Button onAction="#onBackToMenuClick">
                     <graphic>
                         <StackPane>
