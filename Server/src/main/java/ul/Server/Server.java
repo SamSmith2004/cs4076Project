@@ -3,6 +3,7 @@ package ul.Server;
 import ul.Server.Handlers.Get;
 import ul.Server.Handlers.Post;
 import ul.Server.Handlers.DBManager;
+import ul.Server.Handlers.Update;
 import ul.Server.Models.IncorrectActionException;
 
 import java.io.BufferedReader;
@@ -163,6 +164,10 @@ public class Server {
                                     case "POST" -> {
                                         Post post = new Post(requestData);
                                         response = post.responseBuilder();
+                                    }
+                                    case "UPDATE" -> {
+                                        Update update = new Update(requestData);
+                                        response = update.responseBuilder();
                                     }
                                     default -> throw new IncorrectActionException();
                                 }

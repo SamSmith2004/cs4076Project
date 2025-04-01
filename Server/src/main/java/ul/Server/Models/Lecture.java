@@ -84,6 +84,16 @@ public class Lecture {
         day = dy;
     }
 
+    public Lecture(String id, Module mod, String lec, String rm, String from, String to, DayOfWeek dy) {
+        this.id = Integer.parseInt(id);
+        module = mod;
+        lecturer = lec;
+        room = rm;
+        fromTime = from;
+        toTime = to;
+        day = dy;
+    }
+
     /**
      * Gets the ID of the lecture.
      * 

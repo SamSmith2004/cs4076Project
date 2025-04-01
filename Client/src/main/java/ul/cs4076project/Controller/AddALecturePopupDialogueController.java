@@ -36,7 +36,7 @@ public class AddALecturePopupDialogueController implements Initializable {
     /**
      * Stage for the add lecture popup dialogue.
      */
-    private Stage addALecturePopupStage;
+    protected Stage addALecturePopupStage;
 
     /**
      * List of available end times for lectures.
@@ -46,7 +46,7 @@ public class AddALecturePopupDialogueController implements Initializable {
     /**
      * The {@link TCPClient} instance for server communication.
      */
-    private TCPClient client;
+    protected TCPClient client;
 
     /**
      * ComboBox for selecting lecture start time.

@@ -136,6 +136,41 @@ public class DBManager {
         return success;
     }
 
+    public boolean updateLecture(Lecture lecture) throws SQLException {
+        String query = "UPDATE lectures SET module = ?, lecturer = ?, room = ?, from_time = ?, to_time = ?, day = ? WHERE id = ?";
+        boolean success = false;
+
+        try {
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+                pstmt.setObject(1, lecture.getModule(), Types.OTHER);
+                pstmt.setString(2, lecture.getLecturer());
+                pstmt.setString(3, lecture.getRoom());
+                pstmt.setString(4, lecture.getFromTime());
+                pstmt.setString(5, lecture.getToTime());
+                pstmt.setObject(6, lecture.getDay(), Types.OTHER);
+                pstmt.setInt(7, lecture.getId());
+
+                int affectedRows = pstmt.executeUpdate();
+                success = affectedRows > 0;
+            }
+
+            if (success) {
+                connection.commit();
+            } else {
+                connection.rollback();
+            }
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            connection.setAutoCommit(true);
+        }
+
+        return success;
+    }
+
     /**
      * Remove a lecture from the database given the lecture ID.
      * 

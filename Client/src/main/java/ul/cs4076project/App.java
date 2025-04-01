@@ -193,6 +193,7 @@ public class App extends Application {
         }
     }
 
+    // Java
     public static void openReplaceLecturePopupDialogue(Lecture l) {
         try {
             FXMLLoader replaceLecturePopupLoader = new FXMLLoader(
@@ -212,7 +213,7 @@ public class App extends Application {
 
             replaceLecturePopupDialogueController = replaceLecturePopupLoader.getController();
             replaceLecturePopupDialogueController.initializeWithClient(client);
-            replaceLecturePopupDialogueController.setDialogStage(addALecturePopupStage);
+            replaceLecturePopupDialogueController.setDialogStage(replaceLecturePopupStage);
             replaceLecturePopupDialogueController.preparePassedData(l);
 
             replaceLecturePopupStage.showAndWait();

@@ -108,6 +108,10 @@ public class TCPClient {
         return sendRequest("POST", message, headers);
     }
 
+    public ResponseType update(String message, Map<String, String> headers) throws IOException {
+        return sendRequest("UPDATE", message, headers);
+    }
+
     /**
      * Sends a CREATE request to the server.
      *
