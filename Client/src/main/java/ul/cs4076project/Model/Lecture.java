@@ -127,6 +127,8 @@ public class Lecture {
         return fromTime;
     }
 
+    public String getToTime() { return toTime; }
+
     /**
      * Gets the day of the week when the lecture is scheduled.
      * 

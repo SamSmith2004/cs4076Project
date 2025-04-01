@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="ul.cs4076project.Controller.ReplaceLecturePopupDialogueController">
+
+    <!-- Center the VBox in the BorderPane -->
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20" BorderPane.alignment="CENTER">
+            <!-- Add padding around the VBox -->
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20" />
+            </padding>
+
+            <!-- Time Field -->
+            <VBox spacing="5">
+                <Label text="Time:" style="-fx-font-size: 14;" />
+                <HBox spacing="10">
+                    <VBox spacing="5">
+                        <ComboBox fx:id="comboBoxFromTimeField" prefWidth="138"
+                            style="-fx-font-size: 14;" />
+                    </VBox>
+
+                    <VBox spacing="5">
+                        <Label text="to" style="-fx-font-size: 14;" />
+                    </VBox>
+
+                    <VBox spacing="5">
+                        <ComboBox fx:id="comboBoxToTimeField" prefWidth="138"
+                            style="-fx-font-size: 14;" />
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Day Field -->
+            <VBox spacing="5">
+                <Label text="Day:" style="-fx-font-size: 14;" />
+                <ComboBox fx:id="comboBoxDayField" prefWidth="310" style="-fx-font-size: 14;" />
+            </VBox>
+
+            <!-- Module Name Field -->
+            <VBox spacing="5">
+                <Label text="Module Name:" style="-fx-font-size: 14;" />
+                <ComboBox fx:id="comboBoxModuleField" prefWidth="310" style="-fx-font-size: 14;" />
+            </VBox>
+
+            <!-- Room Number Field -->
+            <VBox spacing="5">
+                <Label text="Room Number:" style="-fx-font-size: 14;" />
+                <TextField fx:id="roomNumberField" promptText="Enter room number"
+                    style="-fx-font-size: 14;" prefWidth="310" />
+            </VBox>
+
+            <!-- Lecturer Field -->
+            <VBox spacing="5">
+                <Label text="Lecturer:" style="-fx-font-size: 14;" />
+                <TextField fx:id="lecturerField" promptText="Enter Lecturer name"
+                           style="-fx-font-size: 14;" prefWidth="310" />
+            </VBox>
+
+            <!-- Notice Label -->
+            <Label fx:id="noticeLabel" style="-fx-font-size: 14; -fx-text-fill: red;" />
+
+            <!-- OK Button -->
+            <Button fx:id="submitButton" text="ADD Lecture" onAction="#handleSubmitBtn" style="-fx-font-size: 14;"
+                prefWidth="100" />
+        </VBox>
+    </center>
+</BorderPane>

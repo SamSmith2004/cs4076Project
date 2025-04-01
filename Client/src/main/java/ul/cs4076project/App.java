@@ -9,7 +9,9 @@ import javafx.stage.StageStyle;
 
 import ul.cs4076project.Controller.AddALecturePopupDialogueController;
 import ul.cs4076project.Controller.MainController;
+import ul.cs4076project.Controller.ReplaceLecturePopupDialogueController;
 import ul.cs4076project.Controller.TimetableController;
+import ul.cs4076project.Model.Lecture;
 import ul.cs4076project.Model.TCPClient;
 
 import java.io.IOException;
@@ -35,6 +37,8 @@ public class App extends Application {
      * Stage for the "Add a Lecture" popup dialogue.
      */
     private static Stage addALecturePopupStage;
+
+    private static Stage replaceLecturePopupStage;
 
     /**
      * Scene containing the main menu view.
@@ -66,6 +70,8 @@ public class App extends Application {
      * @see ul.cs4076project.Controller.AddALecturePopupDialogueController
      */
     private static AddALecturePopupDialogueController addALecturePopupDialogueController;
+
+    private static ReplaceLecturePopupDialogueController replaceLecturePopupDialogueController;
 
     /**
      * TCP client instance for handling network communications.
@@ -182,6 +188,34 @@ public class App extends Application {
             addALecturePopupDialogueController.setDateTime(day, fromTime, toTime);
 
             addALecturePopupStage.showAndWait();
+        } catch (IOException | NullPointerException e) {
+            System.err.println("Error loading AddALecturePopupDialogue: " + e.getMessage());
+        }
+    }
+
+    public static void openReplaceLecturePopupDialogue(Lecture l) {
+        try {
+            FXMLLoader replaceLecturePopupLoader = new FXMLLoader(
+                    App.class.getResource("View/popup-dialogues/replace-lecture-popup-dialogue.fxml"));
+            Scene scene = new Scene(replaceLecturePopupLoader.load());
+
+            if (replaceLecturePopupStage == null) {
+                replaceLecturePopupStage = new Stage();
+                replaceLecturePopupStage.initStyle(StageStyle.UTILITY);
+                replaceLecturePopupStage.initModality(Modality.WINDOW_MODAL);
+                replaceLecturePopupStage.initOwner(primaryStage);
+                replaceLecturePopupStage.setResizable(false);
+            }
+
+            replaceLecturePopupStage.setTitle("ADD Lecture");
+            replaceLecturePopupStage.setScene(scene);
+
+            replaceLecturePopupDialogueController = replaceLecturePopupLoader.getController();
+            replaceLecturePopupDialogueController.initializeWithClient(client);
+            replaceLecturePopupDialogueController.setDialogStage(addALecturePopupStage);
+            replaceLecturePopupDialogueController.preparePassedData(l);
+
+            replaceLecturePopupStage.showAndWait();
         } catch (IOException | NullPointerException e) {
             System.err.println("Error loading AddALecturePopupDialogue: " + e.getMessage());
         }

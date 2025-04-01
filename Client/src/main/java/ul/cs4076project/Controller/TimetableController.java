@@ -216,8 +216,10 @@ public class TimetableController implements Initializable {
                     // Lecture index
                     final int finalCol = col;
                     final int finalRow = row - 1;
-                    // passes lecture at cell index to removeLecture method
+                    // passes lecture at cell index to events
                     removeItem.setOnAction(event -> removeLecture(lectures[finalCol][finalRow]));
+                    replaceItem.setOnAction(event ->
+                            App.openReplaceLecturePopupDialogue(lectures[finalCol][finalRow]));
 
                     contextMenu.getItems().addAll(removeItem, replaceItem);
                     contextMenu.setStyle("-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-radius: 3px;");

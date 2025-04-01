@@ -52,43 +52,43 @@ public class AddALecturePopupDialogueController implements Initializable {
      * ComboBox for selecting lecture start time.
      */
     @FXML
-    private ComboBox<String> comboBoxFromTimeField;
+    protected ComboBox<String> comboBoxFromTimeField;
 
     /**
      * ComboBox for selecting lecture end time.
      */
     @FXML
-    private ComboBox<String> comboBoxToTimeField;
+    protected ComboBox<String> comboBoxToTimeField;
 
     /**
      * ComboBox for selecting the day of the week.
      */
     @FXML
-    private ComboBox<String> comboBoxDayField;
+    protected ComboBox<String> comboBoxDayField;
 
     /**
      * ComboBox for selecting the module.
      */
     @FXML
-    private ComboBox<String> comboBoxModuleField;
+    protected ComboBox<String> comboBoxModuleField;
 
     /**
      * TextField for entering the room number.
      */
     @FXML
-    private TextField roomNumberField;
+    protected TextField roomNumberField;
 
     /**
      * TextField for entering the lecturer's name.
      */
     @FXML
-    private TextField lecturerField;
+    protected TextField lecturerField;
 
     /**
      * Label for displaying status messages to the user.
      */
     @FXML
-    private Label noticeLabel;
+    protected Label noticeLabel;
 
     /**
      * Default constructor for the {@code AddALecturePopupDialogueController}.
