@@ -18,8 +18,8 @@
     - [ ] Syncs with client
 
 ### Actions
-- [ ] Multi-Client
-  - [ ] Uses concurrency 
+- [x] Multi-Client
+  - [x] Uses concurrency 
 - [ ] Early Lectures
   - [ ] Uses ForkJoin + Divide and Conquer (thread per day)
 
