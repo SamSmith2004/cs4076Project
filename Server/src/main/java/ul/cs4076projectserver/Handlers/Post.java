@@ -1,9 +1,9 @@
-package ul.Server.Handlers;
+package ul.cs4076projectserver.Handlers;
 
-import ul.Server.Server;
-import ul.Server.Models.DayOfWeek;
-import ul.Server.Models.Module;
-import ul.Server.Models.Lecture;
+import ul.cs4076projectserver.Server;
+import ul.cs4076projectserver.Models.DayOfWeek;
+import ul.cs4076projectserver.Models.Module;
+import ul.cs4076projectserver.Models.Lecture;
 
 import jakarta.json.Json;
 import jakarta.json.JsonException;
@@ -20,10 +20,10 @@ import java.sql.SQLException;
  * This class extends {@link RequestHandler} and overrides the
  * {@link #responseBuilder()} method to build the response.
  * 
- * @see ul.Server.Handlers.RequestHandler
- * @see ul.Server.Models.Lecture
- * @see ul.Server.Models.DayOfWeek
- * @see ul.Server.Models.Module
+ * @see ul.cs4076projectserver.Handlers.RequestHandler
+ * @see Lecture
+ * @see DayOfWeek
+ * @see Module
  */
 public class Post extends RequestHandler {
     /**
@@ -101,9 +101,9 @@ public class Post extends RequestHandler {
      * the content of the request data.
      * 
      * @return A {@link JsonObject} representing the add lecture response.
-     * @see ul.Server.Models.Module
-     * @see ul.Server.Models.DayOfWeek
-     * @see ul.Server.Models.Lecture
+     * @see Module
+     * @see DayOfWeek
+     * @see Lecture
      */
     private JsonObject buildAddLectureResponse() {
         try {

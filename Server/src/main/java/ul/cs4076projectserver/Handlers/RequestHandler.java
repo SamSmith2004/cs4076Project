@@ -1,4 +1,4 @@
-package ul.Server.Handlers;
+package ul.cs4076projectserver.Handlers;
 
 import jakarta.json.*;
 import java.io.IOException;

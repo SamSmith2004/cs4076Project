@@ -1,12 +1,14 @@
-package ul.Server.Models;
+package ul.cs4076projectserver.Models;
+
+import java.lang.Module;
 
 /**
  * The {@code Lecture} class represents a lecture with its associated details.
  * It includes information such as the lecture ID, module, lecturer, room, time,
  * and day.
  * 
- * @see ul.Server.Models.DayOfWeek
- * @see ul.Server.Models.Module
+ * @see ul.cs4076projectserver.Models.DayOfWeek
+ * @see ul.cs4076projectserver.Models.Module
  */
 public class Lecture {
     /**
@@ -16,7 +18,7 @@ public class Lecture {
     /**
      * The module associated with the lecture.
      */
-    private final Module module;
+    private final ul.cs4076projectserver.Models.Module module;
     /**
      * The lecturer conducting the lecture.
      */
@@ -48,10 +50,10 @@ public class Lecture {
      * @param from The start time of the lecture.
      * @param to   The end time of the lecture.
      * @param dy   The day of the week when the lecture is scheduled.
-     * @see ul.Server.Models.Module
-     * @see ul.Server.Models.DayOfWeek
+     * @see ul.cs4076projectserver.Models.Module
+     * @see ul.cs4076projectserver.Models.DayOfWeek
      */
-    public Lecture(int id, Module mod, String lec, String rm, String from, String to, DayOfWeek dy) {
+    public Lecture(int id, ul.cs4076projectserver.Models.Module mod, String lec, String rm, String from, String to, DayOfWeek dy) {
         this.id = id;
         module = mod;
         lecturer = lec;
@@ -71,10 +73,10 @@ public class Lecture {
      * @param from The start time of the lecture.
      * @param to   The end time of the lecture.
      * @param dy   The day of the week when the lecture is scheduled.
-     * @see ul.Server.Models.Module
-     * @see ul.Server.Models.DayOfWeek
+     * @see ul.cs4076projectserver.Models.Module
+     * @see ul.cs4076projectserver.Models.DayOfWeek
      */
-    public Lecture(Module mod, String lec, String rm, String from, String to, DayOfWeek dy) {
+    public Lecture(ul.cs4076projectserver.Models.Module mod, String lec, String rm, String from, String to, DayOfWeek dy) {
         this.id = -1; // Temporary ID, will be replaced when added to database
         module = mod;
         lecturer = lec;
@@ -84,7 +86,7 @@ public class Lecture {
         day = dy;
     }
 
-    public Lecture(String id, Module mod, String lec, String rm, String from, String to, DayOfWeek dy) {
+    public Lecture(String id, ul.cs4076projectserver.Models.Module mod, String lec, String rm, String from, String to, DayOfWeek dy) {
         this.id = Integer.parseInt(id);
         module = mod;
         lecturer = lec;
@@ -106,10 +108,10 @@ public class Lecture {
     /**
      * Gets the module associated with the lecture.
      * 
-     * @return The {@link Module} associated with the lecture.
-     * @see ul.Server.Models.Module
+     * @return The {@link java.lang.Module} associated with the lecture.
+     * @see ul.cs4076projectserver.Models.Module
      */
-    public Module getModule() {
+    public ul.cs4076projectserver.Models.Module getModule() {
         return module;
     }
 
@@ -163,7 +165,7 @@ public class Lecture {
      * 
      * @return A {@link DayOfWeek} object of the day of the week when the lecture is
      *         scheduled.
-     * @see ul.Server.Models.DayOfWeek
+     * @see ul.cs4076projectserver.Models.DayOfWeek
      */
     public DayOfWeek getDay() {
         return day;

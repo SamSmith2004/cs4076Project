@@ -1,8 +1,8 @@
-package ul.Server.Handlers;
+package ul.cs4076projectserver.Handlers;
 
-import ul.Server.Models.DayOfWeek;
-import ul.Server.Models.Lecture;
-import ul.Server.Models.Module;
+import ul.cs4076projectserver.Models.DayOfWeek;
+import ul.cs4076projectserver.Models.Lecture;
+import ul.cs4076projectserver.Models.Module;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -29,27 +29,6 @@ public class DBManager {
         this.connection = connection;
     }
 
-    /**
-     * All the lectures are retrieved from the database through the use of an SQL
-     * command. Each lecture from the Lecture db table has it's properties broken
-     * down into:
-     * <ul>
-     * <li>{@link String} lecturer</li>
-     * <li>{@link String} room</li>
-     * <li>{@link String} fromTime</li>
-     * <li>{@link String} toTime</li>
-     * <li>{@link DayOfWeek} day</li>
-     * </ul>
-     * and created into a {@link Lecture} java
-     * object which subsequently gets added to an {@link ArrayList<Lecture>} which
-     * is ready to be processed further by other methods.
-     * 
-     * @return An {@link ArrayList<Lecture>} of relevant timetable data.
-     * @throws SQLException If a database error occurs.
-     * @see ul.Server.Models.Lecture
-     * @see ul.Server.Models.DayOfWeek
-     * @see ul.Server.Models.Module
-     */
     public ArrayList<Lecture> getLectures() throws SQLException {
         ArrayList<Lecture> lectures = new ArrayList<>();
         String query = "SELECT * FROM lectures";
@@ -59,7 +38,7 @@ public class DBManager {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
-                ul.Server.Models.Module module = Module.valueOf(rs.getString("module"));
+                Module module = Module.valueOf(rs.getString("module"));
                 String lecturer = rs.getString("lecturer");
                 String room = rs.getString("room");
                 String fromTime = rs.getString("from_time").trim();
@@ -77,25 +56,6 @@ public class DBManager {
         return lectures;
     }
 
-    /**
-     * Add a lecture to the database through the use of a SQL command. A
-     * {@link Lecture} object is passed in as the parameter which contains all the
-     * Lecture properties. These include:
-     * <ul>
-     * <li>{@link String} lecturer</li>
-     * <li>{@link String} room</li>
-     * <li>{@link String} fromTime</li>
-     * <li>{@link String} toTime</li>
-     * <li>{@link DayOfWeek} day</li>
-     * </ul>
-     * 
-     * @param lecture Lecture object containing all the relevant properties.
-     * @return {@code true} If the operation was successful, {@code false}
-     *         otherwise.
-     * @throws SQLException If a database access error occurs.
-     * @see ul.Server.Models.Lecture
-     * @see ul.Server.Models.DayOfWeek
-     */
     public boolean addLecture(Lecture lecture) throws SQLException {
         String query = "INSERT INTO lectures (module, lecturer, room, from_time, to_time, day) VALUES (?, ?, ?, ?, ?, ?)";
         boolean success = false;
@@ -209,22 +169,6 @@ public class DBManager {
         return success;
     }
 
-    /**
-     * Check if a lecture overlaps with existing lectures in the database. The
-     * method first checks if there is an exact match for the lecture's day and
-     * start time. If no exact match is found, it then checks for any overlapping
-     * lectures on the same day. An overlap is defined by an existing lecture
-     * starting before the new lecture ending and ends after the new lecture starts.
-     * 
-     * @param day      The {@link DayOfWeek} of the lecture.
-     * @param fromTime {@link String} The start time of the lecture, in range
-     *                 09:00-17:00.
-     * @param toTime   {@link String} The end time of the lecture, in range
-     *                 10:00-18:00.
-     * @return {@code true} if the lecture overlaps with existing lectures,
-     *         {@code false} otherwise.
-     * @throws SQLException If a database error occurs.
-     */
     public boolean lectureOverlaps(DayOfWeek day, String fromTime, String toTime) throws SQLException {
         // This first check is necessary due to the UNIQUE(day, from_time) constraint which runs before the overlap check.
         // Check if there's already a lecture at the exact same time

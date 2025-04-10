@@ -1,4 +1,4 @@
-package ul.Server.Models;
+package ul.cs4076projectserver.Models;
 
 /**
  * The {@code DayOfWeek} enum represents the days of the week.

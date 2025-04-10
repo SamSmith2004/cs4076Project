@@ -1,10 +1,10 @@
-package ul.Server;
+package ul.cs4076projectserver;
 
-import ul.Server.Handlers.Get;
-import ul.Server.Handlers.Post;
-import ul.Server.Handlers.DBManager;
-import ul.Server.Handlers.Update;
-import ul.Server.Models.IncorrectActionException;
+import ul.cs4076projectserver.Handlers.Get;
+import ul.cs4076projectserver.Handlers.Post;
+import ul.cs4076projectserver.Handlers.DBManager;
+import ul.cs4076projectserver.Handlers.Update;
+import ul.cs4076projectserver.Models.IncorrectActionException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +13,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.nio.file.Paths;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -28,7 +27,7 @@ import static java.lang.System.out;
 
 /**
  * The {@code Server} class is responsible for initiating and running the server
- * application.
+ * application.\
  * It initializes the database connection, starts the server socket, and listens
  * for incoming client connections.
  * The server handles custom GET and POST requests and can be terminated by a
@@ -47,7 +46,7 @@ public class Server {
     /**
      * The manager responsible for handling database operations.
      * 
-     * @see ul.Server.Handlers.DBManager
+     * @see ul.cs4076projectserver.Handlers.DBManager
      */
     private static DBManager dbManager;
 
@@ -55,64 +54,6 @@ public class Server {
      * Default arg-less {@link Server} constructor - not used
      */
     public Server() {
-
-    }
-
-    /**
-     * Method used to initialise a connection with the PostgresSQL database by
-     * loading the database credentials from the .env file provided in the current
-     * directory. The method first gets the path of the environment variable and
-     * parses it to retrieve the url and database host, port, name and user
-     * credentials.
-     * 
-     * @return A {@link Connection} object that represents a connection to the
-     *         database.
-     * @throws SQLException If a database error occurs, or the URL is null.
-     */
-    private static Connection initializeDatabase() throws SQLException {
-        // Painful method to get the path of the .env file
-        String envPath = Paths.get("Server", "src", "main", "java", "ul", "Server").toString();
-        Dotenv dotenv = Dotenv.configure().directory(envPath).load();
-
-        // Get env data
-        String url = String.format("jdbc:postgresql://%s:%s/%s",
-                dotenv.get("DB_HOST"),
-                dotenv.get("DB_PORT"),
-                dotenv.get("DB_NAME"));
-        String user = dotenv.get("DB_USER");
-        String password = dotenv.get("DB_PASSWORD");
-
-        return DriverManager.getConnection(url, user, password);
-    }
-
-    /**
-     * Accessor method used to retrieve the database instance. This database manager
-     * is responsible for handling all relevant database operations
-     * 
-     * @return The {@link DBManager} instance
-     * @see ul.Server.Handlers.DBManager
-     */
-    public static DBManager getDatabaseManager() {
-        return dbManager;
-    }
-
-    /**
-     * The main method is used to initiate the server application. It first
-     * initialises the database connection, then proceeds to start the server socket
-     * which then allows the server to listen for any incoming client connections.
-     * The server is able to handle custom {@link ul.Server.Handlers.Get} and
-     * {@link ul.Server.Handlers.Post} requests. The server is able
-     * to be terminated through the use of a 'STOP' request received from the
-     * client. If the user in the client tries to achieve outside the scope of the
-     * server's capability, a custom {@link IncorrectActionException} error is
-     * thrown.
-     * 
-     * @param args (not used)
-     * @see ul.Server.Handlers.Get
-     * @see ul.Server.Handlers.Post
-     * @see ul.Server.Models.IncorrectActionException
-     */
-    public static void main(String[] args) {
         boolean serverRunning = true;
 
         // Initialize database connection
@@ -135,7 +76,7 @@ public class Server {
                     out.println("Client connected: " + link.getInetAddress().getHostAddress());
 
                     try (BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));
-                            PrintWriter out = new PrintWriter(link.getOutputStream(), true)) {
+                         PrintWriter out = new PrintWriter(link.getOutputStream(), true)) {
 
                         String request;
                         while ((request = in.readLine()) != null) {
@@ -224,5 +165,44 @@ public class Server {
         } catch (IOException e) {
             System.err.println("IO Error: " + e.getMessage());
         }
+    }
+
+    /**
+     * Method used to initialise a connection with the PostgresSQL database by
+     * loading the database credentials from the .env file provided in the current
+     * directory. The method first gets the path of the environment variable and
+     * parses it to retrieve the url and database host, port, name and user
+     * credentials.
+     * 
+     * @return A {@link Connection} object that represents a connection to the
+     *         database.
+     * @throws SQLException If a database error occurs, or the URL is null.
+     */
+    private static Connection initializeDatabase() throws SQLException {
+        // F*ck paths
+        Dotenv dotenv = Dotenv.configure()
+                .directory("Server/src/main/resources")
+                .load();
+
+        // Get env data
+        String url = String.format("jdbc:postgresql://%s:%s/%s",
+                dotenv.get("DB_HOST"),
+                dotenv.get("DB_PORT"),
+                dotenv.get("DB_NAME"));
+        String user = dotenv.get("DB_USER");
+        String password = dotenv.get("DB_PASSWORD");
+
+        return DriverManager.getConnection(url, user, password);
+    }
+
+    /**
+     * Accessor method used to retrieve the database instance. This database manager
+     * is responsible for handling all relevant database operations
+     * 
+     * @return The {@link DBManager} instance
+     * @see ul.cs4076projectserver.Handlers.DBManager
+     */
+    public static DBManager getDatabaseManager() {
+        return dbManager;
     }
 }

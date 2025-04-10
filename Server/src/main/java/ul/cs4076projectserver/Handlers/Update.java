@@ -1,12 +1,12 @@
-package ul.Server.Handlers;
+package ul.cs4076projectserver.Handlers;
 
 import jakarta.json.Json;
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
-import ul.Server.Models.DayOfWeek;
-import ul.Server.Models.Lecture;
-import ul.Server.Models.Module;
-import ul.Server.Server;
+import ul.cs4076projectserver.Models.DayOfWeek;
+import ul.cs4076projectserver.Models.Lecture;
+import ul.cs4076projectserver.Models.Module;
+import ul.cs4076projectserver.Server;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,7 +25,7 @@ public class Update extends RequestHandler {
         try {
             String contentType = headers.getString("Content-Type");
 
-            responseData = (contentType.equals("replaceLecture")) ? buildUpdateLectureResponse() : buildInvalidResponse();;
+            responseData = (contentType.equals("replaceLecture")) ? buildUpdateLectureResponse() : buildInvalidResponse();
 
             return jsonToString(responseData);
 

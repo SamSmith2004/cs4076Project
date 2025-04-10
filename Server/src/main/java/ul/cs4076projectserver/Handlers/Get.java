@@ -1,7 +1,7 @@
-package ul.Server.Handlers;
+package ul.cs4076projectserver.Handlers;
 
-import ul.Server.Server;
-import ul.Server.Models.Lecture;
+import ul.cs4076projectserver.Server;
+import ul.cs4076projectserver.Models.Lecture;
 
 import jakarta.json.*;
 import java.sql.SQLException;
@@ -17,8 +17,8 @@ import java.util.Set;
  * This class extends {@link RequestHandler} and overrides the
  * {@link #responseBuilder()} method to build the response.
  * 
- * @see ul.Server.Handlers.RequestHandler
- * @see ul.Server.Models.Lecture
+ * @see ul.cs4076projectserver.Handlers.RequestHandler
+ * @see Lecture
  */
 public class Get extends RequestHandler {
     /**
@@ -90,7 +90,7 @@ public class Get extends RequestHandler {
      * retrieved from the database and formatted as a JSON array.
      * 
      * @return A {@link JsonObject} representing the timetable response
-     * @see ul.Server.Models.Lecture
+     * @see Lecture
      */
     private JsonObject buildTimetableResponse() {
         try {
