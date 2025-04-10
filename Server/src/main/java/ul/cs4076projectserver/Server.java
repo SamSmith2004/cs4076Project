@@ -49,7 +49,7 @@ public class Server {
                 System.out.println("New client connected");
 
                 // New thread for each client
-                ClientHandler handler = new ClientHandler(clientSocket, servSock);
+                ClientHandler handler = new ClientHandler(clientSocket);
                 Thread thread = new Thread(handler);
                 thread.start();
             }
@@ -81,18 +81,16 @@ public class Server {
 
     static class ClientHandler implements Runnable {
         private final Socket clientSocket;
-        private static ServerSocket servSock;
 
-        public ClientHandler(Socket clientSocket, ServerSocket servSock) {
+        public ClientHandler(Socket clientSocket) {
             this.clientSocket = clientSocket;
-            ClientHandler.servSock = servSock;
         }
 
         @Override
         public void run() {
             Socket link = clientSocket;
             try {
-                link = servSock.accept();
+                // link = servSock.accept();
                 out.println("Client connected: " + link.getInetAddress().getHostAddress());
                 try (
                     BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));
