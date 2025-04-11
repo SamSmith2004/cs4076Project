@@ -25,6 +25,7 @@
 
 ## Bugs - Add as They Occur
 - [X] Db connection breaking
+- [ ] Early lectures always returns that it updated all days even when it doesn't
 
 ## Documentation
 - [ ] Server/API
