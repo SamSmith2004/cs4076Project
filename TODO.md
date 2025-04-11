@@ -11,11 +11,14 @@
   - [ ] Functional
 
 ## Server
+### Functionality
+- [ ] Weird connection bug with clients - server shuts down only after the second press of the STOP button
 ### GUI
 - [ ] Timetable
     - [ ] Timetable skeleton
     - [ ] Display updates
     - [ ] Syncs with client
+    - [ ] GUI / App functions dont link with server functionality (e.g., server is still running after closing the GUI app)
 
 ### Actions
 - [x] Multi-Client
