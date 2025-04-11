@@ -57,7 +57,7 @@ public class ResponseHandler {
                 case "timetable":
                     result = buildTimetableResponse();
                     break;
-                case "addLecture", "test", "Message", "removeLecture":
+                case "addLecture", "earlyLecture", "Message", "removeLecture":
                     result = new ResponseType.StringResponse(response.getString("content"));
                     break;
                 default:

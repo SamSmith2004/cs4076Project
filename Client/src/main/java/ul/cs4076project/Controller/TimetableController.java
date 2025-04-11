@@ -297,6 +297,30 @@ public class TimetableController implements Initializable {
         }
     }
 
+    @FXML
+    private void onEarlyLectureButtonClick() {
+        if (client == null || !client.isConnected()) {
+            noticeLabel.setText("Not Connected to Server");
+            return;
+        }
+
+        try {
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("Content-Type", "earlyLecture");
+
+            ResponseType response = client.update("message", headers);
+
+            loadTimetableData();
+
+        } catch (JsonException e) {
+            System.err.println("JsonException occurred: " + e.getMessage());
+            noticeLabel.setText("ERROR Occurred While Αttempting Early Times");
+        } catch (IOException e) {
+            System.err.println("IOException occurred: " + e.getMessage());
+            noticeLabel.setText("ERROR Occurred While Removing Lecture");
+        }
+    }
+
     private Map<String, String> getCellDateTime(int col, int row) {
         Map<String, String> dateTime = new HashMap<>();
 

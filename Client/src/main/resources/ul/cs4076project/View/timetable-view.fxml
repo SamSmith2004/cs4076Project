@@ -45,6 +45,15 @@
                         </StackPane>
                     </graphic>
                 </Button>
+                <Button onAction='#onEarlyLectureButtonClick'>
+                    <graphic>
+                        <StackPane>
+                            <Label text="Early Lectures"
+                                style="-fx-text-fill: black; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 6px;"
+                                StackPane.alignment="CENTER" />
+                        </StackPane>
+                    </graphic>
+                </Button>
             </HBox>
 
             <!-- Timetable Grid -->
