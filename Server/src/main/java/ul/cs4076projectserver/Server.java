@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
 
+import jakarta.json.stream.JsonParsingException;
 import ul.cs4076projectserver.Handlers.*;
 import ul.cs4076projectserver.Models.IncorrectActionException;
 
@@ -90,7 +91,6 @@ public class Server {
         public void run() {
             Socket link = clientSocket;
             try {
-                // link = servSock.accept();
                 out.println("Client connected: " + link.getInetAddress().getHostAddress());
                 try (
                     BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));
@@ -134,6 +134,16 @@ public class Server {
                             System.out.println("Sending: " + response);
                             out.println(response);
                             out.flush();
+                            out.flush();
+                        } catch (JsonParsingException e) {
+                            System.err.println("JSON parsing error: " + e.getMessage());
+                            JsonObject errorResponse = Json.createObjectBuilder()
+                                    .add("status", "error")
+                                    .add("content", "Malformed JSON input")
+                                    .add("Content-Type", "Exception")
+                                    .build();
+                            out.println(errorResponse);
+                            out.flush();
                         } catch (IncorrectActionException e) {
                             JsonObject response = Json.createObjectBuilder()
                                 .add("status", "InvalidActionException")
@@ -164,13 +174,8 @@ public class Server {
                         if (link != null && !link.isClosed()) {
                             link.close();
                         }
-                        if (dbConnection != null) {
-                            dbConnection.close();
-                        }
                     } catch (SocketException e) {
                         System.err.println("Socket Error: " + e.getMessage());
-                    } catch (SQLException e) {
-                        System.err.println("Error closing database connection: " +e.getMessage());
                     }
                 }
             } catch (IOException e) {

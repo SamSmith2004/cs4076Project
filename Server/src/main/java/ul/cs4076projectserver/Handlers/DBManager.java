@@ -3,6 +3,7 @@ package ul.cs4076projectserver.Handlers;
 import ul.cs4076projectserver.Models.DayOfWeek;
 import ul.cs4076projectserver.Models.Lecture;
 import ul.cs4076projectserver.Models.Module;
+import ul.cs4076projectserver.Server;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class DBManager {
 
     /**
      * Constructs a {@link DBManager} with the specified database connection.
-     * 
+     *
      * @param connection The {@link Connection} object used to interact with the
      *                   database.
      */
@@ -34,7 +35,7 @@ public class DBManager {
         String query = "SELECT * FROM lectures";
 
         try (Statement stmt = connection.createStatement();
-                ResultSet rs = stmt.executeQuery(query)) {
+             ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -133,10 +134,10 @@ public class DBManager {
 
     /**
      * Remove a lecture from the database given the lecture ID.
-     * 
+     *
      * @param id The ID of the lecture to remove
      * @return {@code true} If the operation was successful, {@code false}
-     *         otherwise.
+     * otherwise.
      * @throws SQLException If a database access error occurs.
      */
     public boolean removeLecture(int id) throws SQLException {
@@ -208,5 +209,69 @@ public class DBManager {
         }
 
         return false;
+    }
+
+    public DayOfWeek getEarlyLectures(DayOfWeek day) throws SQLException {
+        String selectQuery = "SELECT * FROM lectures WHERE day = ? ORDER BY to_timestamp(from_time, 'HH24:MI')";
+        ArrayList<Lecture> lectures = new ArrayList<>();
+        connection.setAutoCommit(false);
+
+        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery)) {
+            pstmt.setObject(1, day, Types.OTHER);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                Lecture lec = new Lecture(
+                        id,
+                        Module.valueOf(rs.getString("module")),
+                        rs.getString("lecturer"),
+                        rs.getString("room"),
+                        rs.getString("from_time").trim(),
+                        rs.getString("to_time").trim(),
+                        day
+                );
+                lectures.add(lec);
+            }
+        }
+        if (lectures.isEmpty()) {
+            connection.setAutoCommit(true);
+            return day;
+        }
+
+        try {
+            connection.setAutoCommit(false);
+            int targetHour = 9; // 9AM
+            String updateQuery = "UPDATE lectures SET from_time = ?, to_time = ? WHERE id = ?";
+            try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
+                for (Lecture lec : lectures) {
+                    String targetFromTime = String.format("%d:00", targetHour);
+                    String targetToTime = String.format("%d:00", targetHour + 1);
+
+                    // Only update if lec not already in target time
+                    int currentHour;
+                    try {
+                        currentHour = Integer.parseInt(lec.getFromTime().split(":")[0]);
+                    } catch (NumberFormatException e) {
+                        currentHour = targetHour + 1; // Just move on if it hits the fan
+                    }
+
+                    if (currentHour != targetHour) {
+                        updateStmt.setString(1, targetFromTime);
+                        updateStmt.setString(2, targetToTime);
+                        updateStmt.setInt(3, lec.getId());
+                        updateStmt.addBatch();
+                    }
+                    targetHour++;
+                }
+                updateStmt.executeBatch();
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            connection.setAutoCommit(true);
+        }
+        return day;
     }
 }

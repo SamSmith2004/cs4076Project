@@ -10,6 +10,10 @@ import ul.cs4076projectserver.Server;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveTask;
 
 public class Update extends RequestHandler {
     JsonObject headers;
@@ -24,8 +28,11 @@ public class Update extends RequestHandler {
         JsonObject responseData;
         try {
             String contentType = headers.getString("Content-Type");
-
-            responseData = (contentType.equals("replaceLecture")) ? buildUpdateLectureResponse() : buildInvalidResponse();
+            responseData = switch (contentType) {
+                case "replaceLecture" -> buildUpdateLectureResponse();
+                case "earlyLecture" -> buildEarlyLectureResponse();
+                default -> buildInvalidResponse();
+            };
 
             return jsonToString(responseData);
 
@@ -135,6 +142,38 @@ public class Update extends RequestHandler {
         }
     }
 
+    private JsonObject buildEarlyLectureResponse() {
+        ForkJoinPool pool = new ForkJoinPool(5);
+        try {
+            ArrayList<DayOfWeek> days = new ArrayList<>();
+            for (String day : Arrays.asList("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY")) {
+                days.add(DayOfWeek.valueOf(day));
+            }
+
+            // Divide across days
+            EarlyLectureTask mainTask = new EarlyLectureTask(days, 0, days.size());
+            ArrayList<DayOfWeek> successDays = pool.invoke(mainTask);
+
+            if (successDays.isEmpty()) {
+                return Json.createObjectBuilder()
+                        .add("status", "error")
+                        .add("content", "No early lectures found")
+                        .add("Content-Type", "earlyLecture")
+                        .build();
+            } else {
+                return Json.createObjectBuilder()
+                        .add("status", "success")
+                        .add("Content-Type", "earlyLecture")
+                        .add("content", "Days updated: " + successDays)
+                        .build();
+            }
+        } catch (JsonException e) {
+            return serialError(e);
+        } finally {
+            pool.shutdown();
+        }
+    }
+
     private JsonObject buildInvalidResponse() {
         try {
             return Json.createObjectBuilder()
@@ -146,4 +185,73 @@ public class Update extends RequestHandler {
             return serialError(e);
         }
     }
+
+    private static class EarlyLectureTask extends RecursiveTask<ArrayList<DayOfWeek>> {
+        private final ArrayList<DayOfWeek> days;
+        private final int start, end;
+
+        public EarlyLectureTask(ArrayList<DayOfWeek> days, int start, int end) {
+            this.days = days;
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        protected ArrayList<DayOfWeek> compute() {
+            // day by day
+            if (end - start == 1) {
+                ArrayList<DayOfWeek> result = new ArrayList<>();
+                try {
+                    DayOfWeek day = Server.getDatabaseManager().getEarlyLectures(days.get(start));
+                    if (day != null) {
+                        result.add(day);
+                    }
+                } catch (SQLException e) {
+                    System.err.println("SQL Exception: " + e.getMessage());
+                }
+                return result;
+            }
+
+            // Divide days between threads
+            int mid = start + (end - start) / 2;
+            EarlyLectureTask leftTask = new EarlyLectureTask(days, start, mid);
+            EarlyLectureTask rightTask = new EarlyLectureTask(days, mid, end);
+
+            // Fork, compute, and join
+            rightTask.fork();
+            ArrayList<DayOfWeek> leftResult = leftTask.compute();
+            ArrayList<DayOfWeek> rightResult = rightTask.join();
+
+            leftResult.addAll(rightResult);
+            return leftResult;
+        }
+    }
 }
+
+// Reference:
+/**
+ * class SumArray extends RecursiveTask<Integer> {
+ *  int lo; int hi; int[] arr; // arguments
+ *  SumArray(int[] a, int l, int h) { … }
+ *      protected Integer compute(){// return answer
+ *          if(hi – lo < SEQUENTIAL_CUTOFF) {
+ *              int ans = 0;
+ *          for(int i=lo; i < hi; i++)
+ *              ans += arr[i];
+ *          return ans;
+ *          } else {
+ *          SumArray left = new SumArray(arr,lo,(hi+lo)/2);
+ *          SumArray right= new SumArray(arr,(hi+lo)/2,hi);
+ *          left.fork();
+ *          int rightAns = right.compute();
+ *          int leftAns = left.join();
+ *          return leftAns + rightAns;
+ *      }
+ *  }
+ * }
+ * // Usage
+ * static final ForkJoinPool fjPool = new ForkJoinPool();
+ * int sum(int[] arr){
+ *  return ForkJoinPool.commonPool().invoke(new SumArray(arr,0,arr.length));
+ * }
+ **/
