@@ -98,6 +98,11 @@ public class Get extends RequestHandler {
 
             try {
                 ArrayList<Lecture> lectures = Server.getDatabaseManager().getLectures();
+                try {
+                    Server.setLectures(lectures);
+                } catch (Exception e) {
+                    System.out.println("Exception occurred: " + e.getMessage());
+                }
 
                 for (Lecture lecture : lectures) {
                     JsonObjectBuilder lectureBuilder = Json.createObjectBuilder()

@@ -9,14 +9,20 @@ import ul.cs4076projectserver.Controllers.TimetableController;
 import ul.cs4076projectserver.Models.Lecture;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class App extends Application {
-    private Server server;
-    private Lecture[][] lectures;
+    private static Server server;
+    private static ArrayList<Lecture> lectureList;
 
     private static Stage primaryStage;
     private static Scene timetableScene;
     private static TimetableController timetableController;
+
+    private ScheduledExecutorService scheduler;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -26,16 +32,32 @@ public class App extends Application {
         primaryStage = stage;
         loadTimetableView();
 
+        server = new Server();
         new Thread(() -> {
-            try {
-                server = new Server();
-                synchronized (this) {
-                    lectures = server.getLectures();
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            lectureList = server.getLectureList();
+            Platform.runLater(() -> timetableController.updateTimetableGrid(lectureList).run());
+            server.startServer();
         }).start();
+
+        // 5 second polling - placeholder
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(() -> {
+            // System.out.println("Server is " + (server != null ? "running" : "not running"));
+            if (server != null) {
+                ArrayList<Lecture> updatedLectures = server.getLectureList();
+                // System.out.println(updatedLectures);
+                Platform.runLater(() -> timetableController.updateTimetableGrid(updatedLectures).run());
+            }
+        }, 1, 1, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void stop() throws Exception {
+        // Shutdown scheduler when app close
+        if (scheduler != null) {
+            scheduler.shutdownNow();
+        }
+        super.stop();
     }
 
     public static void main(String[] args) {
@@ -45,16 +67,6 @@ public class App extends Application {
     public void loadTimetableView() {
         primaryStage.setTitle("Server GUI");
         primaryStage.setScene(timetableScene);
-
-        Platform.runLater(timetableController.updateTimetableGrid(lectures));
-
         primaryStage.show();
-    }
-
-    public Lecture[][] getLectures() { return lectures; }
-
-    public synchronized void setLectures(Lecture[][] lectures) {
-        this.lectures = lectures;
-        Platform.runLater(timetableController.updateTimetableGrid(lectures));
     }
 }

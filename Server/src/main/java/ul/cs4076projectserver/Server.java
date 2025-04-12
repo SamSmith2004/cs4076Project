@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import jakarta.json.stream.JsonParsingException;
 import ul.cs4076projectserver.Handlers.*;
@@ -30,34 +33,43 @@ public class Server {
     private static Connection dbConnection;
     private static DBManager dbManager;
     private static ArrayList<Object> clients = new ArrayList<>();
-    private Lecture[][] lectures;
+    private static ArrayList<Lecture> lectureList;
     protected static boolean serverRunning;
 
     public Server() {
         serverRunning = true;
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                dbConnection = initializeDatabase();
+                dbManager = new DBManager(dbConnection);
+                out.println("Connected to database successfully");
+                return null;
+            } catch (SQLException e) {
+                System.err.println("Error initializing database: " + e.getMessage());
+                return null;
+            }
+        }).thenAccept(result -> {
+            try {
+                fillLectureList();
+            } catch (SQLException e) {
+                System.err.println("Error filling lecture list: " + e.getMessage());
+            }
+        });
+    }
 
-        try {
-            dbConnection = initializeDatabase();
-            dbManager = new DBManager(dbConnection);
-            System.out.println("Connected to database successfully");
-        } catch (SQLException e) {
-            System.err.println("Database connection failed: " + e.getMessage());
-            return;
-        }
-
+    public void startServer() {
         try (ServerSocket servSock = new ServerSocket(PORT)) {
             while (serverRunning) {
                 Socket clientSocket = servSock.accept();
                 clients.add(clientSocket);
-                System.out.println("New client connected");
-
+                out.println("New client connected");
                 // New thread for each client
                 ClientHandler handler = new ClientHandler(clientSocket);
                 Thread thread = new Thread(handler);
                 thread.start();
             }
         } catch (IOException e) {
-            System.out.println("Unable to attach to port!");
+            out.println("Unable to attach to port!");
             System.exit(1);
         }
     }
@@ -80,9 +92,19 @@ public class Server {
         return DriverManager.getConnection(url, user, password);
     }
 
+    private static void fillLectureList() throws SQLException {
+        try {
+            lectureList = dbManager.getLectures();
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
     public static DBManager getDatabaseManager() {return dbManager;}
 
-    public Lecture[][] getLectures() {return lectures;}
+    public ArrayList<Lecture> getLectureList() {return lectureList;}
+
+    public static void setLectures(ArrayList<Lecture> l) {lectureList = l;}
 
     static class ClientHandler implements Runnable {
         private final Socket clientSocket;

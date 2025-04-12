@@ -142,6 +142,10 @@ public class Lecture {
         return room;
     }
 
+    public String getTime() {
+        return fromTime + "-" + toTime;
+    }
+
     /**
      * Gets the start time of the lecture.
      * 
