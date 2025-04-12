@@ -23,12 +23,14 @@ import java.io.StringReader;
 import jakarta.json.stream.JsonParsingException;
 import ul.cs4076projectserver.Handlers.*;
 import ul.cs4076projectserver.Models.IncorrectActionException;
+import ul.cs4076projectserver.Models.Lecture;
 
 public class Server {
     private static final int PORT = 8080;
     private static Connection dbConnection;
     private static DBManager dbManager;
     private static ArrayList<Object> clients = new ArrayList<>();
+    private Lecture[][] lectures;
     protected static boolean serverRunning;
 
     public Server() {
@@ -79,6 +81,8 @@ public class Server {
     }
 
     public static DBManager getDatabaseManager() {return dbManager;}
+
+    public Lecture[][] getLectures() {return lectures;}
 
     static class ClientHandler implements Runnable {
         private final Socket clientSocket;
