@@ -12,9 +12,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.control.ScrollPane?>
 
+<?import javafx.scene.layout.Pane?>
 <BorderPane xmlns="http://javafx.com/javafx/17"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="ul.cs4076project.Controller.TimetableController">
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ul.cs4076project.Controller.TimetableController">
     <!-- Header (Top) -->
     <top>
         <StackPane prefHeight="100.0" style="-fx-background-color: lightgray;">
@@ -55,6 +56,9 @@
                     </graphic>
                 </Button>
             </HBox>
+            <Pane>
+                <Label fx:id="noticeLabel" alignment="CENTER" style="-fx-font-weight: bold"/>
+            </Pane>
 
             <!-- Timetable Grid -->
             <ScrollPane fitToWidth="true" fitToHeight="true">
@@ -102,9 +106,4 @@
             </ScrollPane>
         </VBox>
     </center>
-
-    <!-- Footer (Bottom) -->
-    <bottom>
-        <Label fx:id="noticeLabel" alignment="CENTER" />
-    </bottom>
 </BorderPane>

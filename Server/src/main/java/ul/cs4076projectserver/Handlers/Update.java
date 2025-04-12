@@ -164,7 +164,7 @@ public class Update extends RequestHandler {
                 return Json.createObjectBuilder()
                         .add("status", "success")
                         .add("Content-Type", "earlyLecture")
-                        .add("content", "Days updated: " + successDays)
+                        .add("content", "earlyLecture")
                         .build();
             }
         } catch (JsonException e) {

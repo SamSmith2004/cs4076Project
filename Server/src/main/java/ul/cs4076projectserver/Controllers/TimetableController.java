@@ -28,7 +28,6 @@ public class TimetableController implements Initializable {
 
     private void createEmptyCells() {
         try {
-            timetableGrid.getChildren().clear();
             for (int row = 1; row < 10; row++) {
                 for (int col = 0; col < 5; col++) {
                     StackPane cellPane = new StackPane();

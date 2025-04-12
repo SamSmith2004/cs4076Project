@@ -19,7 +19,7 @@
             <!-- Logo on the left -->
             <ImageView fitWidth="200.0" pickOnBounds="true" preserveRatio="true"
                        StackPane.alignment="TOP_LEFT">
-                <Image url="@images/ul_logo.png" backgroundLoading="true" />
+                <Image url="@images/ul_logo.png" backgroundLoading="true"  />
             </ImageView>
 
             <!-- Centered Text -->

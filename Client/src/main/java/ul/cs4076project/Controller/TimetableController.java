@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import jakarta.json.Json;
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -309,8 +310,13 @@ public class TimetableController implements Initializable {
             headers.put("Content-Type", "earlyLecture");
 
             ResponseType response = client.update("message", headers);
-
-            loadTimetableData();
+            if (response instanceof ResponseType.StringResponse(String value) && value.equals("earlyLecture")) {
+                System.out.println("Early Lecture Updated");
+                Platform.runLater(() -> noticeLabel.setText("Lectures brought forward"));
+                loadTimetableData();
+            } else {
+                noticeLabel.setText("ERROR Occurred While Attempting Early Times");
+            }
 
         } catch (JsonException e) {
             System.err.println("JsonException occurred: " + e.getMessage());
