@@ -19,12 +19,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import jakarta.json.stream.JsonParsingException;
 import ul.cs4076projectserver.Handlers.*;
+import ul.cs4076projectserver.Models.ForceKillException;
 import ul.cs4076projectserver.Models.IncorrectActionException;
 import ul.cs4076projectserver.Models.Lecture;
 
@@ -74,6 +73,11 @@ public class Server {
         }
     }
 
+    // Cursed but it works, might change later
+    public void stopServer() {
+        throw new ForceKillException("Server closed");
+    }
+
     private static Connection initializeDatabase() throws SQLException {
         // F*ck paths
         Dotenv dotenv = Dotenv.configure()
@@ -95,6 +99,7 @@ public class Server {
     private static void fillLectureList() throws SQLException {
         try {
             lectureList = dbManager.getLectures();
+            App.fillLectureList();
         } catch (SQLException e) {
             throw e;
         }
@@ -161,6 +166,12 @@ public class Server {
                             out.println(response);
                             out.flush();
                             out.flush();
+
+                            try {
+                                fillLectureList();
+                            } catch (SQLException e) {
+                                System.err.println("Error filling lecture list: " + e.getMessage());
+                            }
                         } catch (JsonParsingException e) {
                             System.err.println("JSON parsing error: " + e.getMessage());
                             JsonObject errorResponse = Json.createObjectBuilder()

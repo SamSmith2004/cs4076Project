@@ -10,9 +10,7 @@ import ul.cs4076projectserver.Models.Lecture;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class App extends Application {
     private static Server server;
@@ -21,8 +19,6 @@ public class App extends Application {
     private static Stage primaryStage;
     private static Scene timetableScene;
     private static TimetableController timetableController;
-
-    private ScheduledExecutorService scheduler;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -38,24 +34,12 @@ public class App extends Application {
             Platform.runLater(() -> timetableController.updateTimetableGrid(lectureList).run());
             server.startServer();
         }).start();
-
-        // 5 second polling - placeholder
-        scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(() -> {
-            // System.out.println("Server is " + (server != null ? "running" : "not running"));
-            if (server != null) {
-                ArrayList<Lecture> updatedLectures = server.getLectureList();
-                // System.out.println(updatedLectures);
-                Platform.runLater(() -> timetableController.updateTimetableGrid(updatedLectures).run());
-            }
-        }, 1, 1, TimeUnit.SECONDS);
     }
 
     @Override
     public void stop() throws Exception {
-        // Shutdown scheduler when app close
-        if (scheduler != null) {
-            scheduler.shutdownNow();
+        if (server != null) {
+            server.stopServer();
         }
         super.stop();
     }
@@ -68,5 +52,13 @@ public class App extends Application {
         primaryStage.setTitle("Server GUI");
         primaryStage.setScene(timetableScene);
         primaryStage.show();
+    }
+
+    public static synchronized void fillLectureList() {
+        if (server != null) {
+            ArrayList<Lecture> updatedLectures = server.getLectureList();
+            System.out.println(updatedLectures);
+            Platform.runLater(() -> timetableController.updateTimetableGrid(updatedLectures).run());
+        }
     }
 }
