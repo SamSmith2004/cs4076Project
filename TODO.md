@@ -9,6 +9,7 @@
 - [X] Early Lectures
   - [X] Skeleton 
   - [X] Functional
+- [ ] Make updates from other client occur without refereshing 
 
 - [ ] Polish
 
@@ -16,7 +17,7 @@
 ### Functionality
 - [ ] Weird connection bug with clients - server shuts down only after the second press of the STOP button
 ### GUI
-- [ ] Timetable
+- [X] Timetable
     - [X] Timetable skeleton
     - [X] Display updates
     - [X] Syncs with client
@@ -29,8 +30,8 @@
   - [X] Uses ForkJoin + Divide and Conquer (thread per day)
 
 ## Bugs - Add as They Occur
-- [X] Db connection breaking
 - [ ] Early lectures always returns that it updated all days even when it doesn't
-- [X] GUI / App functions dont link with server functionality (e.g., server is still running after closing the GUI app)
+- [ ] Image on Server GUI not loading
+- [?] Server force stop is currently an exception which works but is not ideal
 
 - ???Synchronisation???
