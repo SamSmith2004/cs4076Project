@@ -334,6 +334,9 @@ public class TimetableController implements Initializable {
                 System.out.println("Early Lecture Updated");
                 Platform.runLater(() -> noticeLabel.setText("Lectures brought forward"));
                 loadTimetableData();
+            } else if (response instanceof ResponseType.StringResponse(String value) && value.equals("No early lectures found")) {
+                System.out.println("No lectures to bring forward");
+                Platform.runLater(() -> noticeLabel.setText("No lectures to bring forward"));
             } else {
                 noticeLabel.setText("ERROR Occurred While Attempting Early Times");
             }

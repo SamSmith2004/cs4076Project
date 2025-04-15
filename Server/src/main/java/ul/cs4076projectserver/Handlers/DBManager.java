@@ -215,6 +215,7 @@ public class DBManager {
         String selectQuery = "SELECT * FROM lectures WHERE day = ? ORDER BY to_timestamp(from_time, 'HH24:MI')";
         ArrayList<Lecture> lectures = new ArrayList<>();
         connection.setAutoCommit(false);
+        boolean updateMade = false;
 
         try (PreparedStatement pstmt = connection.prepareStatement(selectQuery)) {
             pstmt.setObject(1, day, Types.OTHER);
@@ -233,13 +234,13 @@ public class DBManager {
                 lectures.add(lec);
             }
         }
+
         if (lectures.isEmpty()) {
-            connection.setAutoCommit(true);
-            return day;
+            connection.commit();
+            return null;
         }
 
         try {
-            connection.setAutoCommit(false);
             int targetHour = 9; // 9AM
             String updateQuery = "UPDATE lectures SET from_time = ?, to_time = ? WHERE id = ?";
             try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
@@ -260,6 +261,7 @@ public class DBManager {
                         updateStmt.setString(2, targetToTime);
                         updateStmt.setInt(3, lec.getId());
                         updateStmt.addBatch();
+                        updateMade = true;
                     }
                     targetHour++;
                 }
@@ -272,6 +274,6 @@ public class DBManager {
         } finally {
             connection.setAutoCommit(true);
         }
-        return day;
+        return updateMade ? day : null;
     }
 }

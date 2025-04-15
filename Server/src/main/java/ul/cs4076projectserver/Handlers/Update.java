@@ -9,6 +9,7 @@ import ul.cs4076projectserver.Models.Module;
 import ul.cs4076projectserver.Server;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -152,11 +153,18 @@ public class Update extends RequestHandler {
 
             // Divide across days
             EarlyLectureTask mainTask = new EarlyLectureTask(days, 0, days.size());
-            ArrayList<DayOfWeek> successDays = pool.invoke(mainTask);
+            ArrayList<DayOfWeek> result = pool.invoke(mainTask);
+            ArrayList<DayOfWeek> successDays = new ArrayList<>();
+            for (DayOfWeek day : result) {
+                if (day != null) {
+                    successDays.add(day);
+                }
+            }
 
             if (successDays.isEmpty()) {
+                System.out.println("Success Days is empty");
                 return Json.createObjectBuilder()
-                        .add("status", "error")
+                        .add("status", "success")
                         .add("content", "No early lectures found")
                         .add("Content-Type", "earlyLecture")
                         .build();
@@ -201,8 +209,10 @@ public class Update extends RequestHandler {
             // day by day
             if (end - start == 1) {
                 ArrayList<DayOfWeek> result = new ArrayList<>();
-                try {
-                    DayOfWeek day = Server.getDatabaseManager().getEarlyLectures(days.get(start));
+                // Have to make unique DB connection for each thread else catastrophic failure
+                try (Connection conn = Server.getDataSource().getConnection()) {
+                    DBManager dbManager = new DBManager(conn);
+                    DayOfWeek day = dbManager.getEarlyLectures(days.get(start));
                     if (day != null) {
                         result.add(day);
                     }

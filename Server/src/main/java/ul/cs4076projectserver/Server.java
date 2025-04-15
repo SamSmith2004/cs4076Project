@@ -22,10 +22,14 @@ import java.io.StringReader;
 import java.util.concurrent.CompletableFuture;
 
 import jakarta.json.stream.JsonParsingException;
+import org.postgresql.ds.PGSimpleDataSource;
 import ul.cs4076projectserver.Handlers.*;
+import ul.cs4076projectserver.Models.DB_instance;
 import ul.cs4076projectserver.Models.ForceKillException;
 import ul.cs4076projectserver.Models.IncorrectActionException;
 import ul.cs4076projectserver.Models.Lecture;
+
+import javax.sql.DataSource;
 
 public class Server {
     private static final int PORT = 8080;
@@ -94,6 +98,20 @@ public class Server {
         String password = dotenv.get("DB_PASSWORD");
 
         return DriverManager.getConnection(url, user, password);
+    }
+
+    public static DB_instance getDataSource() {
+        Dotenv dotenv = Dotenv.configure()
+                .directory("Server/src/main/resources")
+                .load();
+        DB_instance ds = new DB_instance();
+        ds.setUrl(String.format("jdbc:postgresql://%s:%s/%s",
+                dotenv.get("DB_HOST"),
+                dotenv.get("DB_PORT"),
+                dotenv.get("DB_NAME")));
+        ds.setUser(dotenv.get("DB_USER"));
+        ds.setPassword(dotenv.get("DB_PASSWORD"));
+        return ds;
     }
 
     private static void fillLectureList() throws SQLException {

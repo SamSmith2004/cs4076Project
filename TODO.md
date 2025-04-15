@@ -30,7 +30,8 @@
   - [X] Uses ForkJoin + Divide and Conquer (thread per day)
 
 ## Bugs - Add as They Occur
-- [ ] Early lectures always returns that it updated all days even when it doesn't
+- [X] Early lectures always returns that it updated all days even when it doesn't
+- [ ] Syncing refresh whole view instead of just the updated part
 - [ ] Image on Server GUI not loading
 - [?] Server force stop is currently an exception which works but is not ideal
 
