@@ -10,7 +10,6 @@ import ul.cs4076projectserver.Models.Lecture;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class App extends Application {
     private static Server server;

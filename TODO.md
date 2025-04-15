@@ -9,7 +9,7 @@
 - [X] Early Lectures
   - [X] Skeleton 
   - [X] Functional
-- [ ] Make updates from other client occur without refereshing 
+- [\] Make updates from other client occur without refreshing (Done with polling not sure if valid)
 
 - [ ] Polish
 

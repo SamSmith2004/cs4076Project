@@ -5,6 +5,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import jakarta.json.Json;
 import jakarta.json.JsonException;
@@ -59,9 +62,8 @@ public class TimetableController implements Initializable {
     @FXML
     private GridPane timetableGrid;
 
-    /**
-     * Default constructor for the TimetableController class.
-     */
+    private ScheduledExecutorService scheduler;
+
     public TimetableController() {
     }
 
@@ -94,6 +96,24 @@ public class TimetableController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         createEmptyCells();
         noticeLabel.setText("Waiting For Client Initialization...");
+        startPolling();
+    }
+
+    private void startPolling() {
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(() -> {
+            if (client != null && client.isConnected()) {
+                Platform.runLater(this::loadTimetableData); // this::loadTimetableData = () -> loadTimetableData();
+            } else {
+                Platform.runLater(() -> noticeLabel.setText("Not connected to server."));
+            }
+        }, 1, 5, TimeUnit.SECONDS); // Poll 5s
+    }
+
+    public void stopPolling() {
+        if (scheduler != null) {
+            scheduler.shutdownNow();
+        }
     }
 
     /**

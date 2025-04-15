@@ -162,6 +162,10 @@ public class TCPClient {
 
             // Read response
             String response = in.readLine();
+            if (response == null) {
+                System.err.println("Response is null.");
+                throw new IOException("Response is null");
+            }
             System.out.println("Received: " + response);
 
             JsonReader jsonReader = Json.createReader(new StringReader(response));
