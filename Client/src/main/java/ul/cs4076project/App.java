@@ -235,9 +235,6 @@ public class App extends Application {
         if (client != null) {
             client.close();
         }
-        if (timetableController != null) {
-            timetableController.stopPolling();
-        }
         super.stop();
     }
 }

@@ -9,7 +9,7 @@
 - [X] Early Lectures
   - [X] Skeleton 
   - [X] Functional
-- [\] Make updates from other client occur without refreshing (Done with polling not sure if valid)
+- [X] Make updates from other client occur without refreshing (Fully synced)
 
 - [ ] Polish
 
@@ -31,8 +31,5 @@
 
 ## Bugs - Add as They Occur
 - [X] Early lectures always returns that it updated all days even when it doesn't
-- [ ] Syncing refresh whole view instead of just the updated part
 - [ ] Image on Server GUI not loading
 - [?] Server force stop is currently an exception which works but is not ideal
-
-- ???Synchronisation???

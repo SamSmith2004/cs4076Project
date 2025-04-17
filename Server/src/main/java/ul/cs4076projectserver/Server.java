@@ -4,12 +4,12 @@ import static java.lang.System.out;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -22,20 +22,17 @@ import java.io.StringReader;
 import java.util.concurrent.CompletableFuture;
 
 import jakarta.json.stream.JsonParsingException;
-import org.postgresql.ds.PGSimpleDataSource;
 import ul.cs4076projectserver.Handlers.*;
 import ul.cs4076projectserver.Models.DB_instance;
 import ul.cs4076projectserver.Models.ForceKillException;
 import ul.cs4076projectserver.Models.IncorrectActionException;
 import ul.cs4076projectserver.Models.Lecture;
 
-import javax.sql.DataSource;
-
 public class Server {
     private static final int PORT = 8080;
     private static Connection dbConnection;
     private static DBManager dbManager;
-    private static ArrayList<Object> clients = new ArrayList<>();
+    private static final ArrayList<PrintWriter> clientWriters = new ArrayList<>();
     private static ArrayList<Lecture> lectureList;
     protected static boolean serverRunning;
 
@@ -64,7 +61,6 @@ public class Server {
         try (ServerSocket servSock = new ServerSocket(PORT)) {
             while (serverRunning) {
                 Socket clientSocket = servSock.accept();
-                clients.add(clientSocket);
                 out.println("New client connected");
                 // New thread for each client
                 ClientHandler handler = new ClientHandler(clientSocket);
@@ -80,6 +76,54 @@ public class Server {
     // Cursed but it works, might change later
     public void stopServer() {
         throw new ForceKillException("Server closed");
+    }
+
+    public static void broadcastTimetableUpdate() {
+        try {
+            JsonObject timetableResponse = buildTimetableResponse();
+            System.out.println("Broadcasting timetable update to " + clientWriters.size() + " clients");
+
+            // Send to all connected clients
+            synchronized (clientWriters) {
+                for (PrintWriter writer : clientWriters) {
+                    writer.println(timetableResponse.toString());
+                    writer.flush();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error broadcasting update: " + e.getMessage());
+        }
+    }
+
+    private static JsonObject buildTimetableResponse() {
+        try {
+            JsonArrayBuilder lecturesArrayBuilder = Json.createArrayBuilder();
+
+            for (Lecture lecture : lectureList) {
+                lecturesArrayBuilder.add(Json.createObjectBuilder()
+                        .add("id", Integer.parseInt(String.valueOf(lecture.getId())))
+                        .add("module", lecture.getModule().toString())
+                        .add("lecturer", lecture.getLecturer())
+                        .add("room", lecture.getRoom())
+                        .add("fromTime", lecture.getFromTime())
+                        .add("toTime", lecture.getToTime())
+                        .add("day", lecture.getDay().toString())
+                        .build());
+            }
+
+            return Json.createObjectBuilder()
+                    .add("status", "success")
+                    .add("Content-Type", "timetable")
+                    .add("content", lecturesArrayBuilder.build())
+                    .build();
+        } catch (Exception e) {
+            System.err.println("Error building timetable response: " + e.getMessage());
+            return Json.createObjectBuilder()
+                    .add("status", "error")
+                    .add("Content-Type", "Exception")
+                    .add("content", "Error building timetable response")
+                    .build();
+        }
     }
 
     private static Connection initializeDatabase() throws SQLException {
@@ -119,6 +163,7 @@ public class Server {
             lectureList = dbManager.getLectures();
             App.fillLectureList();
         } catch (SQLException e) {
+            // rethrown to be handled by caller
             throw e;
         }
     }
@@ -127,10 +172,14 @@ public class Server {
 
     public ArrayList<Lecture> getLectureList() {return lectureList;}
 
-    public static void setLectures(ArrayList<Lecture> l) {lectureList = l;}
+    public static void setLectures(ArrayList<Lecture> l) {
+        lectureList = l;
+        broadcastTimetableUpdate();
+    }
 
     static class ClientHandler implements Runnable {
         private final Socket clientSocket;
+        private PrintWriter out;
 
         public ClientHandler(Socket clientSocket) {
             this.clientSocket = clientSocket;
@@ -140,11 +189,17 @@ public class Server {
         public void run() {
             Socket link = clientSocket;
             try {
-                out.println("Client connected: " + link.getInetAddress().getHostAddress());
-                try (
-                    BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));
-                    PrintWriter out = new PrintWriter(link.getOutputStream(), true)
-                ) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));
+                PrintWriter out = new PrintWriter(link.getOutputStream(), true);
+                this.out = out;
+
+                System.out.println("Client connected: " + link.getInetAddress().getHostAddress());
+
+                synchronized (clientWriters) {
+                    clientWriters.add(out);
+                }
+
+                try {
                     String request;
                     while ((request = in.readLine()) != null) {
                         System.out.println("Received: " + request);
@@ -161,9 +216,11 @@ public class Server {
                         try {
                             StringReader stringReader = new StringReader(request);
                             JsonReader jsonReader = Json.createReader(stringReader);
-                            JsonObject requestData =jsonReader.readObject();
+                            JsonObject requestData = jsonReader.readObject();
 
                             String response;
+                            boolean updateMade = false;
+
                             switch (requestData.getString("method")) {
                                 case "GET" -> {
                                     Get get = new Get(requestData);
@@ -172,10 +229,12 @@ public class Server {
                                 case "POST" -> {
                                     Post post = new Post(requestData);
                                     response = post.responseBuilder();
+                                    updateMade = true;
                                 }
                                 case "UPDATE" -> {
                                     Update update = new Update(requestData);
                                     response = update.responseBuilder();
+                                    updateMade = true;
                                 }
                                 default -> throw new IncorrectActionException();
                             }
@@ -183,10 +242,12 @@ public class Server {
                             System.out.println("Sending: " + response);
                             out.println(response);
                             out.flush();
-                            out.flush();
 
                             try {
-                                fillLectureList();
+                                if (updateMade) {
+                                    fillLectureList();
+                                    broadcastUpdateToOtherClients(out);
+                                }
                             } catch (SQLException e) {
                                 System.err.println("Error filling lecture list: " + e.getMessage());
                             }
@@ -201,20 +262,20 @@ public class Server {
                             out.flush();
                         } catch (IncorrectActionException e) {
                             JsonObject response = Json.createObjectBuilder()
-                                .add("status", "InvalidActionException")
-                                .add("content", "Invalid method")
-                                .add("Content-Type", "Exception")
-                                .build();
+                                    .add("status", "InvalidActionException")
+                                    .add("content", "Invalid method")
+                                    .add("Content-Type", "Exception")
+                                    .build();
 
                             System.out.println("Sending: " + response);
                             out.println(response);
                             out.flush();
                         } catch (IOException e) {
                             JsonObject response = Json.createObjectBuilder()
-                                .add("status", "error")
-                                .add("content", e.getMessage())
-                                .add("Content-Type", "Exception")
-                                .build();
+                                    .add("status", "error")
+                                    .add("content", e.getMessage())
+                                    .add("Content-Type", "Exception")
+                                    .build();
 
                             System.out.println("Sending: " + response);
                             out.println(response);
@@ -222,19 +283,37 @@ public class Server {
                         }
                     }
                     System.out.println("Client Disconnected: " + link.getInetAddress().getHostAddress());
-                } catch (IOException e) {
-                    System.err.println("IO ERROR in Client Handling: " + e.getMessage());
                 } finally {
-                    try {
-                        if (link != null && !link.isClosed()) {
-                            link.close();
-                        }
-                    } catch (SocketException e) {
-                        System.err.println("Socket Error: " + e.getMessage());
+                    synchronized (clientWriters) {
+                        clientWriters.remove(out);
+                    }
+
+                    out.close();
+                    in.close();
+                    if (!link.isClosed()) {
+                        link.close();
                     }
                 }
             } catch (IOException e) {
                 System.err.println("IO Error: " + e.getMessage());
+                if (this.out != null) {
+                    synchronized (clientWriters) {
+                        clientWriters.remove(this.out);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void broadcastUpdateToOtherClients(PrintWriter excludedClient) {
+        JsonObject timetableResponse = buildTimetableResponse();
+
+        synchronized (clientWriters) {
+            for (PrintWriter writer : clientWriters) {
+                if (writer != excludedClient) {
+                    writer.println(timetableResponse.toString());
+                    writer.flush();
+                }
             }
         }
     }

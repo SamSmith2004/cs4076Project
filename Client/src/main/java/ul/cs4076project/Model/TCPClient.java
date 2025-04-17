@@ -10,7 +10,13 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
+
 import jakarta.json.*;
+import javafx.application.Platform;
 
 /**
  * A TCP client implementation that handles communication with a server using
@@ -19,41 +25,20 @@ import jakarta.json.*;
  * formatted messages.
  */
 public class TCPClient {
-    /**
-     * The port number used to connect to the server.
-     */
     private static final int PORT = 8080;
-
-    /**
-     * The socket connection to the server.
-     */
-    private final Socket link;
-
-    /**
-     * Buffered reader for reading responses from the server.
-     */
-    private final BufferedReader in;
-
-    /**
-     * PrintWriter for sending requests to the server.
-     */
-    private final PrintWriter out;
-
-    /**
-     * Flag indicating whether the client is currently connected to the server.
-     */
+    private Socket link;
+    private BufferedReader in;
+    private PrintWriter out;
     private boolean isConnected = false;
+    private boolean isListening = false;
+    // Executor Thread Pool for handling promises
+    private final ExecutorService executorService = Executors.newFixedThreadPool(2);
+    // Event Listener
+    private Consumer<ResponseType> updateListener;
 
-    /**
-     * Constructs a new TCPClient and establishes a connection to the server. The
-     * client connects to localhost on the specified PORT.
-     *
-     * @throws IOException          if there is an error creating the socket
-     *                              connection
-     * @throws UnknownHostException if the host cannot be found
-     * @throws ConnectException     if the connection is refused
-     */
-    public TCPClient() throws IOException {
+    public TCPClient() throws IOException {connect();}
+
+    private void connect() throws IOException {
         try {
             link = new Socket("localhost", PORT);
             in = new BufferedReader(new InputStreamReader(link.getInputStream()));
@@ -74,71 +59,72 @@ public class TCPClient {
         }
     }
 
-    /**
-     * Checks if the client is currently connected to the server.
-     *
-     * @return true if the client is connected and the socket is open, false
-     *         otherwise
-     */
     public boolean isConnected() {
         return isConnected && link != null && link.isConnected() && !link.isClosed();
     }
 
-    /**
-     * Sends a GET request to the server.
-     *
-     * @param message the message content to send
-     * @param headers a map of headers to include in the request
-     * @return a {@link ResponseType} object containing the server's response
-     * @throws IOException if there is an error during communication
-     */
-    public ResponseType get(String message, Map<String, String> headers) throws IOException {
-        return sendRequest("GET", message, headers);
+    // All requests types act as promises
+    public CompletableFuture<ResponseType> get(String message, Map<String, String> headers) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return sendRequest("GET", message, headers);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }, executorService);
     }
 
-    /**
-     * Sends a POST request to the server.
-     *
-     * @param message the message content to send
-     * @param headers a map of headers to include in the request
-     * @return a {@link ResponseType} object containing the server's response
-     * @throws IOException if there is an error during communication
-     */
-    public ResponseType post(String message, Map<String, String> headers) throws IOException {
-        return sendRequest("POST", message, headers);
+    public CompletableFuture<ResponseType> post(String message, Map<String, String> headers) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return sendRequest("POST", message, headers);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }, executorService);
     }
 
-    public ResponseType update(String message, Map<String, String> headers) throws IOException {
-        return sendRequest("UPDATE", message, headers);
+    public CompletableFuture<ResponseType> update(String message, Map<String, String> headers) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return sendRequest("UPDATE", message, headers);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }, executorService);
+    }
+    public CompletableFuture<ResponseType> create(String message, Map<String, String> headers) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return sendRequest("CREATE", message, headers);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }, executorService);
     }
 
-    /**
-     * Sends a CREATE request to the server.
-     *
-     * @param message the message content to send
-     * @param headers a map of headers to include in the request
-     * @return a {@link ResponseType} object containing the server's response
-     * @throws IOException if there is an error during communication
-     */
-    public ResponseType create(String message, Map<String, String> headers) throws IOException {
-        return sendRequest("CREATE", message, headers);
+    public void setUpdateListener(Consumer<ResponseType> listener) {
+        this.updateListener = listener;
+        if (!isListening) {
+            startListening();
+        }
     }
 
-    /**
-     * Sends a request to the server with the specified method type. The request is
-     * formatted as a JSON object containing the method type, headers, and content.
-     *
-     * @param methodType the method type (GET, POST, CREATE)
-     * @param message    the message content to send
-     * @param headers    a map of headers to include in the request
-     * @return a {@link ResponseType} object containing the server's response
-     * @see ul.cs4076project.Model.ResponseHandler
-     * @throws IOException     if there is an error during communication
-     * @throws JsonException   if there is an error processing JSON
-     * @throws SocketException if there is an error with the socket connection
-     */
-    private ResponseType sendRequest(String methodType, String message, Map<String, String> headers)
+    private void startListening() {
+        isListening = true;
+        executorService.submit(new ServerListener());
+    }
+
+    private synchronized ResponseType sendRequest(String methodType, String message, Map<String, String> headers)
             throws IOException {
+        if (!isConnected()) {
+            try {
+                connect();
+            } catch (IOException e) {
+                throw new IOException("Failed to reconnect", e);
+            }
+        }
+
         try {
             // Headers
             JsonObjectBuilder headersBuilder = Json.createObjectBuilder();
@@ -184,26 +170,64 @@ public class TCPClient {
         }
     }
 
-    /**
-     * Closes the connection to the server. Sends a STOP message and waits for a
-     * TERMINATE response before closing all streams and the socket. Any errors
-     * during closing are logged but not thrown.
-     */
-    public void close() {
-        try {
-            out.println("STOP");
-            String response = in.readLine();
-            System.out.println("Received: " + response);
+    private class ServerListener implements Runnable {
+        @Override
+        public void run() {
+            try {
+                while (isListening && isConnected()) {
+                    try {
+                        if (in.ready()) {
+                            String response = in.readLine();
+                            if (response != null) {
+                                System.out.println("Received update: " + response);
+                                if (updateListener != null) {
+                                    JsonReader jsonReader = Json.createReader(new StringReader(response));
+                                    final ResponseType responseType = new ResponseHandler(jsonReader.readObject()).extractResponse();
 
-            if (response.equals("TERMINATE")) {
-                in.close();
-                out.close();
-                link.close();
-            } else {
-                System.err.println("Error closing connection: " + response);
+                                    Platform.runLater(() -> updateListener.accept(responseType));
+                                }
+                            }
+                        }
+                        // This prevents a bug do not remove
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        System.err.println("Listener thread interrupted: " + e.getMessage());
+                        isListening = false;
+                    } catch (Exception e) {
+                        System.err.println("Error in listener thread: " + e.getMessage());
+                        if (!isConnected()) {
+                            isListening = false;
+                        }
+                    }
+                }
+            } finally {
+                System.out.println("Server listener stopped");
+            }
+        }
+    }
+
+    public void close() {
+        isListening = false;
+        try {
+            if (isConnected()) {
+                out.println("STOP");
+                String response = in.readLine();
+                System.out.println("Received: " + response);
+
+                if (response.equals("TERMINATE")) {
+                    in.close();
+                    out.close();
+                    link.close();
+                    isConnected = false;
+                } else {
+                    System.err.println("Error closing connection: " + response);
+                }
             }
         } catch (IOException e) {
             System.err.println("IO Error during close: " + e.getMessage());
+        } finally {
+            executorService.shutdown();
         }
     }
 }

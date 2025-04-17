@@ -5,9 +5,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import jakarta.json.Json;
 import jakarta.json.JsonException;
@@ -62,8 +60,6 @@ public class TimetableController implements Initializable {
     @FXML
     private GridPane timetableGrid;
 
-    private ScheduledExecutorService scheduler;
-
     public TimetableController() {
     }
 
@@ -75,7 +71,13 @@ public class TimetableController implements Initializable {
      */
     public void initializeWithClient(TCPClient client) {
         this.client = client;
-        loadTimetableData();
+        this.client.setUpdateListener(response -> {
+            if (response instanceof ResponseType.TimetableResponse(Lecture[][] lectureArray)) {
+                lectures = lectureArray;
+                updateTimetableGrid(lectures);
+                noticeLabel.setText("Timetable Updated");
+            }
+        });
     }
 
     /**
@@ -96,24 +98,6 @@ public class TimetableController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         createEmptyCells();
         noticeLabel.setText("Waiting For Client Initialization...");
-        startPolling();
-    }
-
-    private void startPolling() {
-        scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(() -> {
-            if (client != null && client.isConnected()) {
-                Platform.runLater(this::loadTimetableData); // this::loadTimetableData = () -> loadTimetableData();
-            } else {
-                Platform.runLater(() -> noticeLabel.setText("Not connected to server."));
-            }
-        }, 1, 5, TimeUnit.SECONDS); // Poll 5s
-    }
-
-    public void stopPolling() {
-        if (scheduler != null) {
-            scheduler.shutdownNow();
-        }
     }
 
     /**
@@ -176,23 +160,30 @@ public class TimetableController implements Initializable {
             return;
         }
 
-        try {
-            Map<String, String> headers = new HashMap<>();
-            headers.put("Content-Type", "timetable");
+        noticeLabel.setText("Loading Timetable Data...");
 
-            ResponseType response = client.get("timetable", headers);
-            if (response instanceof ResponseType.TimetableResponse(Lecture[][] value)) {
-                lectures = value;
-                timetable = new String[5][9];
-                updateTimetableGrid(lectures);
-            } else {
-                noticeLabel.setText("ERROR: Invalid Response Type");
-            }
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "timetable");
 
-        } catch (IOException e) {
-            System.err.println("ERROR sending message: " + e.getMessage());
-            noticeLabel.setText("ERROR Sending Message to Server!");
-        }
+        // GET Promise
+        client.get("timetable", headers)
+                .thenAccept(response -> Platform.runLater(() -> {
+                    if (response instanceof ResponseType.TimetableResponse(Lecture[][] value)) {
+                        lectures = value;
+                        timetable = new String[5][9];
+                        updateTimetableGrid(lectures);
+                        noticeLabel.setText("");
+                    } else {
+                        noticeLabel.setText("ERROR: Invalid Response Type");
+                    }
+                }))
+                .exceptionally(e -> {
+                    Platform.runLater(() -> {
+                        System.err.println("ERROR sending message: " + e.getMessage());
+                        noticeLabel.setText("ERROR Sending Message to Server!");
+                    });
+                    return null;
+                });
     }
 
     /**
@@ -291,24 +282,40 @@ public class TimetableController implements Initializable {
             return;
         }
 
-        try {
-            HashMap<String, String> headers = new HashMap<>();
-            headers.put("Content-Type", "removeLecture");
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "removeLecture");
 
+        try {
             JsonObject removeJson = Json.createObjectBuilder()
                     .add("id", Integer.parseInt(lecture.getId()))
                     .build();
 
-            ResponseType response = client.post(removeJson.toString(), headers);
-            if (response instanceof ResponseType.StringResponse(String value) && value.equals("Lecture removed")) {
-                noticeLabel.setText("Lecture Removed");
-                loadTimetableData();
-            } else {
-                noticeLabel.setText("ERROR Occurred While Removing Lecture");
-            }
-        } catch (IOException e) {
-            System.err.println("IOException occurred: " + e.getMessage());
-            noticeLabel.setText("ERROR Occurred While Removing Lecture");
+            // POST Promise
+            client.post(removeJson.toString(), headers)
+                    .thenAccept(response -> Platform.runLater(() -> {
+                        if (response instanceof ResponseType.StringResponse(String value) &&
+                                value.equals("Lecture removed")) {
+                            noticeLabel.setText("Lecture Removed");
+                            loadTimetableData();
+                        } else {
+                            noticeLabel.setText("ERROR Occurred While Removing Lecture");
+                        }
+                    }))
+                    .exceptionally(e -> {
+                        // Substitute for try catch block
+                        Platform.runLater(() -> {
+                            Throwable cause = e.getCause();
+                            if (cause instanceof IOException) {
+                                System.err.println("IOException occurred: " + cause.getMessage());
+                            } else if (cause instanceof JsonException) {
+                                System.err.println("JsonException occurred: " + cause.getMessage());
+                            } else {
+                                System.err.println("Error occurred: " + cause.getMessage());
+                            }
+                            noticeLabel.setText("ERROR Occurred While Removing Lecture");
+                        });
+                        return null;
+                    });
         } catch (JsonException e) {
             System.err.println("JsonException occurred: " + e.getMessage());
             noticeLabel.setText("ERROR Occurred While Removing Lecture");
@@ -325,29 +332,44 @@ public class TimetableController implements Initializable {
             return;
         }
 
-        try {
-            HashMap<String, String> headers = new HashMap<>();
-            headers.put("Content-Type", "earlyLecture");
+        noticeLabel.setText("Processing early lectures...");
 
-            ResponseType response = client.update("message", headers);
-            if (response instanceof ResponseType.StringResponse(String value) && value.equals("earlyLecture")) {
-                System.out.println("Early Lecture Updated");
-                Platform.runLater(() -> noticeLabel.setText("Lectures brought forward"));
-                loadTimetableData();
-            } else if (response instanceof ResponseType.StringResponse(String value) && value.equals("No early lectures found")) {
-                System.out.println("No lectures to bring forward");
-                Platform.runLater(() -> noticeLabel.setText("No lectures to bring forward"));
-            } else {
-                noticeLabel.setText("ERROR Occurred While Attempting Early Times");
-            }
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "earlyLecture");
 
-        } catch (JsonException e) {
-            System.err.println("JsonException occurred: " + e.getMessage());
-            noticeLabel.setText("ERROR Occurred While Αttempting Early Times");
-        } catch (IOException e) {
-            System.err.println("IOException occurred: " + e.getMessage());
-            noticeLabel.setText("ERROR Occurred While Removing Lecture");
-        }
+        // UPDATE Promise
+        client.update("message", headers)
+                .thenAccept(response -> Platform.runLater(() -> {
+                    if (response instanceof ResponseType.StringResponse(String value)) {
+                        if (value.equals("earlyLecture")) {
+                            System.out.println("Early Lecture Updated");
+                            noticeLabel.setText("Lectures brought forward");
+                            loadTimetableData();
+                        } else if (value.equals("No early lectures found")) {
+                            System.out.println("No lectures to bring forward");
+                            noticeLabel.setText("No lectures to bring forward");
+                        } else {
+                            noticeLabel.setText("Unexpected response: " + value);
+                        }
+                    } else {
+                        noticeLabel.setText("ERROR: Unexpected Response Type");
+                    }
+                }))
+                .exceptionally(e -> {
+                    Platform.runLater(() -> {
+                        // Substitute for try catch block
+                        Throwable cause = e.getCause();
+                        if (cause instanceof JsonException) {
+                            System.err.println("JsonException occurred: " + cause.getMessage());
+                        } else if (cause instanceof IOException) {
+                            System.err.println("IOException occurred: " + cause.getMessage());
+                        } else {
+                            System.err.println("Error occurred: " + cause.getMessage());
+                        }
+                        noticeLabel.setText("ERROR Occurred While Attempting Early Times");
+                    });
+                    return null;
+                });
     }
 
     private Map<String, String> getCellDateTime(int col, int row) {

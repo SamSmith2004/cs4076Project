@@ -1,5 +1,6 @@
 package ul.cs4076project.Controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -136,18 +137,23 @@ public class MainController implements Initializable {
             return;
         }
 
-        try {
-            ResponseType response = client.create("LM11025", new HashMap<>());
-            if (response instanceof ResponseType.StringResponse(String value)
-                    && value.equals("Invalid Action Exception")) {
-                noticeLabel.setText("Invalid Action");
-            } else {
-                noticeLabel.setText("Unknown Error");
-            }
-        } catch (IOException e) {
-            System.err.println("Error sending message: " + e.getMessage());
-            noticeLabel.setText("ERROR Sending Message to Server");
-        }
+        // CREATE Promise
+        client.create("LM11025", new HashMap<>())
+                .thenAccept(response -> Platform.runLater(() -> {
+                    if (response instanceof ResponseType.StringResponse(String value)
+                            && value.equals("Invalid Action Exception")) {
+                        noticeLabel.setText("Invalid Action");
+                    } else {
+                        noticeLabel.setText("Unknown Error");
+                    }
+                }))
+                .exceptionally(e -> {
+                    Platform.runLater(() -> {
+                        System.err.println("Error sending message: " + e.getMessage());
+                        noticeLabel.setText("ERROR Sending Message to Server");
+                    });
+                    return null;
+                });
     }
 
     /**
@@ -164,21 +170,26 @@ public class MainController implements Initializable {
             return;
         }
 
-        try {
-            ResponseType response = client.create("LM11025", new HashMap<>());
-            if (response instanceof ResponseType.StringResponse(String value)) {
-                if (value.equals("Invalid Action Exception")) {
-                    noticeLabel.setText("Invalid Action");
-                } else {
-                    noticeLabel.setText("Unknown Error");
-                }
-            } else {
-                noticeLabel.setText("Unknown Error");
-            }
-        } catch (IOException e) {
-            System.err.println("Error sending message: " + e.getMessage());
-            noticeLabel.setText("ERROR Sending Message to Server!");
-        }
+        // CREATE Promise
+        client.create("LM11025", new HashMap<>())
+                .thenAccept(response -> Platform.runLater(() -> {
+                    if (response instanceof ResponseType.StringResponse(String value)) {
+                        if (value.equals("Invalid Action Exception")) {
+                            noticeLabel.setText("Invalid Action");
+                        } else {
+                            noticeLabel.setText("Unknown Error");
+                        }
+                    } else {
+                        noticeLabel.setText("Unknown Error");
+                    }
+                }))
+                .exceptionally(e -> {
+                    Platform.runLater(() -> {
+                        System.err.println("Error sending message: " + e.getMessage());
+                        noticeLabel.setText("ERROR Sending Message to Server!");
+                    });
+                    return null;
+                });
     }
 
     /**

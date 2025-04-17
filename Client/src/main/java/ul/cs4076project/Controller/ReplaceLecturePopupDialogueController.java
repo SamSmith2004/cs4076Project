@@ -3,6 +3,7 @@ package ul.cs4076project.Controller;
 import jakarta.json.Json;
 import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import ul.cs4076project.App;
 import ul.cs4076project.Model.Lecture;
@@ -78,30 +79,58 @@ public class ReplaceLecturePopupDialogueController extends AddALecturePopupDialo
         try {
             HashMap<String, String> headers = new HashMap<>();
             headers.put("Content-Type", "replaceLecture");
-            ResponseType response = client.update(lectureJson.toString(), headers);
 
-            if (response instanceof ResponseType.StringResponse(String value)) {
-                switch (value) {
-                    case "Lecture added" -> {
-                        noticeLabel.setText("Lecture Replaced Successfully");
-                        addALecturePopupStage.close();
-                        App.loadTimetableView();
-                    }
-                    case "Timeslot already taken" -> noticeLabel.setText("Timeslot Already Taken");
-                    default -> noticeLabel.setText("Failed to add lecture: " + value);
-                }
-            } else {
-                noticeLabel.setText("Unexpected Response Type");
-            }
+            // POST Promise
+            client.post(lectureJson.toString(), headers)
+                    .thenAccept(response -> Platform.runLater(() -> {
+                        if (response instanceof ResponseType.StringResponse(String value)) {
+                            switch (value) {
+                                case "Lecture added" -> {
+                                    noticeLabel.setText("Lecture Replaced Successfully");
+                                    addALecturePopupStage.close();
+                                    App.loadTimetableView();
+                                }
+                                case "Timeslot already taken" -> noticeLabel.setText("Timeslot Already Taken");
+                                default -> noticeLabel.setText("Failed to replace lecture: " + value);
+                            }
+                        } else {
+                            noticeLabel.setText("Unexpected Response Type");
+                        }
+                    }))
+                    .exceptionally(e -> {
+                        Platform.runLater(() -> {
+                            // Substitute for the try catch block
+                            Throwable cause = e.getCause();
+                            switch (cause) {
+                                case JsonException jsonException -> {
+                                    System.err.println("JSON error occurred: " + cause.getMessage());
+                                    noticeLabel.setText("Error occurred while processing response");
+                                }
+                                case NullPointerException nullPointerException -> {
+                                    System.err.println("NullPointerException occurred: " + cause.getMessage());
+                                    noticeLabel.setText("Error occurred while processing response");
+                                }
+                                case IOException ioException -> {
+                                    System.err.println("IOError occurred: " + cause.getMessage());
+                                    noticeLabel.setText("Error occurred while communicating with server");
+                                }
+                                default -> {
+                                    System.err.println("Unknown error occurred: " + cause.getMessage());
+                                    noticeLabel.setText("An unexpected error occurred");
+                                }
+                            }
+                        });
+                        return null;
+                    });
         } catch (JsonException e) {
-            System.err.println("JSON error occurred" + e.getMessage());
-            noticeLabel.setText("Error occurred while processing response");
+            noticeLabel.setText("Error occurred while creating JSON object");
+            System.err.println("JSON error occurred: " + e.getMessage());
         } catch (NullPointerException e) {
-            System.err.println("NullPointerException occurred" + e.getMessage());
-            noticeLabel.setText("Error occurred while processing response");
-        } catch (IOException e) {
-            System.err.println("IOError occurred" + e.getMessage());
-            noticeLabel.setText("Error occurred while processing response");
+            noticeLabel.setText("Error occurred while creating JSON object");
+            System.err.println("NullPointerException occurred: " + e.getMessage());
+        } catch (Exception e) {
+            noticeLabel.setText("An unexpected error occurred");
+            System.err.println("Unknown error occurred: " + e.getMessage());
         }
     }
 }
