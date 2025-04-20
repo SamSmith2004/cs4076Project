@@ -18,12 +18,6 @@ import java.util.function.Consumer;
 import jakarta.json.*;
 import javafx.application.Platform;
 
-/**
- * A TCP client implementation that handles communication with a server using
- * JSON messages. This class manages socket connections and provides methods for
- * sending GET, POST and CREATE requests. All communication is done using JSON
- * formatted messages.
- */
 public class TCPClient {
     private static final int PORT = 8080;
     private Socket link;
