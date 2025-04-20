@@ -14,8 +14,6 @@
 - [ ] Polish (fix notice labels)
 
 ## Server
-### Functionality
-- **NOTE** Server shuts down only after the second press of the STOP button, intended behavior?
 ### GUI
 - [X] Timetable
     - [X] Timetable skeleton
@@ -30,5 +28,6 @@
   - [X] Uses ForkJoin + Divide and Conquer (thread per day)
 
 ## Bugs - Add as They Occur
+- [X] It takes 2 stops to kill server
+- [ ] Client won't boot without server
 - [ ] Image on Server GUI not loading
-- [?] Server force stop is currently an exception which works but is not ideal

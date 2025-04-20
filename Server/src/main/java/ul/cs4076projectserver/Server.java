@@ -24,7 +24,6 @@ import java.util.concurrent.CompletableFuture;
 import jakarta.json.stream.JsonParsingException;
 import ul.cs4076projectserver.Handlers.*;
 import ul.cs4076projectserver.Models.DB_instance;
-import ul.cs4076projectserver.Models.ForceKillException;
 import ul.cs4076projectserver.Models.IncorrectActionException;
 import ul.cs4076projectserver.Models.Lecture;
 
@@ -35,6 +34,7 @@ public class Server {
     private static final ArrayList<PrintWriter> clientWriters = new ArrayList<>();
     private static ArrayList<Lecture> lectureList;
     protected static boolean serverRunning;
+    private static ServerSocket servSock;
 
     public Server() {
         serverRunning = true;
@@ -58,24 +58,38 @@ public class Server {
     }
 
     public void startServer() {
-        try (ServerSocket servSock = new ServerSocket(PORT)) {
+        try {
+            servSock = new ServerSocket(PORT);
             while (serverRunning) {
-                Socket clientSocket = servSock.accept();
-                out.println("New client connected");
-                // New thread for each client
-                ClientHandler handler = new ClientHandler(clientSocket);
-                Thread thread = new Thread(handler);
-                thread.start();
+                try {
+                    Socket clientSocket = servSock.accept();
+                    out.println("New client connected");
+                    // New thread for each client
+                    ClientHandler handler = new ClientHandler(clientSocket);
+                    Thread thread = new Thread(handler);
+                    thread.start();
+                } catch (IOException ex) {
+                    if (!serverRunning) break;
+                    System.err.println("Error accepting client connection: " + ex.getMessage());
+                }
             }
         } catch (IOException e) {
-            out.println("Unable to attach to port!");
+            out.println("IOERROR: Unable to start server");
             System.exit(1);
+        } finally {
+            if (servSock != null && !servSock.isClosed()) {
+                try {
+                    servSock.close();
+                } catch (IOException e) {
+                    System.err.println("Error closing server socket: " + e.getMessage());
+                }
+            }
         }
     }
 
-    // Cursed but it works, might change later
     public void stopServer() {
-        throw new ForceKillException("Server closed");
+        out.println("Stopping server");
+        System.exit(1);
     }
 
     public static void broadcastTimetableUpdate() {
@@ -208,8 +222,15 @@ public class Server {
                             System.out.println("Client requested termination. Shutting down server.");
                             out.println("TERMINATE");
                             out.flush();
-                            link.close();
                             serverRunning = false;
+                            try {
+                                if (servSock != null && !servSock.isClosed()) {
+                                    servSock.close();
+                                }
+                            } catch (IOException e) {
+                                System.err.println("Error closing server socket: " + e.getMessage());
+                            }
+                            link.close();
                             break;
                         }
 
@@ -291,7 +312,11 @@ public class Server {
                     out.close();
                     in.close();
                     if (!link.isClosed()) {
-                        link.close();
+                        try {
+                            link.close();
+                        } catch (IOException e) {
+                            System.err.println("Error closing socket: " + e.getMessage());
+                        }
                     }
                 }
             } catch (IOException e) {
