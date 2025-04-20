@@ -9,13 +9,13 @@
 - [X] Early Lectures
   - [X] Skeleton 
   - [X] Functional
-- [X] Make updates from other client occur without refreshing (Fully synced)
+- [X] Make updates from another client occur without refreshing (Fully synced)
 
-- [ ] Polish
+- [ ] Polish (fix notice labels)
 
 ## Server
 ### Functionality
-- [ ] Weird connection bug with clients - server shuts down only after the second press of the STOP button
+- **NOTE** Server shuts down only after the second press of the STOP button, intended behavior?
 ### GUI
 - [X] Timetable
     - [X] Timetable skeleton
@@ -30,6 +30,5 @@
   - [X] Uses ForkJoin + Divide and Conquer (thread per day)
 
 ## Bugs - Add as They Occur
-- [X] Early lectures always returns that it updated all days even when it doesn't
 - [ ] Image on Server GUI not loading
 - [?] Server force stop is currently an exception which works but is not ideal
