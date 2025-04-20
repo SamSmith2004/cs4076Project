@@ -29,5 +29,5 @@
 
 ## Bugs - Add as They Occur
 - [X] It takes 2 stops to kill server
-- [ ] Client won't boot without server
+- [X] Client won't boot without server
 - [ ] Image on Server GUI not loading

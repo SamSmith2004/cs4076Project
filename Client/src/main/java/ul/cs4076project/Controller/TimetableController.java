@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.concurrent.ScheduledExecutorService;
 
 import jakarta.json.Json;
 import jakarta.json.JsonException;
@@ -71,6 +70,10 @@ public class TimetableController implements Initializable {
      */
     public void initializeWithClient(TCPClient client) {
         this.client = client;
+        if(this.client == null || !this.client.isConnected()) {
+            Platform.runLater(() -> noticeLabel.setText("Unable to connect"));
+            return;
+        }
         this.client.setUpdateListener(response -> {
             if (response instanceof ResponseType.TimetableResponse(Lecture[][] lectureArray)) {
                 lectures = lectureArray;
