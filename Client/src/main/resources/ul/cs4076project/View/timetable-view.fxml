@@ -34,7 +34,7 @@
     </top>
 
     <center>
-        <VBox spacing="15" style="-fx-padding: 15 150 0 150;">
+        <VBox spacing="10" style="-fx-padding: 15 150 0 150;">
             <!-- Control buttons -->
             <HBox alignment="CENTER">
                 <Button onAction="#onBackToMenuClick">
@@ -56,9 +56,10 @@
                     </graphic>
                 </Button>
             </HBox>
-            <Pane>
-                <Label fx:id="noticeLabel" alignment="CENTER" style="-fx-font-weight: bold"/>
-            </Pane>
+
+            <HBox alignment="CENTER">
+                <Label fx:id="noticeLabel" style="-fx-font-weight: bold"/>
+            </HBox>
 
             <!-- Timetable Grid -->
             <ScrollPane fitToWidth="true" fitToHeight="true">

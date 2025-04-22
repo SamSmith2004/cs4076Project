@@ -11,7 +11,7 @@
   - [X] Functional
 - [X] Make updates from another client occur without refreshing (Fully synced)
 
-- [ ] Polish (fix notice labels)
+- [x] Polish (fix notice labels)
 
 ## Server
 ### GUI
