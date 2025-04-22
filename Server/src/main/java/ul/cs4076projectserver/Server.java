@@ -69,7 +69,8 @@ public class Server {
                     Thread thread = new Thread(handler);
                     thread.start();
                 } catch (IOException ex) {
-                    if (!serverRunning) break;
+                    if (!serverRunning)
+                        break;
                     System.err.println("Error accepting client connection: " + ex.getMessage());
                 }
             }
@@ -143,15 +144,14 @@ public class Server {
     private static Connection initializeDatabase() throws SQLException {
         // F*ck paths
         Dotenv dotenv = Dotenv.configure()
-            .directory("Server/src/main/resources")
-            .load();
+                .directory("Server/src/main/resources")
+                .load();
 
         String url = String.format(
-            "jdbc:postgresql://%s:%s/%s",
-            dotenv.get("DB_HOST"),
-            dotenv.get("DB_PORT"),
-            dotenv.get("DB_NAME")
-        );
+                "jdbc:postgresql://%s:%s/%s",
+                dotenv.get("DB_HOST"),
+                dotenv.get("DB_PORT"),
+                dotenv.get("DB_NAME"));
         String user = dotenv.get("DB_USER");
         String password = dotenv.get("DB_PASSWORD");
 
@@ -182,9 +182,13 @@ public class Server {
         }
     }
 
-    public static DBManager getDatabaseManager() {return dbManager;}
+    public static DBManager getDatabaseManager() {
+        return dbManager;
+    }
 
-    public ArrayList<Lecture> getLectureList() {return lectureList;}
+    public ArrayList<Lecture> getLectureList() {
+        return lectureList;
+    }
 
     public static void setLectures(ArrayList<Lecture> l) {
         lectureList = l;

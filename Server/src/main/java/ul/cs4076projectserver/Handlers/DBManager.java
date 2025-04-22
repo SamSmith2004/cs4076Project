@@ -8,24 +8,9 @@ import ul.cs4076projectserver.Server;
 import java.sql.*;
 import java.util.ArrayList;
 
-/**
- * The {@code DBManager} class provides methods to interact with the database.
- * It allows for the retrieval, addition, and removal of lectures. This class
- * uses a {@link Connection} object to perform SQL operations and
- * ensures data integrity through the use of transactions.
- */
 public class DBManager {
-    /**
-     * The connection object used to interact with the database.
-     */
     private final Connection connection;
 
-    /**
-     * Constructs a {@link DBManager} with the specified database connection.
-     *
-     * @param connection The {@link Connection} object used to interact with the
-     *                   database.
-     */
     public DBManager(Connection connection) {
         this.connection = connection;
     }
@@ -132,14 +117,6 @@ public class DBManager {
         return success;
     }
 
-    /**
-     * Remove a lecture from the database given the lecture ID.
-     *
-     * @param id The ID of the lecture to remove
-     * @return {@code true} If the operation was successful, {@code false}
-     * otherwise.
-     * @throws SQLException If a database access error occurs.
-     */
     public boolean removeLecture(int id) throws SQLException {
         String query = "DELETE FROM lectures WHERE id = ?";
         boolean success = false;

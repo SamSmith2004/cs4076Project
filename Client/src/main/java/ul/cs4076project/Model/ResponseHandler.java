@@ -5,40 +5,13 @@ import jakarta.json.JsonException;
 import jakarta.json.JsonObject;
 import java.util.ArrayList;
 
-/**
- * Handles the processing of JSON responses to extract and build appropriate
- * response types.
- */
 public class ResponseHandler {
-    /**
-     * The JSON object containing the response data to be processed.
-     */
     private final JsonObject response;
 
-    /**
-     * Constructs a {@code ResponseHandler} with the specified JSON response object.
-     * 
-     * @param response The JSON object containing the response data to be processed.
-     */
     public ResponseHandler(JsonObject response) {
         this.response = response;
     }
 
-    /**
-     * Extracts and processes the response from the JSON object.
-     * 
-     * <p>
-     * This method retrieves the content type and status from the response object,
-     * handles specific statuses such as "InvalidActionException" and "error", and
-     * determines the appropriate response type based on the content type. It
-     * supports content types such as "timetable", "addLecture", "test", "Message",
-     * and "removeLecture". For "timetable", it constructs a timetable response by
-     * calling the {@link #buildTimetableResponse()} method. For other content
-     * types, it returns the content as a string response.
-     * 
-     * @return A {@link ResponseType} object representing the processed response.
-     * @see ul.cs4076project.Model.ResponseType
-     */
     public ResponseType extractResponse() {
         try {
             String contentType = response.getString("Content-Type");
@@ -75,24 +48,6 @@ public class ResponseHandler {
         }
     }
 
-    /**
-     * Builds a timetable response from the JSON content in the response object.
-     * 
-     * <p>
-     * This method processes a JSON array named "content" from the response object,
-     * parses each lecture's details, validates them, and constructs a timetable
-     * represented as a 2D array of {@link Lecture} objects. The timetable has 5
-     * rows (representing days of the week from Monday to Friday) and 9 columns
-     * (representing time slots from 9:00 to 17:00). Each lecture is placed in the
-     * appropriate slot based on its day and start time.
-     * 
-     * @return A {@link ResponseType.TimetableResponse} object containing the
-     *         constructed timetable.
-     * @see ul.cs4076project.Model.ResponseHandler
-     * @see ul.cs4076project.Model.Lecture
-     * @see ul.cs4076project.Model.Module
-     * @see ul.cs4076project.Model.DayOfWeek
-     */
     private ResponseType buildTimetableResponse() {
         JsonArray contentArray = response.getJsonArray("content");
         ArrayList<Lecture> lectures = new ArrayList<>();

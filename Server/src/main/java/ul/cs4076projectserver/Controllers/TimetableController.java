@@ -95,11 +95,11 @@ public class TimetableController implements Initializable {
                         labelContainer.setStyle("-fx-padding: 5;");
                         labelContainer.setAlignment(javafx.geometry.Pos.CENTER);
                         labelContainer.getChildren().addAll(
-                                createStyledLabel(lecture.getModuleString(), "-fx-font-size: 16; -fx-font-weight: bold;"),
+                                createStyledLabel(lecture.getModuleString(),
+                                        "-fx-font-size: 16; -fx-font-weight: bold;"),
                                 createStyledLabel(lecture.getLecturer(), "-fx-font-size: 16;"),
                                 createStyledLabel(lecture.getRoom(), "-fx-font-size: 16;"),
-                                createStyledLabel(lecture.getTime(), "-fx-font-size: 16;")
-                        );
+                                createStyledLabel(lecture.getTime(), "-fx-font-size: 16;"));
 
                         cellPane.getChildren().add(labelContainer);
                         timetableGrid.add(cellPane, col, row);

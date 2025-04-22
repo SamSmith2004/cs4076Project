@@ -8,47 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Set;
 
-/**
- * The {@code Get} class handles GET requests to the server.
- * It processes the request data, extracts headers, and generates appropriate
- * responses based on the request.
- * 
- * <p>
- * This class extends {@link RequestHandler} and overrides the
- * {@link #responseBuilder()} method to build the response.
- * 
- * @see ul.cs4076projectserver.Handlers.RequestHandler
- * @see Lecture
- */
 public class Get extends RequestHandler {
-    /**
-     * A {@link JsonObject} containing the headers from the request data.
-     * These headers are used to determine the type of response to generate.
-     */
     JsonObject headers;
-    /**
-     * A {@link Set} of {@link String} keys representing the headers from the
-     * request data. These keys are used to access specific header values in the
-     * {@link JsonObject} headers.
-     */
     Set<String> headerKeys;
 
-    /**
-     * Constructs a {@code Get} request handler with the specified request data.
-     * 
-     * @param requestData The {@link JsonObject} containing the request data.
-     */
     public Get(JsonObject requestData) {
         this.headers = requestData.getJsonObject("headers");
         this.headerKeys = headers.keySet();
     }
 
-    /**
-     * Builds the response for the GET request. The response is generated based on
-     * the "Content-Type" header in the request data.
-     * 
-     * @return A {@link String} representing the response.
-     */
     @Override
     public String responseBuilder() {
         JsonObject responseData;
@@ -67,12 +35,6 @@ public class Get extends RequestHandler {
         }
     }
 
-    /**
-     * Builds an invalid response indicating an error with the "Content-Type"
-     * header. It does this by concatenating strings into a {@link JsonObject}.
-     * 
-     * @return A {@link JsonObject} representing the invalid response.
-     */
     private JsonObject buildInvalidResponse() {
         try {
             return Json.createObjectBuilder()
@@ -85,13 +47,6 @@ public class Get extends RequestHandler {
         }
     }
 
-    /**
-     * Builds the response containing the timetable data. The timetable data is
-     * retrieved from the database and formatted as a JSON array.
-     * 
-     * @return A {@link JsonObject} representing the timetable response
-     * @see Lecture
-     */
     private JsonObject buildTimetableResponse() {
         try {
             JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();

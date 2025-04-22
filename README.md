@@ -7,14 +7,6 @@
 ### Running the Project:
 #### General:
 - Ensure you have Java 23 installed on your machine.
-- For **JavaDoc**: <br>
-Ensure your at the `{project_root}` directory and run:
-```bash
-mvn javadoc:javadoc
-```
-The generated javadocs for client and serer can be found in:
-`Client/target/site/apidocs` <br>
-`Server/target/site/apidocs`
 
 #### Server:
 The projects **database** is hosted on a **VPS** and the schema is viewable down below,<br>
