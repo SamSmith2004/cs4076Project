@@ -10,7 +10,6 @@
   - [X] Skeleton 
   - [X] Functional
 - [X] Make updates from another client occur without refreshing (Fully synced)
-
 - [x] Polish (fix notice labels)
 
 ## Server
@@ -30,4 +29,3 @@
 ## Bugs - Add as They Occur
 - [X] It takes 2 stops to kill server
 - [X] Client won't boot without server
-- [ ] Image on Server GUI not loading

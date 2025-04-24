@@ -6,7 +6,6 @@ module ul.cs4076projectserver {
     requires jakarta.json;
     requires org.eclipse.parsson;
     requires java.sql;
-    requires io.github.cdimascio.dotenv.java;
     requires org.postgresql.jdbc;
 
     opens ul.cs4076projectserver to javafx.fxml;

@@ -12,7 +12,7 @@
 The projects **database** is hosted on a **VPS** and the schema is viewable down below,<br>
 however if you wish to run the server locally you must:
 1. Install PostgresSQL on your machine. https://www.postgresql.org/download/windows/
-2. Create a user with the details in the `.env` file or make your own and update the `.env` file.
+2. Create a user with the details in the `Server.java` file or make your own and update the `Server.java` file.
 3. Grant user permissions to set up the database. https://www.postgresql.org/docs/8.1/privileges.html
 4. Run the schema queries in the schema below. 
 
@@ -23,32 +23,19 @@ You have 2 ways of running the client:
 1. Run the binary: `{project_root}/Client/target/cs4076-client/bin/launcher` folder. 
 - If you need to re-create the binary, navigate to the `{project_root}/Client` directory.
 ```bash
-mvn clean javafx:jlink
+mvn clean javafx:jlink -X
 ```
 2. Import the project into Netbeans and run it from there.
 - Ensure you have JavaFX is installed on your machine.
 
 ### Project Info:
 #### Server/API:
-Server send JSON serialized data to the client over TCP.
-Server->Client messages are formatted:
-```json
-{
-  "status": "success",
-  "Content-Type": "timetable",
-  "content": {}
-}
-```
-
-Client->Server messages are formatted:
-```json
-{
-  "method": "GET",
-  "headers":{
-    "Content-Type":"timetable"
-  },
-  "content": {}
-}
+##### Run:
+To run the server is can be run by:
+1. Navigate to the directory `{project_root}/Server`.
+2. Run the following command:
+```bash
+./mvnw exec:java -Dexec.mainClass="ul.cs4076projectserver.App"
 ```
 
 #### Database Schema:

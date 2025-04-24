@@ -48,40 +48,39 @@ public class ReplaceLecturePopupDialogueController extends AddALecturePopupDialo
             return;
         }
 
-        // Use the colon index to determine the substring endpoint
-        int colonIndexFrom = comboBoxFromTimeField.getValue().indexOf(":");
-        if (colonIndexFrom == -1) {
-            colonIndexFrom = 2;
-        }
-        int fromTimeInt = Integer.parseInt(comboBoxFromTimeField.getValue().substring(0, colonIndexFrom));
-
-        int colonIndexTo = comboBoxToTimeField.getValue().indexOf(":");
-        if (colonIndexTo == -1) {
-            colonIndexTo = 2;
-        }
-        int toTimeInt = Integer.parseInt(comboBoxToTimeField.getValue().substring(0, colonIndexTo));
-
-        String fromTime = String.format("%02d:00", fromTimeInt);
-        String toTime = String.format("%02d:00", toTimeInt);
-        String moduleCode = comboBoxModuleField.getValue().split(" - ")[0];
-        String day = comboBoxDayField.getValue().toUpperCase();
-
-        JsonObject lectureJson = Json.createObjectBuilder()
-                .add("id", lectureToRemove.getId())
-                .add("module", moduleCode)
-                .add("lecturer", lecturerField.getText())
-                .add("room", roomNumberField.getText())
-                .add("fromTime", fromTime)
-                .add("toTime", toTime)
-                .add("day", day)
-                .build();
-
         try {
+            // Use the colon index to determine the substring endpoint
+            int colonIndexFrom = comboBoxFromTimeField.getValue().indexOf(":");
+            if (colonIndexFrom == -1) {
+                colonIndexFrom = 2;
+            }
+            int fromTimeInt = Integer.parseInt(comboBoxFromTimeField.getValue().substring(0, colonIndexFrom));
+
+            int colonIndexTo = comboBoxToTimeField.getValue().indexOf(":");
+            if (colonIndexTo == -1) {
+                colonIndexTo = 2;
+            }
+            int toTimeInt = Integer.parseInt(comboBoxToTimeField.getValue().substring(0, colonIndexTo));
+
+            String fromTime = String.format("%02d:00", fromTimeInt);
+            String toTime = String.format("%02d:00", toTimeInt);
+            String moduleCode = comboBoxModuleField.getValue().split(" - ")[0];
+            String day = comboBoxDayField.getValue().toUpperCase();
+
+            JsonObject lectureJson = Json.createObjectBuilder()
+                    .add("id", lectureToRemove.getId())
+                    .add("module", moduleCode)
+                    .add("lecturer", lecturerField.getText())
+                    .add("room", roomNumberField.getText())
+                    .add("fromTime", fromTime)
+                    .add("toTime", toTime)
+                    .add("day", day)
+                    .build();
+
             HashMap<String, String> headers = new HashMap<>();
             headers.put("Content-Type", "replaceLecture");
 
-            // POST Promise
-            client.post(lectureJson.toString(), headers)
+            client.update(lectureJson.toString(), headers)
                     .thenAccept(response -> Platform.runLater(() -> {
                         if (response instanceof ResponseType.StringResponse(String value)) {
                             switch (value) {
@@ -91,7 +90,7 @@ public class ReplaceLecturePopupDialogueController extends AddALecturePopupDialo
                                     App.loadTimetableView();
                                 }
                                 case "Timeslot already taken" -> noticeLabel.setText("Timeslot Already Taken");
-                                default -> noticeLabel.setText("Failed to replace lecture: " + value);
+                                default -> noticeLabel.setText("Failed to add lecture: " + value);
                             }
                         } else {
                             noticeLabel.setText("Unexpected Response Type");
@@ -99,20 +98,19 @@ public class ReplaceLecturePopupDialogueController extends AddALecturePopupDialo
                     }))
                     .exceptionally(e -> {
                         Platform.runLater(() -> {
-                            // Substitute for the try catch block
                             Throwable cause = e.getCause();
                             switch (cause) {
                                 case JsonException jsonException -> {
-                                    System.err.println("JSON error occurred: " + cause.getMessage());
-                                    noticeLabel.setText("Error occurred while processing response");
+                                    noticeLabel.setText("An unexpected error occurred");
+                                    System.err.println("JSON error: " + e.getMessage());
                                 }
                                 case NullPointerException nullPointerException -> {
-                                    System.err.println("NullPointerException occurred: " + cause.getMessage());
-                                    noticeLabel.setText("Error occurred while processing response");
+                                    noticeLabel.setText("An unexpected error occurred");
+                                    System.err.println("NullPointerException: " + e.getMessage());
                                 }
                                 case IOException ioException -> {
-                                    System.err.println("IOError occurred: " + cause.getMessage());
-                                    noticeLabel.setText("Error occurred while communicating with server");
+                                    System.err.println("IOError: " + cause.getMessage());
+                                    noticeLabel.setText("An unexpected error occurred");
                                 }
                                 default -> {
                                     System.err.println("Unknown error occurred: " + cause.getMessage());
@@ -122,11 +120,11 @@ public class ReplaceLecturePopupDialogueController extends AddALecturePopupDialo
                         });
                         return null;
                     });
-        } catch (JsonException e) {
-            noticeLabel.setText("Error occurred while creating JSON object");
+    } catch (JsonException e) {
+            noticeLabel.setText("An unexpected error occurred");
             System.err.println("JSON error occurred: " + e.getMessage());
         } catch (NullPointerException e) {
-            noticeLabel.setText("Error occurred while creating JSON object");
+            noticeLabel.setText("An unexpected error occurred");
             System.err.println("NullPointerException occurred: " + e.getMessage());
         } catch (Exception e) {
             noticeLabel.setText("An unexpected error occurred");

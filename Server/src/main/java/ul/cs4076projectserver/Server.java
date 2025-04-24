@@ -2,7 +2,6 @@ package ul.cs4076projectserver;
 
 import static java.lang.System.out;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
@@ -35,6 +34,13 @@ public class Server {
     private static ArrayList<Lecture> lectureList;
     protected static boolean serverRunning;
     private static ServerSocket servSock;
+
+    // env variables (ideally should be in .env file but this is for insurance)
+    static final String DB_NAME="cs4076project";
+    static final String DB_HOST="149.102.146.18";
+    static final String DB_PORT="5432";
+    static final String DB_USER= "ul";
+    static final String DB_PASSWORD="bog2025";
 
     public Server() {
         serverRunning = true;
@@ -142,33 +148,21 @@ public class Server {
     }
 
     private static Connection initializeDatabase() throws SQLException {
-        // F*ck paths
-        Dotenv dotenv = Dotenv.configure()
-                .directory("Server/src/main/resources")
-                .load();
-
-        String url = String.format(
-                "jdbc:postgresql://%s:%s/%s",
-                dotenv.get("DB_HOST"),
-                dotenv.get("DB_PORT"),
-                dotenv.get("DB_NAME"));
-        String user = dotenv.get("DB_USER");
-        String password = dotenv.get("DB_PASSWORD");
-
-        return DriverManager.getConnection(url, user, password);
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            System.err.println("PostgreSQL JDBC driver not found.");
+            throw new SQLException(e);
+        }
+        String url = String.format("jdbc:postgresql://%s:%s/%s", DB_HOST, DB_PORT, DB_NAME);
+        return DriverManager.getConnection(url, DB_USER, DB_PASSWORD);
     }
 
     public static DB_instance getDataSource() {
-        Dotenv dotenv = Dotenv.configure()
-                .directory("Server/src/main/resources")
-                .load();
         DB_instance ds = new DB_instance();
-        ds.setUrl(String.format("jdbc:postgresql://%s:%s/%s",
-                dotenv.get("DB_HOST"),
-                dotenv.get("DB_PORT"),
-                dotenv.get("DB_NAME")));
-        ds.setUser(dotenv.get("DB_USER"));
-        ds.setPassword(dotenv.get("DB_PASSWORD"));
+        ds.setUrl(String.format("jdbc:postgresql://%s:%s/%s", DB_HOST, DB_PORT, DB_NAME));
+        ds.setUser(DB_USER);
+        ds.setPassword(DB_PASSWORD);
         return ds;
     }
 

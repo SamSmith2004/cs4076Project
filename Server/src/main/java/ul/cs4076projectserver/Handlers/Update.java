@@ -28,10 +28,12 @@ public class Update extends RequestHandler {
     public String responseBuilder() throws IOException {
         JsonObject responseData;
         try {
-            String contentType = headers.getString("Content-Type");
+            System.out.println("Headers received: " + headers.toString());
+            String contentType = headers.getString("Content-Type").trim().toLowerCase();
+            System.out.println("Content-Type: " + headers.getString("Content-Type"));
             responseData = switch (contentType) {
-                case "replaceLecture" -> buildUpdateLectureResponse();
-                case "earlyLecture" -> buildEarlyLectureResponse();
+                case "replacelecture" -> buildUpdateLectureResponse();
+                case "earlylecture" -> buildEarlyLectureResponse();
                 default -> buildInvalidResponse();
             };
 
