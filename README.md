@@ -38,6 +38,11 @@ To run the server is can be run by:
 ./mvnw exec:java -Dexec.mainClass="ul.cs4076projectserver.App"
 ```
 
+If using **powershell**, use the following command:
+```bash
+./mvnw --% exec:java -Dexec.mainClass="ul.cs4076projectserver.App"
+```
+
 #### Database Schema:
 **Objects:** <br>
 Custom enum type for days of the week.
