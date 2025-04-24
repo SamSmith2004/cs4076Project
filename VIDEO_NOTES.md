@@ -19,22 +19,33 @@ show on client -> diagram overview of code and how it links -> show & explain co
 - Server
     - Server.java:198-335 ClientHandler
     - Server.java:260 Update update = new Update(requestData);
-    - Handlers/Update.java:19-239 Update
-
+    - Handlers/Update.java:146-183 buildEarlyLectureResponse()
 
 ##### REPLACE
 - Client
-    -
+    - resources/popup-dialogues/replace-lecture-popup-dialogue.fxml:11-77
+    - Controller/ReplaceLecturePopupDialogueController.java:33-135 handleSubmitBtn()
+    - Model/TCPClient.java:71-79 post()
+    - Model/TCPClient.java:113-166 sendRequest()
+    - Model/ResponseHandler.java:15-49 extractResponse()
     
 - Server
-    -
+    - Server.java:198-335 ClientHandler
+    - Server.java:260 Update update = new Update(requestData);
+    - Handlers/Update.java:49-144 buildUpdateLectureResponse()
 
 ##### ADD
 - Client
-    -
+    - resources/popup-dialogues/add-lecture-popup-dialogue.fxml:11-77
+    - Controller/AddALecturePopupDialogueController.java:119-205 handleOkButton()
+    - Model/TCPClient.java:71-79 post()
+    - Model/TCPClient.java:113-166 sendRequest()
+    - Model/ResponseHandler.java:15-49 extractResponse()
     
 - Server
-    -
+    - Server.java:198-335 ClientHandler
+    - Server.java:255 Post post = new Post(requestData);
+    - Handlers/Post.java:58-170 buildAddLectureResponse()
 
 ### ADDITIONAL THINGS TO DEMONSTRATE
 
