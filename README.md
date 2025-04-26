@@ -16,7 +16,13 @@ however if you wish to run the server locally you must:
 3. Grant user permissions to set up the database. https://www.postgresql.org/docs/8.1/privileges.html
 4. Run the schema queries in the schema below. 
 
-As for the **Server** itself, it should work fine on Netbeans being a Maven project.
+##### Running Server:
+To run the server is can be run by:
+1. Navigate to the directory `{project_root}/Server`.
+2. Run the following command:
+```bash
+./mvnw exec:java -Dexec.mainClass="ul.cs4076projectserver.App"
+```
 
 #### Client:
 You have 2 ways of running the client:
@@ -30,14 +36,6 @@ mvn clean javafx:jlink -X
 
 ### Project Info:
 #### Server/API:
-##### Run:
-To run the server is can be run by:
-1. Navigate to the directory `{project_root}/Server`.
-2. Run the following command:
-```bash
-./mvnw exec:java -Dexec.mainClass="ul.cs4076projectserver.App"
-```
-
 If using **powershell**, use the following command:
 ```bash
 ./mvnw --% exec:java -Dexec.mainClass="ul.cs4076projectserver.App"
